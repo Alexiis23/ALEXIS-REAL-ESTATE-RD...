@@ -1,0 +1,16 @@
+{
+  "titulo": "Moderno Apartamento Próximo a la Playa",
+  "precio": 145000,
+  "tipo": "apartamento",
+  "estado": "en planos",
+  "ubicacion": "Bávaro, Punta Cana",
+  "habitaciones": 2,
+  "banos": 2.5,
+  "parqueos": 1,
+  "confotur": true,
+  "imagenPrincipal": "../../assets/images/prueba-inmobiliaria.jpg",
+  "descripcion": "Excelente oportunidad de inversión en la zona de mayor crecimiento turístico de la República Dominicana. Cuenta con línea blanca e instalaciones de lujo.",
+  "latitud": 18.47186,
+  "longitud": -69.93922,
+  "area": 45
+}

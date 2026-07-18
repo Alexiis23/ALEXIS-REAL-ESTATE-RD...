@@ -1,0 +1,15 @@
+{
+  "titulo": "Exclusiva Villa Turistica en Las Terrenas",
+  "precio": 320000,
+  "tipo": "villa",
+  "estado": "en planos",
+  "ubicacion": "Las Terrenas, Samana",
+  "habitaciones": 3,
+  "banos": 3.5,
+  "parqueos": 2,
+  "confotur": true,
+  "imagenPrincipal": "../../assets/images/prueba-inmobiliaria.jpg",
+  "descripcion": "Hermosa villa con diseno eco-luxury a pasos de la playa. Cuenta con piscina privada, terrazas exteriores y altos retornos de inversion estimados por rentas cortas (Airbnb).",
+  "latitud": 19.31758,
+  "longitud": -69.54275
+}

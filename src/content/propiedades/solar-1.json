@@ -1,0 +1,16 @@
+{
+  "titulo": "Solar Premium en Vista Cana",
+  "precio": 85000,
+  "tipo": "Solar",
+  "estado": "disponible",
+  "ubicacion": "Bávaro, Punta Cana",
+  "habitaciones": 0,
+  "banos": 0,
+  "parqueos": 0,
+  "confotur": false,
+  "imagenPrincipal": "../../assets/images/prueba-inmobiliaria.jpg",
+  "descripcion": "Excelente terreno ideal para construir la villa de tus sueños de base unifamiliar.",
+  "latitud": 18.50000,
+  "longitud": -69.80000,
+  "area": 1200
+}

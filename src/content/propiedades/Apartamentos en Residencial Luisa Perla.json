@@ -1,0 +1,17 @@
+{
+  "descripcion": "Es un proyecto excelente, diseñado con un enfoque moderno y funcional para tu comodidad.",
+  "precio": 200000,
+  "regimen": "Venta",
+  "exclusiva": true,
+  "confotur": true,
+  "tipo": "Apartamento",
+  "estado": "En planos",
+  "habitaciones": 2,
+  "banos": 2,
+  "parqueos": 1,
+  "area": 103,
+  "latitud": 18.604,
+  "longitud": -68.719,
+  "ubicacion": "luisa perla",
+  "imagenPrincipal": "../../assets/propiedades/Apartamentos en Residencial Luisa Perla/imagenPrincipal.jpg"
+}

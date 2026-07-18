@@ -1,0 +1,455 @@
+---
+import { getCollection } from "astro:content";
+import { Image, getImage } from "astro:assets"; 
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import AccessibilityWidget from "../components/AccessibilityWidget.astro";
+import fallbackImage from "../assets/images/prueba-inmobiliaria.jpg";
+
+// 1. Recuperar todas las propiedades indexadas con sus coordenadas
+const allPropiedades = await getCollection("propiedades");
+
+// 2. Filtrar únicamente las que posean coordenadas válidas
+const propiedadesConMapa = allPropiedades.filter(
+  (p) => p.data.latitud && p.data.longitud,
+);
+
+const imagenes = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}",
+  { eager: true },
+);
+
+// Convertir los datos al formato plano procesando miniaturas optimizadas
+const propiedadesJSON = await Promise.all(
+  propiedadesConMapa.map(async (p) => {
+    const rutaRaw = String(p.data.imagenPrincipal || "");
+    const imagenPublica = rutaRaw ? rutaRaw.replace(/^\.\.\/\.\.\//, "/src/") : "";
+    const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
+    const dataPlana = p.data as any;
+
+    const popupImgOptimized = await getImage({
+      src: imgMeta,
+      width: 240,
+      height: 120,
+      format: "webp",
+      quality: 70
+    });
+
+    return {
+      id: p.id,
+      titulo: p.data.titulo || "Propiedad en Inventario", // 🌟 Evita h3 vacíos
+      precio: p.data.precio,
+      tipo: p.data.tipo || "Inmueble",
+      ubicacion: p.data.ubicacion || "República Dominicana",
+      lat: Number(p.data.latitud),
+      lng: Number(p.data.longitud),
+      imagenMetadata: imgMeta,
+      popupImgUrl: popupImgOptimized.src,
+      confotur: Boolean(p.data.confotur),
+      exclusiva: dataPlana.exclusiva !== undefined ? Boolean(dataPlana.exclusiva) : false,
+    };
+  })
+);
+
+const datosSegurosParaMapa = propiedadesJSON.map((p) => ({
+  id: p.id,
+  titulo: p.titulo,
+  precio: p.precio,
+  tipo: p.tipo,
+  ubicacion: p.ubicacion,
+  lat: p.lat,
+  lng: p.lng,
+  imagen: p.popupImgUrl,
+  exclusiva: p.exclusiva,
+}));
+---
+
+<!doctype html>
+<html lang="es" class="min-h-screen bg-offwhite text-slate-900">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa de Inventario Global | Alexis RD Real Estate</title>
+    <meta name="description" content="Explora todas las propiedades en venta y alquiler de Alexis RD Real Estate sobre el mapa interactivo de República Dominicana." />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  </head>
+
+  <body
+    class="min-h-screen flex flex-col map-page-bg"
+    style="--grid-color: rgba(11, 25, 44, 0.12); background-color: #F8F7F4; background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px); background-size: 60px 60px;"
+  >
+    <Navbar lang="es" currentPage="map" />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 w-full flex-1">
+      <div
+        class="border-2 border-[#C9A84C]/40 bg-[#0B192C] rounded-3xl overflow-hidden
+               shadow-[0_12px_50px_rgba(201,168,76,0.15)]
+               flex flex-col md:flex-row
+               h-[75vh] min-h-[560px] relative z-20"
+      >
+        <!-- SIDEBAR DE PROPIEDADES -->
+        <aside
+          id="properties-sidebar"
+          class="w-full md:w-[38%] lg:w-[34%]
+                 bg-[#0B192C] border-r border-[#C9A84C]/20
+                 flex flex-col h-[42%] md:h-full overflow-y-auto z-20"
+        >
+          <div class="p-5 border-b border-[#C9A84C]/20 bg-[#0B192C] sticky top-0 z-30 shadow-sm">
+            <span class="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.18em] bg-[#C9A84C]/10 px-3 py-1 rounded-full border border-[#C9A84C]/35 inline-block">
+              Ubicaciones Filtradas
+            </span>
+            <h1 class="text-2xl font-black text-white tracking-tight mt-2.5">
+              Inventario en el Mapa
+            </h1>
+            <p class="text-[12px] text-slate-300 mt-1 leading-relaxed">
+              Haz clic en una propiedad para centrar el mapa, o pasa el ratón para previsualizarla.
+            </p>
+          </div>
+
+          <div class="p-3 space-y-2.5 flex-1">
+            {
+              propiedadesJSON.map((p) => (
+                <div
+                  class="map-card bg-[#112036] rounded-xl border border-slate-800 overflow-hidden
+                         shadow-sm cursor-pointer flex gap-3 p-2.5
+                         transition-all duration-200
+                         hover:shadow-md hover:border-[#C9A84C]/70 hover:bg-[#152740] hover:-translate-y-px group"
+                  data-id={p.id}
+                  data-lat={p.lat}
+                  data-lng={p.lng}
+                  data-exclusiva={p.exclusiva ? "true" : "false"}
+                  role="button"
+                  tabindex="0"
+                >
+                  <div class="w-[82px] h-[82px] rounded-lg overflow-hidden flex-shrink-0 bg-slate-900 relative">
+                    <Image
+                      src={p.imagenMetadata}
+                      width={120}
+                      height={90}
+                      format="webp"
+                      quality={60}
+                      class="object-cover w-full h-full rounded-lg"
+                      alt={p.titulo}
+                    />
+                    {p.confotur && (
+                      <span class="absolute top-1 left-1 bg-emerald-500/90 text-white text-[7px] font-black px-1.5 py-0.5 rounded shadow z-10 tracking-wide flex items-center gap-0.5">
+                        <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        CONFOTUR
+                      </span>
+                    )}
+                    {p.exclusiva && (
+                      <span class="absolute bottom-1 left-1 bg-[#0B192C]/90 text-[#C9A84C] text-[7px] font-black px-1.5 py-0.5 rounded shadow border border-[#C9A84C]/40 z-10 flex items-center gap-0.5">
+                        <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>
+                        EXCLUSIVA
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="flex-1 flex flex-col justify-between py-0.5 min-w-0">
+                    <div>
+                      <div class="flex items-center justify-between gap-1">
+                        <span class="text-[11px] font-extrabold text-[#C9A84C] uppercase tracking-wider truncate">
+                          {p.tipo}
+                        </span>
+                        {!p.exclusiva && (
+                          <span class="text-[9px] font-semibold text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
+                            <svg class="w-2 h-2 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            Zona aprox.
+                          </span>
+                        )}
+                      </div>
+                      <h3 class="font-bold text-white text-[14px] line-clamp-1 mt-0.5">
+                        {p.titulo} <!-- 🌟 Blindado contra strings vacíos -->
+                      </h3>
+                      <p class="text-[12px] text-slate-300 flex items-center gap-1 mt-0.5 truncate">
+                        <svg class="w-2.5 h-2.5 text-[#C9A84C] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        {p.ubicacion}
+                      </p>
+                    </div>
+                    <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-800">
+                      <span class="text-[13px] font-black text-white">
+                        USD ${Number(p.precio).toLocaleString("en-US")}
+                      </span>
+                      <span class="text-[12px] font-bold text-[#C9A84C] flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                        Ver ficha ›
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </aside>
+
+        <!-- MAPA LEAFLET -->
+        <main class="flex-1 h-[58%] md:h-full relative z-10 overflow-hidden">
+          <div id="mapa-global" class="w-full h-full"></div>
+        </main>
+      </div>
+    </div>
+
+    <Footer lang="es" />
+    <AccessibilityWidget lang="es" />
+
+    <script is:inline define:vars={{ datosPropiedades: datosSegurosParaMapa }}>
+      let map;
+      const markersMap = {};
+
+      function formatPriceTag(num) {
+        if (num >= 1_000_000) return 'USD $' + (num / 1_000_000).toFixed(1).replace('.0', '') + 'M';
+        if (num >= 1_000)     return 'USD $' + Math.round(num / 1_000) + 'K';
+        return 'USD $' + num;
+      }
+
+      function buildCircleIcon(isExclusive) {
+        const d = isExclusive ? 48 : 40;
+        const half = d / 2;
+
+        const svgExclusive = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#C9A84C" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>`;
+        const svgRegular  = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#C9A84C" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+
+        const css = isExclusive
+          ? `width:${d}px;height:${d}px;border-radius:50%;background:linear-gradient(135deg,#0B192C 0%,#122a47 100%);border:2.5px solid #C9A84C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(201,168,76,0.45);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;`
+          : `width:${d}px;height:${d}px;border-radius:50%;background:#0B192C;border:2px solid rgba(201,168,76,0.55);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(11,25,44,0.35);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;`;
+
+        return L.divIcon({
+          className: isExclusive ? 'map-circle-exclusive' : 'map-circle-regular',
+          html: `<div style="${css}">${isExclusive ? svgExclusive : svgRegular}</div>`,
+          iconSize:   [d, d],
+          iconAnchor: [half, half],
+          popupAnchor: [0, -(half + 6)],
+        });
+      }
+
+      window.focusOnMap = (lat, lng, id, exclusiva) => {
+        if (!map) return;
+        const item = markersMap[id];
+        if (!item) return;
+
+        map.setView([item.lat, item.lng], exclusiva ? 15 : 14, {
+          animate: true,
+          duration: 1.0,
+        });
+        setTimeout(() => item.element.openPopup(), 500);
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const contenedor = document.getElementById('mapa-global');
+        if (!contenedor || datosPropiedades.length === 0) return;
+
+        map = L.map('mapa-global', { zoomControl: false }).setView([18.9, -70.3], 8.5);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // 🌟 PARCHE DE ACCESIBILIDAD PARA EL LIVE DOM (Mejorado)
+        setTimeout(() => {
+          const zoomIn = document.querySelector('.leaflet-control-zoom-in');
+          const zoomOut = document.querySelector('.leaflet-control-zoom-out');
+          
+          if (zoomIn) {
+            zoomIn.setAttribute('aria-label', 'Acercar mapa');
+            zoomIn.setAttribute('role', 'button');
+            zoomIn.setAttribute('href', '#zoom-in'); // Evita el error de "Required attributes missing"
+            zoomIn.addEventListener('click', (e) => e.preventDefault()); // Evita que recargue la URL
+          }
+          if (zoomOut) {
+            zoomOut.setAttribute('aria-label', 'Alejar mapa');
+            zoomOut.setAttribute('role', 'button');
+            zoomOut.setAttribute('href', '#zoom-out'); // Evita el error de "Required attributes missing"
+            zoomOut.addEventListener('click', (e) => e.preventDefault()); // Evita que recargue la URL
+          }
+          
+          // Limpieza de los enlaces de atribución inferiores
+          document.querySelectorAll('.leaflet-control-attribution a').forEach(el => {
+            el.setAttribute('rel', 'noopener noreferrer');
+            el.setAttribute('aria-label', el.textContent + ' (abre en nueva pestaña)');
+          });
+        }, 200);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          maxZoom: 19,
+        }).addTo(map);
+
+        const bounds = [];
+
+        datosPropiedades.forEach((prop) => {
+          let lat = prop.lat;
+          let lng = prop.lng;
+          const label = formatPriceTag(prop.precio);
+          const icon  = buildCircleIcon(prop.exclusiva);
+
+          if (!prop.exclusiva) {
+            const seed  = prop.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+            lat += Math.sin(seed) * 0.0055;
+            lng += Math.cos(seed) * 0.0055;
+
+            L.circle([lat, lng], {
+              color: '#0B192C',
+              fillColor: '#C9A84C',
+              fillOpacity: 0.18,
+              weight: 1.5,
+              dashArray: '6 5',
+              radius: 620,
+            }).addTo(map);
+          }
+
+          bounds.push([lat, lng]);
+          const marker = L.marker([lat, lng], { icon }).addTo(map);
+
+          // 🌟 Estructura HTML de Popups Blindada y Semántica
+          const popupHtml = prop.exclusiva
+            ? `<div style="font-family:'Inter',sans-serif;padding:0;color:#0B192C;width:240px">
+                 <div style="position:relative;height:120px;overflow:hidden;background:#f1f5f9">
+                   <img src="${prop.imagen}" alt="${prop.titulo}" style="width:100%;height:100%;object-fit:cover"/>
+                   <span style="position:absolute;top:8px;left:8px;background:#0B192C;color:#C9A84C;font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:0.06em;border:1px solid rgba(201,168,76,0.35);display:inline-flex;align-items:center;gap:4px">
+                     <svg width="9" height="9" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>Exclusiva
+                   </span>
+                 </div>
+                 <div style="padding:12px 14px">
+                   <h4 style="font-size:13px;font-weight:800;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${prop.titulo}">${prop.titulo}</h4>
+                   <p style="font-size:10px;color:#64748b;margin:0 0 10px;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>${prop.ubicacion}</p>
+                   <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f1f5f9;padding-top:10px">
+                     <span style="font-size:13px;font-weight:900">${label}</span>
+                     <a href="/propiedades/${prop.id}" style="background:#0B192C;color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:8px;text-decoration:none;letter-spacing:0.04em;transition:background .2s" onmouseover="this.style.background='#C9A84C';this.style.color='#0B192C'" onmouseout="this.style.background='#0B192C';this.style.color='#fff'">Ver Detalles →</a>
+                   </div>
+                 </div>
+               </div>`
+            : `<div style="font-family:'Inter',sans-serif;padding:14px 16px;color:#0B192C;width:240px">
+                 <div style="display:inline-flex;align-items:center;gap:5px;background:#fffbeb;border:1px solid rgba(201,168,76,0.3);padding:3px 8px;border-radius:6px;margin-bottom:8px;font-size:9px;font-weight:800;color:#C9A84C;letter-spacing:0.06em;text-transform:uppercase">
+                   <svg width="9" height="9" viewBox="0 0 24 24" fill="#C9A84C"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Ubicación Aproximada
+                 </div>
+                 <h4 style="font-size:13px;font-weight:800;margin:0 0 4px">${prop.titulo}</h4>
+                 <p style="font-size:10px;color:#64748b;margin:0 0 10px;line-height:1.5;display:flex;align-items:flex-start;gap:4px">
+                   <svg width="10" height="10" viewBox="0 0 24 24" fill="#C9A84C" style="margin-top:2px;flex-shrink:0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Ubicación referencial — área de ${prop.ubicacion}.
+                 </p>
+                 <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f1f5f9;padding-top:10px">
+                   <span style="font-size:12px;font-weight:900">${label}</span>
+                   <a href="/propiedades/${prop.id}" style="background:#0B192C;color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:8px;text-decoration:none;letter-spacing:0.04em" onmouseover="this.style.background='#C9A84C';this.style.color='#0B192C'" onmouseout="this.style.background='#0B192C';this.style.color='#fff'">Ver Ficha →</a>
+                 </div>
+               </div>`;
+
+          marker.bindPopup(popupHtml, {
+            maxWidth: 260,
+            className: prop.exclusiva ? 'popup-exclusive' : 'popup-regular',
+          });
+
+          markersMap[prop.id] = { element: marker, lat, lng };
+        });
+
+        if (bounds.length > 0) {
+          map.fitBounds(bounds, { padding: [50, 50] });
+        }
+        setTimeout(() => map.invalidateSize(), 200);
+
+        // Delegación de Eventos optimizada para el Sidebar
+        const sidebar = document.getElementById('properties-sidebar');
+        if (sidebar) {
+          const handleSelection = (card) => {
+            const lat = parseFloat(card.dataset.lat);
+            const lng = parseFloat(card.dataset.lng);
+            const id = card.dataset.id;
+            const exclusiva = card.dataset.exclusiva === 'true';
+            window.focusOnMap(lat, lng, id, exclusiva);
+          };
+
+          sidebar.addEventListener('click', (e) => {
+            const card = e.target.closest('.map-card');
+            if (card) handleSelection(card);
+          });
+
+          sidebar.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              const card = e.target.closest('.map-card');
+              if (card) {
+                e.preventDefault();
+                handleSelection(card);
+              }
+            }
+          });
+
+          sidebar.addEventListener('mouseover', (e) => {
+            const card = e.target.closest('.map-card');
+            if (!card) return;
+            const item = markersMap[card.dataset.id];
+            if (item && map) {
+              map.panTo([item.lat, item.lng], { animate: true, duration: 0.5 });
+              item.element.getElement?.()?.classList.add('marker-hovered');
+            }
+          });
+
+          sidebar.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.map-card');
+            if (!card) return;
+            const item = markersMap[card.dataset.id];
+            item?.element.getElement?.()?.classList.remove('marker-hovered');
+          });
+        }
+      });
+    </script>
+
+    <!-- ESTILOS GLOBALES -->
+    <style is:global>
+      @keyframes goldPulse {
+        0%, 100% { box-shadow: 0 4px 14px rgba(201,168,76,0.4); }
+        50%       { box-shadow: 0 6px 22px rgba(201,168,76,0.7), 0 0 0 5px rgba(201,168,76,0.15); }
+      }
+      @keyframes navyPulse {
+        0%, 100% { box-shadow: 0 3px 10px rgba(11,25,44,0.35); }
+        50%       { box-shadow: 0 5px 18px rgba(11,25,44,0.55), 0 0 0 4px rgba(201,168,76,0.2); }
+      }
+
+      .map-circle-exclusive div { animation: goldPulse 2.4s ease-in-out infinite; }
+      .map-circle-exclusive div:hover {
+        transform: scale(1.15) !important;
+        box-shadow: 0 6px 24px rgba(201,168,76,0.65) !important;
+        animation: none !important;
+      }
+
+      .map-circle-regular div { animation: navyPulse 3s ease-in-out infinite; }
+      .map-circle-regular div:hover {
+        transform: scale(1.15) !important;
+        background: linear-gradient(135deg, #0B192C 0%, #122a47 100%) !important;
+        border-color: #C9A84C !important;
+        box-shadow: 0 5px 20px rgba(11,25,44,0.5) !important;
+        animation: none !important;
+      }
+
+      .map-circle-exclusive.marker-hovered div,
+      .map-circle-regular.marker-hovered div {
+        transform: scale(1.2) !important;
+        box-shadow: 0 6px 24px rgba(201,168,76,0.55) !important;
+        animation: none !important;
+      }
+
+      .leaflet-bar { border: none !important; border-radius: 10px !important; overflow: hidden !important; box-shadow: 0 4px 14px rgba(11,25,44,0.25) !important; }
+      .leaflet-control-zoom-in,
+      .leaflet-control-zoom-out {
+        background: #0B192C !important;
+        color: #C9A84C !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        width: 32px !important;
+        height: 32px !important;
+        line-height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(201,168,76,0.2) !important;
+        transition: background 0.2s ease, color 0.2s ease !important;
+      }
+      .leaflet-control-zoom-out { border-bottom: none !important; }
+      .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover { background: #C9A84C !important; color: #0B192C !important; }
+
+      .popup-exclusive .leaflet-popup-content-wrapper,
+      .popup-regular  .leaflet-popup-content-wrapper { background: #ffffff !important; border-radius: 18px !important; padding: 0 !important; overflow: hidden !important; border: 1px solid rgba(11,25,44,0.07) !important; box-shadow: 0 20px 40px rgba(11,25,44,0.15) !important; }
+      .popup-exclusive .leaflet-popup-content, .popup-regular  .leaflet-popup-content { margin: 0 !important; width: 240px !important; }
+      .leaflet-popup-tip { background: #ffffff !important; }
+      .leaflet-popup-close-button { top: 8px !important; right: 8px !important; color: #fff !important; background: rgba(11,25,44,0.55) !important; border-radius: 50% !important; width: 20px !important; height: 20px !important; line-height: 20px !important; text-align: center !important; font-size: 11px !important; padding: 0 !important; border: none !important; z-index: 50 !important; transition: background 0.2s !important; }
+      .leaflet-popup-close-button:hover { background: rgba(11,25,44,0.9) !important; }
+    </style>
+  </body>
+</html>

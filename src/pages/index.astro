@@ -1,11 +1,392 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import AccessibilityWidget from '../components/AccessibilityWidget.astro';
+import { Image } from 'astro:assets';
+import logoEmpresa from '../assets/images/logo-alexis-rd.jpg';
+import fallbackImage from '../assets/images/prueba-inmobiliaria.jpg';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const WHATSAPP_PHONE = "18295259993";
+
+const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}', { eager: true });
+
+// Tomamos solo las primeras 3 propiedades para la sección de featured cards
+const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
+const featuredProps = Object.entries(modulosJSON).slice(0, 3).map(([ruta, modulo]) => {
+  const c = modulo as any;
+  const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
+  const precio = parseInt(String(c.precio || '0').replace(/[^0-9]/g, ''), 10) || 0;
+  const urlSlug = id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-');
+  
+  const rutaRaw = String(c.imagenPrincipal || '');
+  const imagenPublica = rutaRaw ? rutaRaw.replace(/^\.\.\/\.\.\//, '/src/') : '';
+  const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
+
+    const cleanUbicacion = c.ubicacion ? String(c.ubicacion).replace(/\b\w/g, char => char.toUpperCase()) : 'República Dominicana';
+
+    return { 
+      id, 
+      urlSlug, 
+      titulo: c.titulo || id, 
+      ubicacion: cleanUbicacion, 
+      precio, 
+      tipo: c.tipo || 'Propiedad', 
+      imagenPrincipal: c.imagenPrincipal || '', 
+      imagenMetadata: imgMeta,
+      estado: c.estado || '' 
+    };
+});
+
+const stats = [
+  { value: '150+', label: 'Propiedades vendidas' },
+  { value: '12+', label: 'Años de experiencia' },
+  { value: '98%', label: 'Clientes satisfechos' },
+  { value: '$50M+', label: 'En transacciones' },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!DOCTYPE html>
+<html lang="es" class="bg-offwhite text-slate-900">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexis RD Real Estate | Propiedades Premium en República Dominicana</title>
+  <meta name="description" content="Descubre las mejores oportunidades de inversión inmobiliaria en Santo Domingo, Punta Cana, Las Terrenas y zonas de alto crecimiento en República Dominicana." />
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <Navbar lang="es" currentPage="home" />
+
+  <!-- ═══════════════════════════════════════════
+       HERO — Full Screen con Ken Burns
+  ═══════════════════════════════════════════ -->
+  <section class="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <img
+      src="/images/hero-dominican-republic.png"
+      alt="Propiedad de lujo en República Dominicana"
+      class="absolute inset-0 w-full h-full object-cover animate-ken-burns"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/50 to-navy/95"></div>
+
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <span class="inline-block bg-gold/20 text-gold text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-gold/30 mb-7 animate-fade-in">
+        Inversiones Inmobiliarias Premium · República Dominicana
+      </span>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight animate-fade-in-up">
+        Tu próxima inversión<br />
+        <span class="text-gold">empieza aquí</span>
+      </h1>
+      <p class="mt-6 text-xl text-white/75 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200 [text-shadow:_0_1px_3px_rgba(0,0,0,0.7)]">
+        Santo Domingo · Punta Cana · Las Terrenas · Juan Dolio
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-300">
+        <a
+          href="/comprar"
+          class="bg-gold hover:bg-amber-400 text-navy font-black px-9 py-4 rounded-full text-sm transition-all duration-200 shadow-xl shadow-gold/25 uppercase tracking-widest flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          Ver Propiedades Exclusivas
+        </a>
+        <a
+          href="/mapa"
+          class="bg-white/10 hover:bg-white/18 text-white font-semibold px-9 py-4 rounded-full text-sm transition-all duration-200 border border-white/25 backdrop-blur-sm uppercase tracking-widest"
+        >
+          Explorar Mapa
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <span class="text-white/40 text-xs uppercase tracking-widest font-semibold">Descubrir</span>
+      <svg class="w-5 h-5 text-gold/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       STATS BAND
+  ═══════════════════════════════════════════ -->
+  <section class="bg-navy border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        {stats.map(s => (
+          <div>
+            <div class="text-3xl font-black text-gold">{s.value}</div>
+            <div class="text-xs text-white/45 font-semibold uppercase tracking-widest mt-1">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SPLIT SECTION 1 — Tarjeta LEFT · Imagen RIGHT
+       "Propiedades Exclusivas"
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-offwhite py-24 md:py-32 overflow-hidden">
+    <!-- Decorative bg circle -->
+    <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-gold/5 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0 items-center">
+
+        <!-- LEFT — Floating Card -->
+        <div class="relative z-10 lg:pr-0 flex justify-center lg:justify-start">
+          <!-- The card overlaps the image on large screens -->
+          <div class="bg-white rounded-3xl shadow-[0_24px_60px_-12px_rgba(11,25,44,0.18)] p-10 md:p-14 max-w-md w-full lg:translate-x-16 lg:z-20 relative">
+            <span class="inline-flex items-center gap-2 bg-gold/10 text-gold text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-gold/20 mb-6">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>
+              Propiedades Exclusivas
+            </span>
+            <h2 class="text-3xl md:text-4xl font-black text-navy leading-tight tracking-tight">
+              Encuentra tu hogar<br />
+              <span class="text-gold">de ensueño</span>
+            </h2>
+            <p class="mt-5 text-warm-gray leading-relaxed text-sm">
+              Seleccionamos las mejores oportunidades residenciales y de inversión en zonas de alto crecimiento de República Dominicana. Asesoría experta del inicio al cierre.
+            </p>
+
+            <ul class="mt-6 space-y-3">
+              {['Apartamentos de lujo frente al mar', 'Villas y residencias privadas', 'Proyectos con beneficio Confotur'].map(item => (
+                <li class="flex items-center gap-3 text-sm text-navy font-medium">
+                  <span class="w-5 h-5 bg-gold/15 rounded-full flex items-center justify-center shrink-0">
+                    <svg class="w-3 h-3 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/comprar"
+                class="inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-amber-400 text-[#0B192C] font-bold px-7 py-3.5 rounded-full text-sm uppercase tracking-widest transition-all duration-200 shadow-lg shadow-gold/20 hover:shadow-gold/30"
+              >
+                Ver Propiedades Exclusivas
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </a>
+              <a
+                href="/mapa"
+                class="inline-flex items-center justify-center gap-1.5 text-slate-600 hover:text-gold border border-[#C9A84C]/30 hover:border-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 my-4"
+              >
+                <svg class="w-3.5 h-3.5 text-[#C9A84C]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Ver en el Mapa
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT — Image -->
+        <div class="relative order-first lg:order-last">
+          <div class="aspect-[4/3] lg:aspect-[3/2] rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="/images/hero-dominican-republic.png"
+              alt="Propiedades exclusivas en República Dominicana"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-br from-navy/20 to-transparent rounded-3xl"></div>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute bottom-4 left-4 lg:-bottom-4 lg:-left-4 bg-gold text-navy font-black text-sm px-5 py-3 rounded-2xl shadow-xl shadow-gold/30 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            +150 Propiedades
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SPLIT SECTION 2 — Imagen LEFT · Tarjeta RIGHT
+       "Inversión y Planos"
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-white py-24 md:py-32 overflow-hidden">
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-navy/3 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0 items-center">
+
+        <!-- LEFT — Image -->
+        <div class="relative order-last lg:order-first">
+          <div class="aspect-[4/3] lg:aspect-[3/2] rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="/images/torre-moderna-santo-domingo.png"
+              alt="Proyectos en planos e inversión inmobiliaria"
+              class="w-full h-full object-cover scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-tl from-navy/25 to-transparent rounded-3xl"></div>
+          </div>
+          <!-- Floating stat -->
+          <div class="absolute top-4 right-4 lg:-top-4 lg:-right-4 bg-white border border-slate-100 shadow-xl rounded-2xl p-4 flex flex-col items-center gap-1">
+            <span class="text-2xl font-black text-navy">12%</span>
+            <span class="text-[10px] text-warm-gray font-semibold uppercase tracking-wider text-center">ROI<br/>Promedio</span>
+          </div>
+        </div>
+
+        <!-- RIGHT — Floating Card -->
+        <div class="relative z-10 lg:pl-0 flex justify-center lg:justify-end">
+          <div class="bg-white rounded-3xl shadow-[0_24px_60px_-12px_rgba(11,25,44,0.14)] border border-slate-100/80 p-6 pb-12 sm:p-10 md:p-14 max-w-md w-full lg:-translate-x-16 lg:z-20 relative">
+            <span class="inline-flex items-center gap-2 bg-navy/8 text-navy text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-navy/15 mb-6">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+              Proyectos en Planos
+            </span>
+            <h2 class="text-3xl md:text-4xl font-black text-navy leading-tight tracking-tight">
+              Invierte desde
+              <span class="text-gold"> el inicio</span>
+            </h2>
+            <p class="mt-5 text-warm-gray leading-relaxed text-sm">
+              Los mejores retornos de inversión en el mercado dominicano vienen de proyectos pre-construcción. Accede a precios preferentes y construye patrimonio desde el primer día.
+            </p>
+
+<div class="mt-6 grid grid-cols-2 gap-3">
+              {[
+                {
+                  svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>',
+                  label: 'Pre-construcción', sub: 'Precios desde planos'
+                },
+                {
+                  svg: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+                  label: 'Alta valorización', sub: 'Hasta 35% al entrega'
+                },
+                {
+                  svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>',
+                  label: 'Zonas turísticas', sub: 'Punta Cana · Cap Cana'
+                },
+                {
+                  svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>',
+                  label: 'Ley Confotur', sub: 'Exención de impuestos'
+                },
+              ].map(item => (
+                <div class="bg-offwhite rounded-xl p-3 border border-slate-100">
+                  <svg class="w-5 h-5 text-[#C9A84C] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={item.svg}></svg>
+                  <div class="text-xs font-bold text-navy">{item.label}</div>
+                  <div class="text-[10px] text-warm-gray mt-0.5">{item.sub}</div>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/comprar"
+                class="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-navy font-black px-7 py-3.5 rounded-full text-sm uppercase tracking-widest transition-all duration-200 shadow-lg shadow-gold/25 hover:shadow-gold/35"
+              >
+                Ver Oportunidades de Inversión
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FEATURED PROPERTIES — Mini-grid de 3 tarjetas
+  ═══════════════════════════════════════════ -->
+  <section class="bg-offwhite py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14">
+        <span class="inline-block bg-gold/10 text-gold text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-gold/20 mb-4">
+          Selección del Mes
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-navy tracking-tight">
+          Propiedades Destacadas
+        </h2>
+        <p class="mt-3 text-warm-gray max-w-xl mx-auto text-sm">Una selección curada de las mejores opciones del mes en todo el territorio dominicano.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+        {featuredProps.map(p => (
+          <a
+            href={"/propiedades/" + p.urlSlug}
+            class="group bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_40px_-8px_rgba(11,25,44,0.16)] transition-all duration-300 hover:-translate-y-1 flex flex-col"
+          >
+            <div class="aspect-[4/3] overflow-hidden bg-slate-100 relative">
+              <Image
+                src={p.imagenMetadata}
+                alt={p.titulo}
+                format="webp"
+                quality={80}
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
+              />
+              <div class="hidden absolute inset-0 items-center justify-center bg-gradient-to-br from-[#e8eaf0] to-[#d4d8e2]"></div>
+              <span class="absolute top-3 left-3 bg-navy/90 text-gold text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg">{p.estado}</span>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <div class="text-[10px] font-black text-gold uppercase tracking-widest">{p.tipo}</div>
+              <h3 class="mt-2 font-bold text-navy text-base leading-snug line-clamp-2 group-hover:text-gold-dark transition-colors">{p.titulo}</h3>
+              <p class="mt-1 text-xs text-warm-gray">{p.ubicacion}</p>
+              <div class="flex items-center justify-between w-full mt-auto pt-3 border-t border-slate-100/60">
+                <span class="text-lg font-black text-navy">USD ${p.precio.toLocaleString('en-US')}</span>
+                <span class="text-xs text-gold font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                  Ver detalles
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="text-center mt-12">
+        <a
+          href="/comprar"
+          class="inline-flex items-center gap-2 bg-navy hover:bg-navy-light text-white font-bold px-10 py-4 rounded-full text-sm uppercase tracking-widest transition-all duration-200 shadow-lg shadow-navy/20"
+        >
+          Ver Catálogo Completo
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       CTA FINAL — Vende con Nosotros
+  ═══════════════════════════════════════════ -->
+  <section class="bg-navy relative overflow-hidden py-20">
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block bg-gold/15 text-gold text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-gold/25 mb-6">
+        ¿Tienes una propiedad?
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight">
+        Vende o alquila con los<br/>
+        <span class="text-gold">expertos del mercado</span>
+      </h2>
+      <p class="mt-5 text-white/75 max-w-xl mx-auto leading-relaxed">
+        Valuación gratuita, marketing premium y una red de compradores nacionales e internacionales activos. Sin costos iniciales.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/vende-con-nosotros"
+          class="inline-flex items-center justify-center gap-2 bg-gold hover:bg-amber-400 text-navy font-black px-9 py-4 rounded-full text-sm uppercase tracking-widest transition-all duration-200 shadow-xl shadow-gold/25"
+        >
+          Solicitar Valuación Gratis
+        </a>
+        <a
+          href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Hola Alexis, tengo una propiedad y quiero información para venderla o alquilarla.')}`}
+          target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-9 py-4 rounded-full text-sm transition-all duration-200 shadow-lg shadow-emerald-600/20"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Contactar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang="es" />
+  <AccessibilityWidget lang="es" />
+
+</body>
+</html>

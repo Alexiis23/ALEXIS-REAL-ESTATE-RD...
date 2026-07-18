@@ -1,0 +1,351 @@
+---
+import { Image } from "astro:assets";
+import logoEmpresa from "../assets/images/logo-alexis-rd.jpg";
+
+interface Props {
+  lang?: "es" | "en";
+  currentPage?: string;
+}
+
+const { lang = "es", currentPage = "" } = Astro.props;
+const isEn = lang === "en";
+const prefix = isEn ? "/en" : "";
+const isHome = currentPage === "home";
+
+const WHATSAPP_PHONE = "18295259993";
+const whatsappMsg = isEn
+  ? "Hi Alexis, I visited your website and would like personalized real estate advisory."
+  : "Hola Alexis, visité tu sitio web y me gustaría asesoría inmobiliaria personalizada.";
+
+// 🌟 Definimos la interfaz del enlace para que TypeScript conozca sus propiedades
+interface NavLink {
+  label: string;
+  href: string;
+  id: string;
+  external?: boolean; // El signo '?' indica que esta propiedad es opcional
+}
+
+const navLinks: NavLink[] = isEn
+  ? [
+      { label: "Home", href: "/en", id: "home" },
+      { label: "Buy", href: "/en/buy", id: "buy" },
+      { label: "Rent", href: "/en/rent", id: "rent" },
+      { label: "Map", href: "/mapa", id: "map" },
+      { label: "About Us", href: "/en/about-us", id: "nosotros" },
+      { label: "Contact", href: "/en/contact", id: "contact" },
+    ]
+  : [
+      { label: "Inicio", href: "/", id: "home" },
+      { label: "Comprar", href: "/comprar", id: "buy" },
+      { label: "Alquilar", href: "/alquiler", id: "rent" },
+      { label: "Mapa", href: "/mapa", id: "map" },
+      { label: "Nosotros", href: "/nosotros", id: "nosotros" },
+      { label: "Contacto", href: "/contacto", id: "contact" },
+    ];
+
+
+const captacionLink = isEn
+  ? { label: "List with Us", href: "/en/list-with-us", id: "list-with-us" }
+  : {
+      label: "Vende con Nosotros",
+      href: "/vende-con-nosotros",
+      id: "vende-con-nosotros",
+    };
+---
+
+<header
+  id="main-navbar"
+  class={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isHome ? "bg-transparent py-2" : "bg-navy shadow-lg shadow-black/20"}`}
+  data-is-home={isHome ? "true" : "false"}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo Seguro -->
+      <a
+        href={isEn ? "/en" : "/"}
+        class="flex items-center h-full py-2 shrink-0"
+      >
+        <div class="relative overflow-hidden flex items-center justify-center rounded-lg bg-navy/20 backdrop-blur-[2px] p-1 border border-white/5">
+          <Image
+            src={logoEmpresa}
+            alt="Alexis Real Estate RD..."
+            height={52}
+            quality="max"
+            loading="eager"
+            class="h-13 w-auto object-contain mix-blend-screen contrast-125 brightness-110 filter drop-shadow-[0_2px_8px_rgba(201,168,76,0.3)]"
+          />
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-1">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
+              class={`px-4 py-2 text-sm font-semibold tracking-wide uppercase transition-colors duration-200
+              ${
+                currentPage === link.id
+                  ? "text-gold border-b-2 border-gold"
+                  : "text-white/90 hover:text-gold"
+              }`}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+        <!-- Captación CTA — Pill Premium -->
+        <a
+          href={captacionLink.href}
+          class={`ml-2 inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold tracking-wider uppercase rounded-full transition-all duration-200
+            ${
+              currentPage === captacionLink.id
+                ? "bg-gold text-navy shadow-md shadow-gold/30"
+                : "bg-gold/15 text-gold border border-gold/40 hover:bg-gold hover:text-navy hover:shadow-lg hover:shadow-gold/20"
+            }`}
+        >
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            ></path>
+          </svg>
+          {captacionLink.label}
+        </a>
+      </nav>
+
+      <!-- Right Controls -->
+      <div class="hidden md:flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div
+          class="flex items-center gap-0.5 bg-white/10 backdrop-blur-sm p-1 rounded-lg text-xs font-bold"
+        >
+          <a
+            href="/"
+            class={`px-2.5 py-1.5 rounded transition-all duration-200 ${!isEn ? "bg-gold text-navy shadow-sm" : "text-white/70 hover:text-white"}`}
+            >ES</a
+          >
+          <a
+            href="/en"
+            class={`px-2.5 py-1.5 rounded transition-all duration-200 ${isEn ? "bg-gold text-navy shadow-sm" : "text-white/70 hover:text-white"}`}
+            >EN</a
+          >
+        </div>
+
+        <!-- WhatsApp CTA -->
+        <a
+          href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(whatsappMsg)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-all duration-200 flex items-center gap-2 shadow-lg shadow-emerald-600/20 hover:shadow-emerald-500/30"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+            ></path></svg
+          >
+          {isEn ? "Contact Agent" : "Contactar Agente"}
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button with morphing lines -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors focus:outline-none flex flex-col justify-center items-center w-10 h-10 gap-1.5 z-50 relative"
+        aria-label="Toggle menu"
+      >
+        <span class="hamburger-line line-1 bg-[#C9A84C] w-6 h-0.5 rounded-full transition-all duration-300"></span>
+        <span class="hamburger-line line-2 bg-[#C9A84C] w-6 h-0.5 rounded-full transition-all duration-300"></span>
+        <span class="hamburger-line line-3 bg-[#C9A84C] w-6 h-0.5 rounded-full transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 h-screen w-full bg-[#0B192C]/98 backdrop-blur-2xl border-b border-white/5 z-40 transform -translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between pt-24 pb-12 px-6 md:hidden overflow-y-auto"
+  >
+    <!-- Brand indicator -->
+    <div class="flex flex-col items-center gap-1.5 mt-2">
+      <span class="text-gold text-[10px] font-black uppercase tracking-[0.3em]">Alexis RD</span>
+      <div class="w-12 h-[1px] bg-gold/30"></div>
+    </div>
+
+    <!-- Centered Links -->
+    <nav class="flex flex-col items-center gap-5 my-6">
+      {
+        navLinks.map((link, index) => (
+          <a
+            href={link.href}
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+            style={`animation-delay: ${index * 60}ms`}
+            class="mobile-nav-link text-lg font-medium tracking-[0.2em] text-white/90 hover:text-gold transition-colors uppercase"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Bottom CTAs -->
+    <div class="w-full flex flex-col gap-4 max-w-xs mx-auto">
+      <!-- Captación CTA Mobile — Pill Premium -->
+      <a
+        href={captacionLink.href}
+        style={`animation-delay: ${navLinks.length * 60}ms`}
+        class="mobile-nav-link flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold text-navy bg-gold hover:bg-amber-400 rounded-full transition-all duration-300 uppercase tracking-widest shadow-lg shadow-gold/15"
+      >
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+          ></path>
+        </svg>
+        {captacionLink.label}
+      </a>
+      <div 
+        style={`animation-delay: ${(navLinks.length + 1) * 60}ms`}
+        class="mobile-nav-link flex items-center gap-3 w-full"
+      >
+        <div
+          class="flex items-center bg-white/5 border border-white/10 p-1 rounded-xl text-xs font-bold shrink-0"
+        >
+          <a
+            href="/"
+            class={`px-3 py-2 rounded-lg transition-colors ${!isEn ? "bg-gold text-navy font-extrabold" : "text-white/70"}`}
+            >ES</a
+          >
+          <a
+            href="/en"
+            class={`px-3 py-2 rounded-lg transition-colors ${isEn ? "bg-gold text-navy font-extrabold" : "text-white/70"}`}
+            >EN</a
+          >
+        </div>
+        <a
+          href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(whatsappMsg)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-3 rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+            ></path></svg>
+          {isEn ? "WhatsApp" : "WhatsApp"}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  function initNavbar() {
+    const navbar = document.getElementById("main-navbar");
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    let lastScroll = 0;
+    const handleScroll = () => {
+      if (!navbar) return;
+      const isHome = navbar.getAttribute("data-is-home") === "true";
+      if (!isHome) {
+        navbar.classList.add("bg-navy", "shadow-lg", "shadow-black/20");
+        navbar.classList.remove("bg-transparent", "py-2");
+        return;
+      }
+
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > 50) {
+        navbar.classList.add("bg-navy", "shadow-lg", "shadow-black/20");
+        navbar.classList.remove("bg-transparent", "py-2");
+      } else {
+        navbar.classList.remove("bg-navy", "shadow-lg", "shadow-black/20");
+        navbar.classList.add("bg-transparent", "py-2");
+      }
+      lastScroll = currentScroll;
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    mobileMenuBtn?.addEventListener("click", () => {
+      if (!mobileMenu) return;
+      const isOpen = mobileMenu.classList.contains("translate-y-0");
+      if (isOpen) {
+        // Close menu
+        mobileMenu.classList.add("-translate-y-full");
+        mobileMenu.classList.remove("translate-y-0", "mobile-menu-active");
+        mobileMenuBtn.classList.remove("menu-open");
+        document.body.classList.remove("overflow-hidden");
+      } else {
+        // Open menu
+        mobileMenu.classList.remove("-translate-y-full");
+        mobileMenu.classList.add("translate-y-0", "mobile-menu-active");
+        mobileMenuBtn.classList.add("menu-open");
+        document.body.classList.add("overflow-hidden");
+      }
+    });
+
+    // Close menu when a link inside it is clicked
+    mobileMenu?.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        if (!mobileMenu) return;
+        mobileMenu.classList.add("-translate-y-full");
+        mobileMenu.classList.remove("translate-y-0", "mobile-menu-active");
+        mobileMenuBtn?.classList.remove("menu-open");
+        document.body.classList.remove("overflow-hidden");
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initNavbar);
+  document.addEventListener("astro:page-load", initNavbar);
+</script>
+
+<style>
+  #main-navbar {
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  /* Hamburger morphing lines */
+  .hamburger-line {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+  #mobile-menu-btn.menu-open .line-1 {
+    transform: translateY(7px) rotate(45deg);
+  }
+  #mobile-menu-btn.menu-open .line-2 {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  #mobile-menu-btn.menu-open .line-3 {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Fade-in slide-up animation for mobile nav links */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-nav-link {
+    opacity: 0;
+  }
+
+  .mobile-menu-active .mobile-nav-link {
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>
+
+

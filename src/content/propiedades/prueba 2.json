@@ -1,0 +1,18 @@
+{
+  "descripcion": "esto es una prueba",
+  "precio": 100000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": true,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 2,
+  "banos": 2,
+  "parqueos": 2,
+  "area": 120,
+  "latitud": 19.794,
+  "longitud": -73.489,
+  "ubicacion": "el naranjo",
+  "imagenPrincipal": "../../assets/propiedades/prueba 2/imagenPrincipal.png",
+  "galeria": []
+}

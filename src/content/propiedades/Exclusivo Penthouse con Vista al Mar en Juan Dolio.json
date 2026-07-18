@@ -1,0 +1,15 @@
+{
+  "descripcion": "Hermoso penthouse de lujo totalmente amueblado, a solo pasos de la playa. Cuenta con terraza privada, jacuzzi y seguridad 24/7. Ideal para inversión de rentas cortas (Airbnb).",
+  "precio": 285000,
+  "ubicacion": "Juan Dolio, San Pedro de Macorís",
+  "tipo": "Apartamento",
+  "estado": "En planos",
+  "confotur": true,
+  "habitaciones": 2,
+  "banos": 2,
+  "parqueos": 1,
+  "area": 145,
+  "latitud": 18.423,
+  "longitud": -69.412,
+  "imagenPrincipal": "../../assets/propiedades/Exclusivo Penthouse con Vista al Mar en Juan Dolio/imagenPrincipal.webp"
+}

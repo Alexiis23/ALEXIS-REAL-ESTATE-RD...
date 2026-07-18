@@ -1,0 +1,173 @@
+---
+// src/components/buscador.astro
+const url = Astro.url.pathname;
+const isEn = url.startsWith('/en');
+
+interface Props {
+  defaultContrato?: 'todos' | 'venta' | 'alquiler';
+}
+const { defaultContrato = 'todos' } = Astro.props;
+---
+
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-5xl mx-auto -mt-4 relative z-30">
+  <form id="formulario-buscador" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+    <!-- Tipo de Transacción (Venta / Alquiler) -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-contrato" class="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        {isEn ? 'Transaction' : 'Transacción'}
+      </label>
+      <select
+        id="filter-contrato"
+        data-default={defaultContrato}
+        class="bg-offwhite border border-slate-200 rounded-lg p-2.5 text-sm font-medium text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
+      >
+        <option value="todos">{isEn ? 'Buy & Rent' : 'Venta y Alquiler'}</option>
+        <option value="venta">{isEn ? 'For Sale' : 'En Venta'}</option>
+        <option value="alquiler">{isEn ? 'For Rent' : 'En Alquiler'}</option>
+      </select>
+    </div>
+
+    <!-- Tipo de Propiedad -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-tipo" class="text-xs font-bold text-navy uppercase tracking-wider">
+        {isEn ? 'Property Type' : 'Tipo de Propiedad'}
+      </label>
+      <select id="filter-tipo" class="bg-offwhite border border-slate-200 rounded-lg p-2.5 text-sm font-medium text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all">
+        <option value="todos">{isEn ? 'All types' : 'Todos los tipos'}</option>
+        <option value="apartamento">{isEn ? 'Apartment' : 'Apartamento'}</option>
+        <option value="villa">Villa</option>
+        <option value="casa">{isEn ? 'House' : 'Casa'}</option>
+        <option value="solar">{isEn ? 'Lot / Land' : 'Solar / Terreno'}</option>
+      </select>
+    </div>
+
+    <!-- Estado del Proyecto -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-estado" class="text-xs font-bold text-navy uppercase tracking-wider">
+        {isEn ? 'Project Status' : 'Estado del Proyecto'}
+      </label>
+      <select id="filter-estado" class="bg-offwhite border border-slate-200 rounded-lg p-2.5 text-sm font-medium text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all">
+        <option value="todos">{isEn ? 'All status' : 'Todos los estados'}</option>
+        <option value="en planos">{isEn ? 'Under Construction' : 'En planos'}</option>
+        <option value="listo para entrega">{isEn ? 'Ready for Delivery' : 'Listo para entrega'}</option>
+        <option value="disponible">{isEn ? 'Available' : 'Disponible'}</option>
+      </select>
+    </div>
+
+    <!-- Presupuesto Máximo -->
+    <div class="flex flex-col gap-1.5">
+      <label for="filter-precio" class="text-xs font-bold text-navy uppercase tracking-wider">
+        {isEn ? 'Max Price (USD)' : 'Precio Máximo (USD)'}
+      </label>
+      <select id="filter-precio" class="bg-offwhite border border-slate-200 rounded-lg p-2.5 text-sm font-medium text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all">
+        <option value="cualquier">{isEn ? 'Any price' : 'Cualquier precio'}</option>
+        <option value="150000">Up to $150,000</option>
+        <option value="300000">Up to $300,000</option>
+        <option value="500000">Up to $500,000</option>
+      </select>
+    </div>
+
+    <!-- Botón para Limpiar -->
+    <div class="flex items-end">
+      <button type="button" id="btn-limpiar-filtros" class="w-full bg-navy hover:bg-navy-light text-white font-bold p-2.5 rounded-lg text-sm transition-colors border border-navy flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        {isEn ? 'Clear Filters' : 'Limpiar Filtros'}
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const inicializarBuscador = () => {
+    const selectContrato = document.getElementById('filter-contrato') as HTMLSelectElement | null;
+    const selectTipo = document.getElementById('filter-tipo') as HTMLSelectElement | null;
+    const selectEstado = document.getElementById('filter-estado') as HTMLSelectElement | null;
+    const selectPrecio = document.getElementById('filter-precio') as HTMLSelectElement | null;
+    const btnLimpiar = document.getElementById('btn-limpiar-filtros');
+    const tarjetas = document.querySelectorAll('.propiedad-card');
+
+    // Apply default value from data attribute (e.g., pre-select 'alquiler')
+    if (selectContrato) {
+      const defaultVal = selectContrato.getAttribute('data-default') || 'todos';
+      selectContrato.value = defaultVal;
+    }
+
+    function filtrar() {
+      if (!selectContrato || !selectTipo || !selectEstado || !selectPrecio) return;
+
+      const contratoVal = selectContrato.value.toLowerCase().trim();
+      const tipoVal = selectTipo.value.toLowerCase().trim();
+      const estadoVal = selectEstado.value.toLowerCase().trim();
+      const precioVal = selectPrecio.value.trim();
+
+      tarjetas.forEach((tarjeta) => {
+        const htmlTarjeta = tarjeta as HTMLElement;
+        const tTipo = (htmlTarjeta.getAttribute('data-tipo') || '').toLowerCase().trim();
+        const tEstado = (htmlTarjeta.getAttribute('data-estado') || '').toLowerCase().trim();
+        const tContrato = (htmlTarjeta.getAttribute('data-contrato') || 'venta').toLowerCase().trim();
+        const tPrecio = Number(htmlTarjeta.getAttribute('data-precio') || 0);
+
+        const cumpleContrato =
+          contratoVal === 'todos' ||
+          tContrato === contratoVal ||
+          (contratoVal === 'alquiler' && (tContrato === 'alquiler' || tContrato === 'renta' || tContrato === 'rent')) ||
+          (contratoVal === 'venta' && (tContrato === 'venta' || tContrato === 'sale' || tContrato === 'for sale'));
+
+        const cumpleTipo =
+          tipoVal === 'todos' ||
+          tTipo === tipoVal ||
+          (tipoVal === 'apartamento' && tTipo === 'apartment') ||
+          (tipoVal === 'casa' && tTipo === 'house') ||
+          (tipoVal === 'solar' && tTipo === 'lot / land');
+
+        const cumpleEstado =
+          estadoVal === 'todos' ||
+          tEstado === estadoVal ||
+          (estadoVal === 'en planos' && tEstado === 'under construction') ||
+          (estadoVal === 'listo para entrega' && tEstado === 'ready for delivery');
+
+        let cumplePrecio = true;
+        if (precioVal && precioVal !== 'cualquier') {
+          cumplePrecio = tPrecio <= Number(precioVal);
+        }
+
+        if (cumpleContrato && cumpleTipo && cumpleEstado && cumplePrecio) {
+          htmlTarjeta.style.display = 'flex';
+        } else {
+          htmlTarjeta.style.display = 'none';
+        }
+      });
+
+      // Show empty state if all cards are hidden
+      const grid = document.getElementById('propiedades-grid');
+      const emptyMsg = document.getElementById('empty-filter-msg');
+      if (grid && emptyMsg) {
+        const visible = grid.querySelectorAll('.propiedad-card[style*="flex"]').length;
+        emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+      }
+    }
+
+    selectContrato?.addEventListener('change', filtrar);
+    selectTipo?.addEventListener('change', filtrar);
+    selectEstado?.addEventListener('change', filtrar);
+    selectPrecio?.addEventListener('change', filtrar);
+
+    btnLimpiar?.addEventListener('click', () => {
+      if (selectContrato) selectContrato.value = 'todos';
+      if (selectTipo) selectTipo.value = 'todos';
+      if (selectEstado) selectEstado.value = 'todos';
+      if (selectPrecio) selectPrecio.value = 'cualquier';
+      filtrar();
+    });
+
+    // Run on init to apply default filters (e.g., alquiler page)
+    filtrar();
+  };
+
+  document.addEventListener('DOMContentLoaded', inicializarBuscador);
+  document.addEventListener('astro:page-load', inicializarBuscador);
+</script>

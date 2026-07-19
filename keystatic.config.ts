@@ -5,7 +5,7 @@ export default config({
   storage: process.env.NODE_ENV === 'production'
     ? {
       kind: 'github',
-      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD....',
+      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD...',
     }
     : {
       kind: 'local',

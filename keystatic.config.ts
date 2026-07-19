@@ -2,9 +2,14 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   // 🌐 Modo de almacenamiento local para desarrollo (Git-based)
-  storage: {
-    kind: 'local',
-  },
+  storage: process.env.NODE_ENV === 'production'
+    ? {
+      kind: 'github',
+      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD....', // Tu nombre exacto de repositorio de GitHub
+    }
+    : {
+      kind: 'local',
+    },
 
   collections: {
     propiedades: collection({
@@ -29,12 +34,12 @@ export default config({
         }),
 
         // --- SECCIÓN 2: TRADUCCIÓN A INGLÉS (CAMPOS ESPEJO OPCIONALES) ---
-        titulo_en: fields.text({ 
-          label: 'Título de la Propiedad (Inglés) - OPCIONAL', 
+        titulo_en: fields.text({
+          label: 'Título de la Propiedad (Inglés) - OPCIONAL',
           description: 'Déjalo vacío para traducirlo automáticamente con DeepL.',
         }),
-        descripcion_en: fields.text({ 
-          label: 'Descripción del Inmueble (Inglés) - OPCIONAL', 
+        descripcion_en: fields.text({
+          label: 'Descripción del Inmueble (Inglés) - OPCIONAL',
           description: 'Déjalo vacío para traducirlo automáticamente con DeepL.',
           multiline: true
         }),

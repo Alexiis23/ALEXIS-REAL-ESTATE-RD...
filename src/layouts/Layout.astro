@@ -1,14 +1,63 @@
+---
+// src/layouts/Layout.astro
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { 
+	title = "ALEXIS REAL ESTATE RD... | Propiedades Premium en República Dominicana", 
+	description = "Asesoría inmobiliaria premium y corretaje en la República Dominicana. Encuentra apartamentos, villas y terrenos de alta rentabilidad." 
+} = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es" class="bg-offwhite text-slate-900">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		
+		<!-- SEO Meta Tags -->
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content="Alexis Guerrero" />
+		<meta name="designer" content="Alexis Guerrero" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content="https://alexisRealState.com" />
+
+		<!-- JSON-LD Structured Data (Schema.org) for Astro v5 -->
+		<script type="application/ld+json" is:inline>
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "ALEXIS REAL ESTATE RD...",
+				"url": "https://alexisRealState.com",
+				"author": {
+					"@type": "Person",
+					"name": "Alexis Guerrero",
+					"jobTitle": "Chef Developer & Web Architect",
+					"sameAs": "https://github.com/alexisguerrero"
+				},
+				"publisher": {
+					"@type": "Organization",
+					"name": "ALEXIS REAL ESTATE RD...",
+					"url": "https://alexisRealState.com",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "https://alexisRealState.com/src/assets/images/logo-alexis-rd.jpg"
+					}
+				}
+			}
+		</script>
 	</head>
-	<body>
+	<body class="min-h-screen flex flex-col">
 		<slot />
 	</body>
 </html>

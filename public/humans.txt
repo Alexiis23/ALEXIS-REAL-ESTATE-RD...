@@ -1,0 +1,14 @@
+/* TEAM */
+Chef Developer & Web Architect: Erick Alexis Guerrero Espiritusanto
+From: Madrid, España
+Web: https://github.com/Alexiis23
+
+/* THANKS */
+Propietario del negocio & Agente Inmobiliario: Alexis RD
+Web: https://alexisRealState.com
+
+/* SITE */
+Last update: 2026/07/18
+Standards: HTML5, CSS3, JSON-LD Schema
+Components: React
+Software Stack: Astro v5, Tailwind CSS v4, Resend API, Keystatic CMS

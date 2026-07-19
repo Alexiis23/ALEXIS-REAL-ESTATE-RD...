@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
           
           <!-- Encabezado de Marca -->
           <div style="padding: 30px; text-align: center; border-bottom: 1px solid rgba(201,168,76,0.15); background: linear-gradient(135deg, #0B192C 0%, #152740 100%);">
-            <h1 style="color: #C9A84C; margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Alexis Real Estate RD...</h1>
+            <h1 style="color: #C9A84C; margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">ALEXIS REAL ESTATE RD...</h1>
             <p style="color: #ffffff; margin: 5px 0 0; font-size: 13px; font-weight: 500; opacity: 0.8;">Notificación de Lead desde la Web</p>
           </div>
 
@@ -82,7 +82,7 @@ export const POST: APIRoute = async ({ request }) => {
           <!-- Pie de Página Seguridad -->
           <div style="background-color: #0B192C; padding: 20px; text-align: center; border-top: 1px solid rgba(201,168,76,0.15);">
             <p style="color: #94a3b8; font-size: 11px; margin: 0;">Mensaje seguro enviado directamente desde el sistema automatizado de alexisRealState.com</p>
-            <p style="color: #C9A84C; font-size: 10px; margin: 5px 0 0; font-weight: bold;">© 2026 Alexis Real Estate RD... Todos los derechos reservados.</p>
+            <p style="color: #C9A84C; font-size: 10px; margin: 5px 0 0; font-weight: bold;">© 2026 ALEXIS REAL ESTATE RD... Todos los derechos reservados.</p>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ export const POST: APIRoute = async ({ request }) => {
 
         // 4. Disparar el correo usando el Dominio Corporativo Oficial
         const response = await resend.emails.send({
-            from: 'Alexis Real Estate RD <consultas@alexisRealState.com>', // 🌟 REMITENTE CORPORATIVO AUTORIZADO
+            from: 'ALEXIS REAL ESTATE RD <consultas@alexisRealState.com>', // 🌟 REMITENTE CORPORATIVO AUTORIZADO
             to: 'alexisre.rd@gmail.com',                                  // 🌟 DESTINATARIO: Tu papá recibe el lead directo
             replyTo: email,                                               // Permite responderle al cliente dándole al botón "Responder" en Gmail
             subject: asunto,

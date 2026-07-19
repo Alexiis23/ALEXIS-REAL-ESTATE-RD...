@@ -1,23 +1,22 @@
 ---
 import "../styles/global.css";
 import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Buscador from "../components/buscador.astro";
 import AccessibilityWidget from "../components/AccessibilityWidget.astro";
 import fallbackImage from "../assets/images/prueba-inmobiliaria.jpg";
 
-const modulosJSON = import.meta.glob("/src/content/propiedades/**/*.json", {
-  eager: true,
-});
+const propertiesCollection = await getCollection("propiedades");
 const imagenes = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}",
   { eager: true },
 );
 
-const allPropiedades = Object.entries(modulosJSON).map(([ruta, modulo]) => {
-  const contenido = modulo as any;
-  const id = ruta.split("/").pop()?.replace(".json", "") || "property";
+const allPropiedades = propertiesCollection.map((entry) => {
+  const contenido = entry.data;
+  const id = entry.id;
 
   const rawPrecioString = String(contenido.precio || "0");
   const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");

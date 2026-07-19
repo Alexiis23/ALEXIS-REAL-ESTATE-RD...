@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import "../../styles/global.css";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
@@ -7,28 +7,32 @@ import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
 import * as deepl from "deepl-node";
 
-export async function getStaticPaths() {
-  const propiedadesEntries = await getCollection("propiedades");
-  return propiedadesEntries.map((entry) => {
-    const slugSeguro = entry.id
+const { id } = Astro.params;
+
+// Intentar recuperar directamente por ID primero
+let entry = await getEntry("propiedades", id || "");
+
+// Si no se encuentra (debido a diferencias de casing/slug en Keystatic), buscamos en la colección por slug
+if (!entry && id) {
+  const todas = await getCollection("propiedades");
+  entry = todas.find((item) => {
+    const slugSeguro = item.id
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]/g, "-");
-
-    return {
-      params: { id: slugSeguro },
-      props: { entry },
-    };
+    return slugSeguro === id;
   });
 }
 
-// 1. EXTRAER PROPS Y CONFIGURAR IDENTIFICADORES
-const { entry } = Astro.props;
-const id = entry.id;
+if (!entry) {
+  return Astro.redirect("/404");
+}
+
+const idPropiedad = entry.id;
 
 // 2. CONFIGURAR VARIABLES DE TEXTO INMEDIATAMENTE
-const tituloOriginal = entry.data.titulo || id.replace(/-/g, " ");
+const tituloOriginal = entry.data.titulo || idPropiedad.replace(/-/g, " ");
 const descripcionOriginal =
   entry.data.descripcion || "Descubre esta increíble oportunidad inmobiliaria.";
 const tipoOriginal = entry.data.tipo || "Apartamento";

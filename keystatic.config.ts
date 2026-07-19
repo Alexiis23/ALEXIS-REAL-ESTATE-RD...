@@ -1,11 +1,11 @@
 import { config, fields, collection } from '@keystatic/core';
 
 export default config({
-  // 🌐 Modo de almacenamiento local para desarrollo (Git-based)
+  // 🌐 Modo de almacenamiento híbrido: GitHub en Vercel, Local en desarrollo
   storage: process.env.NODE_ENV === 'production'
     ? {
       kind: 'github',
-      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD....', // Tu nombre exacto de repositorio de GitHub
+      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD....',
     }
     : {
       kind: 'local',
@@ -14,13 +14,12 @@ export default config({
   collections: {
     propiedades: collection({
       label: 'Propiedades Inmobiliarias',
-      slugField: 'titulo', // El JSON se guardará usando el título en español como identificador
-      path: 'src/content/propiedades/*', // Ruta exacta de tu colección de Astro
-      format: { data: 'json' }, // Formato de persistencia de datos
+      slugField: 'titulo',
+      path: 'src/content/propiedades/*',
+      format: { data: 'json' },
 
       // 🌟 INTERFAZ PREMIUM DISEÑADA PARA TU PADRE
       schema: {
-
         // --- SECCIÓN 1: CONTENIDO EN ESPAÑOL ---
         titulo: fields.text({
           label: 'Título de la Propiedad (Español)',

@@ -1,94 +1,66 @@
 ---
 // src/pages/alquiler.astro
 import "../styles/global.css";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Buscador from "../components/buscador.astro";
 import AccessibilityWidget from "../components/AccessibilityWidget.astro";
-import * as deepl from "deepl-node";
-import { Image } from "astro:assets";
 import fallbackImage from "../assets/images/prueba-inmobiliaria.jpg";
 
-const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
-let translator: any = null;
-
-try {
-  if (
-    DEEPL_AUTH_KEY &&
-    DEEPL_AUTH_KEY !== "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx"
-  ) {
-    translator = new deepl.Translator(DEEPL_AUTH_KEY);
-  }
-} catch (e) {
-  console.error("Error al inicializar el traductor de DeepL:", e);
-}
-
-const modulosJSON = import.meta.glob("/src/content/propiedades/**/*.json", {
-  eager: true,
-});
-const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}', { eager: true });
-
-const allPropiedades = await Promise.all(
-  Object.entries(modulosJSON).map(async ([ruta, modulo]) => {
-    const contenido = modulo as any;
-    const id = ruta.split("/").pop()?.replace(".json", "") || "property";
-
-    const rawPrecioString = String(contenido.precio || "0");
-    const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");
-    const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
-
-    const tituloOriginal = contenido.titulo || id.replace(/-/g, " ");
-    const descripcionOriginal = contenido.descripcion || "";
-    const tipoOriginal = contenido.tipo || "Apartamento";
-    const estadoOriginal = contenido.estado || "En planos";
-    const tipoContratoOriginal = (contenido.tipoContrato || "venta")
-      .toLowerCase()
-      .trim();
-
-    let tituloFinal = tituloOriginal;
-    let descripcionFinal =
-      descripcionOriginal ||
-      "Descubre esta increíble oportunidad inmobiliaria en República Dominicana.";
-
-    if (translator) {
-      try {
-        // Only translate if needed; for ES page we keep original text
-        tituloFinal = tituloOriginal;
-        descripcionFinal =
-          descripcionOriginal ||
-          "Descubre esta increíble oportunidad inmobiliaria en República Dominicana.";
-      } catch (error) {
-        console.warn(
-          `[DeepL Shield] No se pudo traducir la propiedad ${id}, usando datos base.`,
-        );
-      }
-    }
-
-    const rutaRaw = String(contenido.imagenPrincipal || "");
-    const imagenPublica = rutaRaw ? rutaRaw.replace(/^\.\.\/\.\.\//, "/src/") : "";
-    const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
-
-    return {
-      id,
-      data: {
-        titulo: tituloFinal,
-        descripcion: descripcionFinal,
-        precio: validatedPrecioNum,
-        ubicacion: contenido.ubicacion || "República Dominicana",
-        tipo: tipoOriginal,
-        estado: estadoOriginal,
-        tipoContrato: tipoContratoOriginal,
-        confotur: Boolean(contenido.confotur),
-        habitaciones: Number(contenido.habitaciones) || 0,
-        banos: Number(contenido.banos) || 0,
-        parqueos: Number(contenido.parqueos) || 0,
-        area: Number(contenido.area) || 0,
-        imagenPrincipal: contenido.imagenPrincipal || "",
-        imagenMetadata: imgMeta,
-      },
-    };
-  }),
+const propertiesCollection = await getCollection("propiedades");
+const imagenes = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}",
+  { eager: true },
 );
+
+const allPropiedades = propertiesCollection.map((entry) => {
+  const contenido = entry.data;
+  const id = entry.id;
+
+  const rawPrecioString = String(contenido.precio || "0");
+  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");
+  const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
+
+  const tituloOriginal = contenido.titulo || id.replace(/-/g, " ");
+  const descripcionOriginal = contenido.descripcion || "";
+  const tipoOriginal = contenido.tipo || "Apartamento";
+  const estadoOriginal = contenido.estado || "En planos";
+
+  // 🚀 CORRECCIÓN AQUÍ: Cambiamos contenido.tipoContrato por contenido.regimen
+  const tipoContratoOriginal = (contenido.regimen || "venta")
+    .toLowerCase()
+    .trim();
+
+  const rutaRaw = String(contenido.imagenPrincipal || "");
+  const imagenPublica = rutaRaw
+    ? rutaRaw.replace(/^\.\.\/\.\.\//, "/src/")
+    : "";
+  const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
+
+  return {
+    id,
+    data: {
+      titulo: tituloOriginal,
+      descripcion:
+        descripcionOriginal ||
+        "Descubre esta increíble oportunidad inmobiliaria en República Dominicana.",
+      precio: validatedPrecioNum,
+      ubicacion: contenido.ubicacion || "República Dominicana",
+      tipo: tipoOriginal,
+      estado: estadoOriginal,
+      tipoContrato: tipoContratoOriginal, // Mantenemos el nombre de salida para no romper el HTML de abajo
+      confotur: Boolean(contenido.confotur),
+      habitaciones: Number(contenido.habitaciones) || 0,
+      banos: Number(contenido.banos) || 0,
+      parqueos: Number(contenido.parqueos) || 0,
+      area: Number(contenido.area) || 0,
+      imagenPrincipal: contenido.imagenPrincipal || "",
+      imagenMetadata: imgMeta,
+    },
+  };
+});
 
 const WHATSAPP_PHONE = "18295259993";
 ---
@@ -223,7 +195,7 @@ const WHATSAPP_PHONE = "18295259993";
                 >
                   <div>
                     <a
-                      href={"/propiedades/" + urlSlugSegura}
+                      href={`/propiedades/${p.id}`}
                       class="prop-img-wrap block aspect-video"
                     >
                       <Image
@@ -236,7 +208,19 @@ const WHATSAPP_PHONE = "18295259993";
                         onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
                       />
                       <div class="prop-img-fallback">
-                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <svg
+                          class="w-10 h-10 text-slate-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
                         <span>Sin imagen</span>
                       </div>
                       <span
@@ -259,9 +243,7 @@ const WHATSAPP_PHONE = "18295259993";
                         {p.data.tipo}
                       </div>
                       <h3 class="mt-2 text-xl font-bold text-navy leading-snug hover:text-gold-dark transition-colors line-clamp-2">
-                        <a href={"/propiedades/" + urlSlugSegura}>
-                          {p.data.titulo}
-                        </a>
+                        <a href={`/propiedades/${p.id}`}>{p.data.titulo}</a>
                       </h3>
                       <p class="mt-1 text-sm text-warm-gray flex items-center gap-1.5">
                         <svg

@@ -181,7 +181,7 @@ const WHATSAPP_PHONE = "18295259993";
                 >
                   <div>
                     <a
-                      href={"/propiedades/" + urlSlugSegura}
+                      href={`/propiedades/${p.id}`}
                       class="prop-img-wrap block aspect-video"
                     >
                       <Image
@@ -227,7 +227,7 @@ const WHATSAPP_PHONE = "18295259993";
                         {p.data.tipo}
                       </div>
                       <h3 class="mt-2 text-xl font-bold text-navy leading-snug hover:text-gold-dark transition-colors line-clamp-2">
-                        <a href={"/propiedades/" + urlSlugSegura}>
+                        <a href={`/propiedades/${p.id}`}>
                           {p.data.titulo}
                         </a>
                       </h3>

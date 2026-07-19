@@ -18,7 +18,9 @@ const translateEstado: Record<string, string> = {
   'listo para entrega': 'Ready for Delivery', 'disponible': 'Available',
 };
 
-const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
+import { getCollection } from 'astro:content';
+
+const propertiesCollection = await getCollection('propiedades');
 const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}', { eager: true });
 
 // Configuración del traductor seguro
@@ -33,9 +35,9 @@ try {
 }
 
 // 1. Mapeo inicial de la data estructurada
-const propiedadesBase = Object.entries(modulosJSON).map(([ruta, modulo]) => {
-  const contenido = modulo as any;
-  const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
+const propiedadesBase = propertiesCollection.map((entry) => {
+  const contenido = entry.data;
+  const id = entry.id;
   const rawPrecio = String(contenido.precio || '0');
   const validatedPrecio = parseInt(rawPrecio.replace(/[^0-9]/g, ''), 10) || 0;
   const tipoOrig = String(contenido.tipo || 'apartamento').toLowerCase().trim();

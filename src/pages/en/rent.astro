@@ -1,236 +1,442 @@
 ---
 // src/pages/en/rent.astro
-import '../../styles/global.css';
-import Navbar from '../../components/Navbar.astro';
-import Footer from '../../components/Footer.astro';
-import Buscador from '../../components/buscador.astro';
-import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
-import { Image } from 'astro:assets';
-import fallbackImage from '../../assets/images/prueba-inmobiliaria.jpg';
+import "../../styles/global.css";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Buscador from "../../components/buscador.astro";
+import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
+import { Image } from "astro:assets";
+import fallbackImage from "../../assets/images/prueba-inmobiliaria.jpg";
 
-const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}', { eager: true });
+const imagenes = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}",
+  { eager: true },
+);
 
 const translateTipo: Record<string, string> = {
-  'apartamento': 'Apartment',
-  'villa': 'Villa',
-  'casa': 'House',
-  'solar': 'Lot / Land',
-  'terreno': 'Land'
+  apartamento: "Apartment",
+  villa: "Villa",
+  casa: "House",
+  solar: "Lot / Land",
+  terreno: "Land",
 };
 
 const translateEstado: Record<string, string> = {
-  'en planos': 'Under Construction',
-  'en construcción': 'Under Construction',
-  'listo para entrega': 'Ready for Delivery',
-  'disponible': 'Available'
+  "en planos": "Under Construction",
+  "en construcción": "Under Construction",
+  "listo para entrega": "Ready for Delivery",
+  disponible: "Available",
 };
 
-const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
+import { getCollection } from "astro:content";
 
-const allPropiedades = Object.entries(modulosJSON).map(([ruta, modulo]) => {
-  const contenido = modulo as any;
-  const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
+const propertiesCollection = await getCollection("propiedades");
 
-  const rawPrecioString = String(contenido.precio || '0');
-  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, '');
+const allPropiedades = propertiesCollection.map((entry) => {
+  const contenido = entry.data;
+  const id = entry.id;
+
+  const rawPrecioString = String(contenido.precio || "0");
+  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");
   const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
 
-  const tipoOriginal = String(contenido.tipo || 'apartamento').toLowerCase().trim();
-  const estadoOriginal = String(contenido.estado || 'en planos').toLowerCase().trim();
-  const tipoContratoOriginal = (contenido.tipoContrato || 'venta').toLowerCase().trim();
+  const tipoOriginal = String(contenido.tipo || "apartamento")
+    .toLowerCase()
+    .trim();
+  const estadoOriginal = String(contenido.estado || "en planos")
+    .toLowerCase()
+    .trim();
+
+  // 🚀 CORRECCIÓN AQUÍ: Cambiamos contenido.tipoContrato por contenido.regimen
+  const tipoContratoOriginal = (contenido.regimen || "venta")
+    .toLowerCase()
+    .trim();
 
   return {
     id,
     data: {
-      titulo: contenido.titulo_en || contenido.titulo || id.replace(/-/g, ' '),
-      descripcion: contenido.descripcion_en || contenido.descripcion || 'Discover this amazing real estate opportunity.',
+      titulo: contenido.titulo_en || contenido.titulo || id.replace(/-/g, " "),
+      descripcion:
+        contenido.descripcion_en ||
+        contenido.descripcion ||
+        "Discover this amazing real estate opportunity.",
       precio: validatedPrecioNum,
-      ubicacion: contenido.ubicacion || 'Dominican Republic',
-      tipo: translateTipo[tipoOriginal] || contenido.tipo || 'Apartment',
-      estado: translateEstado[estadoOriginal] || contenido.estado || 'Under Construction',
-      tipoContrato: tipoContratoOriginal,
+      ubicacion: contenido.ubicacion || "Dominican Republic",
+      tipo: translateTipo[tipoOriginal] || contenido.tipo || "Apartment",
+      estado:
+        translateEstado[estadoOriginal] ||
+        contenido.estado ||
+        "Under Construction",
+      tipoContrato: tipoContratoOriginal, // Mantiene el nombre del objeto de salida para no romper el HTML de abajo
       confotur: Boolean(contenido.confotur),
       habitaciones: Number(contenido.habitaciones) || 0,
       banos: Number(contenido.banos) || 0,
       parqueos: Number(contenido.parqueos) || 0,
       area: Number(contenido.area) || 0,
-      imagenPrincipal: contenido.imagenPrincipal || '',
-      imagenMetadata: imagenes[String(contenido.imagenPrincipal || '').replace(/^\.\.\/\.\.\//, '/src/')]?.default || fallbackImage
-    }
+      imagenPrincipal: contenido.imagenPrincipal || "",
+      imagenMetadata:
+        imagenes[
+          String(contenido.imagenPrincipal || "").replace(
+            /^\.\.\/\.\.\//,
+            "/src/",
+          )
+        ]?.default || fallbackImage,
+    },
   };
 });
 
 const WHATSAPP_PHONE = "18295259993";
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="bg-offwhite text-slate-900">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Properties for Rent in Dominican Republic | Alexis RD Real Estate</title>
-  <meta name="description" content="Find apartments, villas and houses for rent in Santo Domingo, Punta Cana, Las Terrenas and top locations across the Dominican Republic. Personalized advisory by Alexis RD." />
-</head>
-<body class="min-h-screen flex flex-col">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Properties for Rent in Dominican Republic | Alexis RD Real Estate
+    </title>
+    <meta
+      name="description"
+      content="Find apartments, villas and houses for rent in Santo Domingo, Punta Cana, Las Terrenas and top locations across the Dominican Republic. Personalized advisory by Alexis RD."
+    />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Navbar lang="en" currentPage="rent" />
 
-  <Navbar lang="en" currentPage="rent" />
+    <!-- Hero Section -->
+    <section
+      class="relative w-full min-h-[45vh] flex items-center justify-center overflow-hidden pt-20"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-navy via-[#0d2240] to-[#091828]"
+      >
+      </div>
+      <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-px bg-gold"></div>
+        <div class="absolute bottom-0 left-0 w-full h-px bg-gold"></div>
+        <div class="absolute top-0 left-1/4 w-px h-full bg-gold"></div>
+        <div class="absolute top-0 left-2/4 w-px h-full bg-gold"></div>
+        <div class="absolute top-0 left-3/4 w-px h-full bg-gold"></div>
+      </div>
 
-  <!-- Hero Section -->
-  <section class="relative w-full min-h-[45vh] flex items-center justify-center overflow-hidden pt-20">
-    <div class="absolute inset-0 bg-gradient-to-br from-navy via-[#0d2240] to-[#091828]"></div>
-    <div class="absolute inset-0 opacity-5">
-      <div class="absolute top-0 left-0 w-full h-px bg-gold"></div>
-      <div class="absolute bottom-0 left-0 w-full h-px bg-gold"></div>
-      <div class="absolute top-0 left-1/4 w-px h-full bg-gold"></div>
-      <div class="absolute top-0 left-2/4 w-px h-full bg-gold"></div>
-      <div class="absolute top-0 left-3/4 w-px h-full bg-gold"></div>
-    </div>
+      <div class="relative z-10 text-center px-4 max-w-3xl mx-auto py-16">
+        <span
+          class="inline-flex items-center gap-2 bg-gold/15 text-gold text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-gold/25 mb-6"
+        >
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"
+            ><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg
+          >
+          Rental Properties
+        </span>
+        <h1
+          class="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight"
+        >
+          Your perfect home in the
+          <span class="text-gold">Dominican Republic</span>
+        </h1>
+        <p class="mt-5 text-lg text-white/65 max-w-xl mx-auto leading-relaxed">
+          Hand-picked rental properties in the most desirable locations. Live
+          where others vacation.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="#rentals"
+            class="bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 shadow-lg shadow-gold/20 uppercase tracking-wide"
+          >
+            Browse Rentals
+          </a>
+          <a
+            href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("Hi Alexis, I am looking for a rental property in the Dominican Republic.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"
+              ><path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+              ></path></svg
+            >
+            WhatsApp Inquiry
+          </a>
+        </div>
+      </div>
+    </section>
 
-    <div class="relative z-10 text-center px-4 max-w-3xl mx-auto py-16">
-      <span class="inline-flex items-center gap-2 bg-gold/15 text-gold text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-gold/25 mb-6">
-        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        Rental Properties
-      </span>
-      <h1 class="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight">
-        Your perfect home in the
-        <span class="text-gold">Dominican Republic</span>
-      </h1>
-      <p class="mt-5 text-lg text-white/65 max-w-xl mx-auto leading-relaxed">
-        Hand-picked rental properties in the most desirable locations. Live where others vacation.
-      </p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="#rentals" class="bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 shadow-lg shadow-gold/20 uppercase tracking-wide">
-          Browse Rentals
-        </a>
-        <a href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Hi Alexis, I am looking for a rental property in the Dominican Republic.')}`} target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 flex items-center justify-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp Inquiry
+    <main
+      id="rentals"
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1"
+    >
+      <div class="mb-10 text-center">
+        <h2
+          class="text-3xl font-extrabold text-navy tracking-tight sm:text-4xl"
+        >
+          Properties for Rent
+        </h2>
+        <p class="mt-3 text-warm-gray max-w-2xl mx-auto">
+          Browse our curated rental catalog. Use the filters below to narrow
+          your search.
+        </p>
+      </div>
+
+      <Buscador defaultContrato="alquiler" />
+
+      <div
+        id="propiedades-grid"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10"
+      >
+        {
+          allPropiedades.length === 0 ? (
+            <p class="text-warm-gray col-span-full py-12 text-center bg-white rounded-xl border border-slate-200 shadow-sm font-medium">
+              No rental properties available at the moment.
+            </p>
+          ) : (
+            allPropiedades.map((p) => {
+              const urlSlugSegura = p.id
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]/g, "-");
+              const isAlquiler =
+                p.data.tipoContrato === "alquiler" ||
+                p.data.tipoContrato === "renta";
+              const contratoLabel = isAlquiler ? "For Rent" : "For Sale";
+              const contratoColor = isAlquiler
+                ? "bg-blue-600 text-white"
+                : "bg-navy text-gold";
+
+              return (
+                <div
+                  class="propiedad-card bg-white border border-slate-200/80 overflow-hidden flex flex-col justify-between group"
+                  data-tipo={p.data.tipo}
+                  data-estado={p.data.estado}
+                  data-precio={p.data.precio}
+                  data-contrato={p.data.tipoContrato}
+                >
+                  <div>
+                    <a
+                      href={`/en/propiedades/${p.id}`}
+                      class="prop-img-wrap block aspect-video"
+                    >
+                      <Image
+                        src={p.data.imagenMetadata}
+                        alt={`Main preview of ${p.data.titulo}`}
+                        format="webp"
+                        quality={80}
+                        loading="lazy"
+                        class="group-hover:scale-105 object-cover w-full h-full"
+                        onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
+                      />
+                      <div class="prop-img-fallback">
+                        <svg
+                          class="w-10 h-10 text-slate-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                        <span>No image</span>
+                      </div>
+                      <span
+                        class={`absolute top-3 left-3 text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg shadow-sm z-10 ${contratoColor}`}
+                      >
+                        {contratoLabel}
+                      </span>
+                      <span class="absolute top-3 right-3 bg-navy/80 text-white/80 text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg shadow-sm z-10">
+                        {p.data.estado}
+                      </span>
+                      {p.data.confotur && (
+                        <span class="absolute bottom-3 right-3 bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-emerald-200 shadow-sm z-10">
+                          Confotur
+                        </span>
+                      )}
+                    </a>
+
+                    <div class="p-6">
+                      <div class="text-xs font-bold text-gold uppercase tracking-widest">
+                        {p.data.tipo}
+                      </div>
+                      <h3 class="mt-2 text-xl font-bold text-navy leading-snug hover:text-gold-dark transition-colors line-clamp-2">
+                        <a href={`/en/propiedades/${p.id}`}>{p.data.titulo}</a>
+                      </h3>
+                      <p class="mt-1 text-sm text-warm-gray flex items-center gap-1.5">
+                        <svg
+                          class="w-3.5 h-3.5 text-gold"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                        {p.data.ubicacion}
+                      </p>
+                      <p class="mt-3 text-slate-600 text-sm line-clamp-3">
+                        {p.data.descripcion}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-slate-100 px-6 py-4 bg-offwhite flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                      <div class="flex flex-col">
+                        <span class="text-xs font-semibold text-warm-gray uppercase tracking-wider">
+                          {isAlquiler ? "Rent / month" : "Investment Price"}
+                        </span>
+                        <span class="text-xl font-black text-navy">
+                          USD ${Number(p.data.precio).toLocaleString("en-US")}
+                        </span>
+                      </div>
+                      <a
+                        href={`https://wa.me/${WHATSAPP_PHONE}?text=Hi%20Alexis,%20I%20am%20interested%20in%20renting%20the%20property:%20"${encodeURIComponent(p.data.titulo)}"%20in%20${encodeURIComponent(p.data.ubicacion)}.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm whitespace-nowrap self-center"
+                      >
+                        <svg
+                          class="w-3.5 h-3.5"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        Inquire
+                      </a>
+                    </div>
+
+                    <div class="border-t border-slate-200/60 pt-3 text-xs text-slate-600">
+                      {p.data.tipo === "Lot / Land" ||
+                      p.data.tipo === "Land" ? (
+                        <div class="flex items-center gap-1.5 bg-slate-100 p-2 rounded-lg font-semibold text-navy justify-center w-full">
+                          <svg
+                            class="w-4 h-4 text-gold"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                            />
+                          </svg>
+                          Area:{" "}
+                          {p.data.area
+                            ? p.data.area.toLocaleString("en-US")
+                            : 0}{" "}
+                          m²
+                        </div>
+                      ) : (
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                          <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
+                            <svg
+                              class="w-3.5 h-3.5 text-gold"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"
+                              />
+                            </svg>
+                            {p.data.habitaciones || 0} Beds
+                          </div>
+                          <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
+                            <svg
+                              class="w-3.5 h-3.5 text-gold"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4"
+                              />
+                            </svg>
+                            {p.data.banos || 0} Baths
+                          </div>
+                          <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
+                            <svg
+                              class="w-3.5 h-3.5 text-gold"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                              />
+                            </svg>
+                            {p.data.parqueos || 0} Parking
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )
+        }
+        <p
+          id="empty-filter-msg"
+          class="hidden text-warm-gray col-span-full py-12 text-center bg-white rounded-xl border border-slate-200 shadow-sm font-medium"
+        >
+          No rental properties match your filters. <a
+            href="/en/rent"
+            class="text-gold underline">Clear filters</a
+          >
+        </p>
+      </div>
+
+      <!-- CTA Banner -->
+      <div
+        class="mt-16 bg-gradient-to-r from-navy to-[#0d2240] rounded-2xl p-8 md:p-12 text-center border border-gold/10 shadow-xl"
+      >
+        <span
+          class="inline-block bg-gold/15 text-gold text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-gold/25 mb-4"
+          >Property Owner?</span
+        >
+        <h3 class="text-2xl md:text-3xl font-black text-white mb-3">
+          Want to list your property for rent?
+        </h3>
+        <p class="text-white/60 max-w-xl mx-auto mb-6">
+          We work with property owners across the Dominican Republic. List with
+          us and reach thousands of potential tenants.
+        </p>
+        <a
+          href="/en/list-with-us"
+          class="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 shadow-lg shadow-gold/20 uppercase tracking-wide"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"></path></svg
+          >
+          List My Property
         </a>
       </div>
-    </div>
-  </section>
+    </main>
 
-  <main id="rentals" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1">
-    <div class="mb-10 text-center">
-      <h2 class="text-3xl font-extrabold text-navy tracking-tight sm:text-4xl">Properties for Rent</h2>
-      <p class="mt-3 text-warm-gray max-w-2xl mx-auto">
-        Browse our curated rental catalog. Use the filters below to narrow your search.
-      </p>
-    </div>
-
-    <Buscador defaultContrato="alquiler" />
-
-    <div id="propiedades-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-      {allPropiedades.length === 0 ? (
-        <p class="text-warm-gray col-span-full py-12 text-center bg-white rounded-xl border border-slate-200 shadow-sm font-medium">
-          No rental properties available at the moment.
-        </p>
-      ) : (
-        allPropiedades.map((p) => {
-          const urlSlugSegura = p.id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-');
-          const isAlquiler = p.data.tipoContrato === 'alquiler' || p.data.tipoContrato === 'renta';
-          const contratoLabel = isAlquiler ? 'For Rent' : 'For Sale';
-          const contratoColor = isAlquiler ? 'bg-blue-600 text-white' : 'bg-navy text-gold';
-
-          return (
-            <div
-              class="propiedad-card bg-white border border-slate-200/80 overflow-hidden flex flex-col justify-between group"
-              data-tipo={p.data.tipo}
-              data-estado={p.data.estado}
-              data-precio={p.data.precio}
-              data-contrato={p.data.tipoContrato}
-            >
-              <div>
-                <a href={"/propiedades/" + urlSlugSegura} class="prop-img-wrap block aspect-video">
-                  <Image
-                    src={p.data.imagenMetadata}
-                    alt={`Main preview of ${p.data.titulo}`}
-                    format="webp"
-                    quality={80}
-                    loading="lazy"
-                    class="group-hover:scale-105 object-cover w-full h-full"
-                    onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
-                  />
-                  <div class="prop-img-fallback">
-                    <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    <span>No image</span>
-                  </div>
-                  <span class={`absolute top-3 left-3 text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg shadow-sm z-10 ${contratoColor}`}>{contratoLabel}</span>
-                  <span class="absolute top-3 right-3 bg-navy/80 text-white/80 text-xs uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg shadow-sm z-10">{p.data.estado}</span>
-                  {p.data.confotur && <span class="absolute bottom-3 right-3 bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-emerald-200 shadow-sm z-10">Confotur</span>}
-                </a>
-
-                <div class="p-6">
-                  <div class="text-xs font-bold text-gold uppercase tracking-widest">{p.data.tipo}</div>
-                  <h3 class="mt-2 text-xl font-bold text-navy leading-snug hover:text-gold-dark transition-colors line-clamp-2">
-                    <a href={"/propiedades/" + urlSlugSegura}>{p.data.titulo}</a>
-                  </h3>
-                  <p class="mt-1 text-sm text-warm-gray flex items-center gap-1.5">
-                    <svg class="w-3.5 h-3.5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    {p.data.ubicacion}
-                  </p>
-                  <p class="mt-3 text-slate-600 text-sm line-clamp-3">{p.data.descripcion}</p>
-                </div>
-              </div>
-
-              <div class="border-t border-slate-100 px-6 py-4 bg-offwhite flex flex-col gap-4">
-                <div class="flex items-center justify-between">
-                  <div class="flex flex-col">
-                    <span class="text-xs font-semibold text-warm-gray uppercase tracking-wider">{isAlquiler ? 'Rent / month' : 'Investment Price'}</span>
-                    <span class="text-xl font-black text-navy">USD ${Number(p.data.precio).toLocaleString('en-US')}</span>
-                  </div>
-                  <a href={`https://wa.me/${WHATSAPP_PHONE}?text=Hi%20Alexis,%20I%20am%20interested%20in%20renting%20the%20property:%20"${encodeURIComponent(p.data.titulo)}"%20in%20${encodeURIComponent(p.data.ubicacion)}.`} target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm whitespace-nowrap self-center">
-                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    Inquire
-                  </a>
-                </div>
-
-                <div class="border-t border-slate-200/60 pt-3 text-xs text-slate-600">
-                  {p.data.tipo === 'Lot / Land' || p.data.tipo === 'Land' ? (
-                    <div class="flex items-center gap-1.5 bg-slate-100 p-2 rounded-lg font-semibold text-navy justify-center w-full">
-                      <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-                      Area: {p.data.area ? p.data.area.toLocaleString('en-US') : 0} m²
-                    </div>
-                  ) : (
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                      <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
-                        {p.data.habitaciones || 0} Beds
-                      </div>
-                      <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4"/></svg>
-                        {p.data.banos || 0} Baths
-                      </div>
-                      <div class="bg-slate-100/80 py-1.5 px-1 rounded-md font-medium text-slate-800 text-[11px] whitespace-nowrap flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        {p.data.parqueos || 0} Parking
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })
-      )}
-      <p id="empty-filter-msg" class="hidden text-warm-gray col-span-full py-12 text-center bg-white rounded-xl border border-slate-200 shadow-sm font-medium">
-        No rental properties match your filters. <a href="/en/rent" class="text-gold underline">Clear filters</a>
-      </p>
-    </div>
-
-    <!-- CTA Banner -->
-    <div class="mt-16 bg-gradient-to-r from-navy to-[#0d2240] rounded-2xl p-8 md:p-12 text-center border border-gold/10 shadow-xl">
-      <span class="inline-block bg-gold/15 text-gold text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-gold/25 mb-4">Property Owner?</span>
-      <h3 class="text-2xl md:text-3xl font-black text-white mb-3">Want to list your property for rent?</h3>
-      <p class="text-white/60 max-w-xl mx-auto mb-6">We work with property owners across the Dominican Republic. List with us and reach thousands of potential tenants.</p>
-      <a href="/en/list-with-us" class="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-lg text-sm transition-all duration-200 shadow-lg shadow-gold/20 uppercase tracking-wide">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        List My Property
-      </a>
-    </div>
-  </main>
-
-  <Footer lang="en" />
-  <AccessibilityWidget lang="en" />
-</body>
+    <Footer lang="en" />
+    <AccessibilityWidget lang="en" />
+  </body>
 </html>

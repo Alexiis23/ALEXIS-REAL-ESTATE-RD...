@@ -1,29 +1,30 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob } from 'astro/loaders'; // Si estás usando la API de loaders de Astro v5/v7
 
 const propiedades = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: "./src/content/propiedades" }),
+  // Si usas Astro v5/v7 usa loader, si usas v4 usa el método antiguo
+  loader: glob({ pattern: '**/[^_]*.json', base: "./src/content/propiedades" }),
   schema: z.object({
-    // 🌟 Al usar .optional() en TODO, Astro no volverá a tirar un "Required" jamás
-    titulo: z.string().optional(), 
-    descripcion: z.string().optional(),
-    
-    // 👑 NUEVOS CAMPOS ESPEJO PARA EL TRADUCTOR INVISIBLE (Totalmente opcionales y seguros)
+    titulo: z.string(),
+    descripcion: z.string(),
     titulo_en: z.string().optional(),
     descripcion_en: z.string().optional(),
+    precio: z.number(),
 
-    precio: z.any().optional(), 
-    ubicacion: z.string().optional(),
-    tipo: z.string().optional(),
-    estado: z.string().optional(),
-    confotur: z.boolean().optional(),
-    habitaciones: z.any().optional(),
-    banos: z.any().optional(),
-    parqueos: z.any().optional(),
-    area: z.any().optional(),
-    latitud: z.any().optional(),
-    longitud: z.any().optional(),
+    // 🚀 LA CORRECCIÓN AQUÍ: Añadir el campo al validador de Astro
+    regimen: z.enum(['Venta', 'Alquiler']).default('Venta'),
+
+    exclusiva: z.boolean().default(false),
+    confotur: z.boolean().default(false),
+    tipo: z.string(),
+    estado: z.string(),
+    habitaciones: z.number().default(0),
+    banos: z.number().default(0),
+    parqueos: z.number().default(0),
+    area: z.number().optional(),
+    ubicacion: z.string().default('Dominican Republic'),
     imagenPrincipal: z.string().optional(),
+    galeria: z.array(z.string()).optional(),
   })
 });
 

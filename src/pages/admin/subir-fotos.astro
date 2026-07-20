@@ -1,0 +1,365 @@
+---
+// src/pages/admin/subir-fotos.astro
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
+import { getCollection } from 'astro:content';
+
+// Obtener todas las propiedades para mostrarlas en el desplegable
+const propertiesCollection = await getCollection('propiedades');
+const properties = propertiesCollection.map((entry) => {
+  return {
+    id: entry.id,
+    titulo: entry.data.titulo || entry.id.replace(/-/g, ' '),
+  };
+});
+---
+
+<!doctype html>
+<html lang="es" class="bg-offwhite text-slate-900">
+<head>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carga Masiva de Fotos | Alexis RD Real Estate - Consola de Administración</title>
+  <meta name="description" content="Suba múltiples fotos de propiedades a Vercel Blob y asócielas a los inmuebles." />
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <Navbar lang="es" currentPage="admin-subir-fotos" />
+
+  <!-- ─── HERO ADMINISTRATIVO ─────────────────────────── -->
+  <section class="relative overflow-hidden pt-20">
+    <div class="absolute inset-0 bg-gradient-to-br from-navy via-[#0a1f38] to-[#071627]"></div>
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-gold/8 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
+      <span class="inline-flex items-center gap-2 bg-gold/15 text-gold text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-gold/25 mb-4">
+        Consola de Administración
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight">
+        Carga Masiva de <span class="text-gold">Imágenes</span>
+      </h1>
+      <p class="mt-3 text-white/70 max-w-xl mx-auto text-sm leading-relaxed">
+        Sube múltiples archivos de fotos de forma simultánea a Vercel Blob y guárdalas directamente en la galería del archivo JSON del inmueble seleccionado.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── PANEL CENTRAL DE CARGA ─────────────────────────── -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+    <div class="bg-white rounded-3xl shadow-[0_4px_40px_-8px_rgba(11,25,44,0.12)] border border-slate-100 overflow-hidden">
+      
+      <!-- Encabezado de Sección -->
+      <div class="bg-gradient-to-r from-navy to-[#0d2240] px-8 py-5 flex items-center gap-4">
+        <div class="w-10 h-10 bg-gold/20 rounded-xl flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-white font-bold text-base">Cargador de Galería</h2>
+          <p class="text-white/50 text-xs">Vercel Blob Storage Integration</p>
+        </div>
+        <div class="ml-auto flex items-center gap-1.5 bg-gold/10 border border-gold/20 rounded-full px-3 py-1">
+          <span class="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
+          <span class="text-gold text-[10px] font-bold uppercase tracking-wider">Blob Secure</span>
+        </div>
+      </div>
+
+      <!-- Formulario de Administración -->
+      <form id="upload-form" class="p-8 space-y-6">
+        
+        <!-- 1. Selección de Propiedad -->
+        <div class="flex flex-col gap-2">
+          <label for="propertySlug" class="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Seleccionar Propiedad <span class="text-gold">*</span>
+          </label>
+          <select id="propertySlug" name="propertySlug" required class="admin-input">
+            <option value="" disabled selected>Selecciona la propiedad de destino...</option>
+            {properties.map((p) => (
+              <option value={p.id}>{p.titulo} ({p.id})</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- 2. Carga Múltiple de Fotos -->
+        <div class="flex flex-col gap-2">
+          <label for="fotos" class="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+            </svg>
+            Seleccionar Fotos <span class="text-gold">*</span>
+          </label>
+          
+          <!-- Area de arrastrar archivos -->
+          <div id="dropzone" class="border-2 border-dashed border-slate-200 hover:border-gold/60 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 bg-[#f8fafc]/50 hover:bg-[#f8fafc] transition-all cursor-pointer">
+            <svg class="w-10 h-10 text-slate-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <div class="text-center">
+              <p class="text-sm font-semibold text-navy">Haz clic para seleccionar fotos o arrástralas aquí</p>
+              <p class="text-xs text-slate-400 mt-1">Formatos recomendados: JPG, PNG, WebP (Máx. 4.5MB por foto)</p>
+            </div>
+            <input
+              type="file"
+              id="fotos"
+              name="fotos"
+              multiple
+              accept="image/*"
+              required
+              class="hidden"
+            />
+          </div>
+          
+          <!-- Lista de archivos seleccionados -->
+          <div id="file-list-container" class="hidden mt-2 p-4 bg-[#f8fafc] border border-slate-100 rounded-xl">
+            <h4 class="text-xs font-bold text-navy uppercase tracking-wider mb-2">Fotos seleccionadas para subir (<span id="file-count">0</span>)</h4>
+            <ul id="file-list" class="text-xs text-slate-600 space-y-1.5 max-h-40 overflow-y-auto pr-1"></ul>
+          </div>
+        </div>
+
+        <!-- 3. Contraseña Administrativa (Privacidad) -->
+        <div class="flex flex-col gap-2">
+          <label for="adminPassword" class="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            Contraseña de Administrador <span class="text-gold">*</span>
+          </label>
+          <input
+            type="password"
+            id="adminPassword"
+            name="adminPassword"
+            required
+            placeholder="Ingrese la contraseña de seguridad..."
+            class="admin-input"
+          />
+        </div>
+
+        <!-- Botón de Acción -->
+        <button
+          type="submit"
+          id="btn-submit"
+          class="w-full bg-navy hover:bg-navy-light text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-navy/20 hover:shadow-navy/30 group disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-y-[-2px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          Subir Galería Completa
+        </button>
+
+        <!-- Estados de Progreso y Feedback -->
+        <div id="progress-container" class="hidden space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-navy uppercase tracking-wider">
+            <span>Subiendo imágenes...</span>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+            <div id="progress-bar" class="bg-gold h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <p id="progress-msg" class="text-xs text-slate-500 italic">Preparando la carga de archivos...</p>
+        </div>
+
+        <!-- Feedback final de éxito / error -->
+        <div id="feedback-success" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl px-5 py-4 text-sm font-semibold flex items-center gap-3">
+          <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div>
+            <p id="success-title" class="font-bold">¡Fotos subidas con éxito!</p>
+            <p id="success-desc" class="text-xs font-normal mt-0.5 text-emerald-700">Se han subido y asociado correctamente las imágenes.</p>
+          </div>
+        </div>
+
+        <div id="feedback-error" class="hidden bg-red-50 border border-red-200 text-red-800 rounded-xl px-5 py-4 text-sm font-semibold flex items-center gap-3">
+          <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div id="error-msg">Algo salió mal durante la subida de las fotos.</div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <Footer lang="es" />
+  <AccessibilityWidget lang="es" />
+
+  <script is:inline>
+    function initUploadFotos() {
+      const form = document.getElementById('upload-form');
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fotos');
+      const fileListContainer = document.getElementById('file-list-container');
+      const fileList = document.getElementById('file-list');
+      const fileCount = document.getElementById('file-count');
+      const btnSubmit = document.getElementById('btn-submit');
+
+      const progressContainer = document.getElementById('progress-container');
+      const progressBar = document.getElementById('progress-bar');
+      const progressPercent = document.getElementById('progress-percent');
+      const progressMsg = document.getElementById('progress-msg');
+
+      const successFeedback = document.getElementById('feedback-success');
+      const successDesc = document.getElementById('success-desc');
+      const errorFeedback = document.getElementById('feedback-error');
+      const errorMsg = document.getElementById('error-msg');
+
+      if (!form || form.dataset.listenerAttached) return;
+      form.dataset.listenerAttached = 'true';
+
+      // Configurar Drag & Drop del selector
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-gold', 'bg-[#f8fafc]');
+      });
+
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('border-gold', 'bg-[#f8fafc]');
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-gold', 'bg-[#f8fafc]');
+        if (e.dataTransfer.files.length > 0) {
+          fileInput.files = e.dataTransfer.files;
+          updateFileList();
+        }
+      });
+
+      fileInput.addEventListener('change', updateFileList);
+
+      function updateFileList() {
+        fileList.innerHTML = '';
+        const files = fileInput.files;
+        if (files.length > 0) {
+          fileListContainer.classList.remove('hidden');
+          fileCount.textContent = files.length;
+          Array.from(files).forEach((file) => {
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center border-b border-slate-100 pb-1';
+            li.innerHTML = `
+              <span class="truncate max-w-[80%]">${file.name}</span>
+              <span class="text-slate-400 font-mono">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+            `;
+            fileList.appendChild(li);
+          });
+        } else {
+          fileListContainer.classList.add('hidden');
+        }
+      }
+
+      // Procesar el envío
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const propertySlug = document.getElementById('propertySlug').value;
+        const adminPassword = document.getElementById('adminPassword').value;
+        const files = fileInput.files;
+
+        if (!propertySlug || files.length === 0 || !adminPassword) return;
+
+        // Ocultar feedback previo
+        successFeedback.classList.add('hidden');
+        errorFeedback.classList.add('hidden');
+
+        // Habilitar barra de carga
+        btnSubmit.setAttribute('disabled', 'true');
+        progressContainer.classList.remove('hidden');
+        
+        // Simular progreso de preparación inicial
+        progressBar.style.width = '10%';
+        progressPercent.textContent = '10%';
+        progressMsg.textContent = `Preparando ${files.length} archivos para subir...`;
+
+        try {
+          const formData = new FormData();
+          formData.append('propertySlug', propertySlug);
+          formData.append('adminPassword', adminPassword);
+          for (let i = 0; i < files.length; i++) {
+            formData.append('fotos', files[i]);
+          }
+
+          progressBar.style.width = '35%';
+          progressPercent.textContent = '35%';
+          progressMsg.textContent = 'Cargando datos y subiendo a Vercel Blob...';
+
+          // Hacemos el fetch al endpoint
+          const response = await fetch('/api/subir-galeria', {
+            method: 'POST',
+            body: formData,
+          });
+
+          progressBar.style.width = '75%';
+          progressPercent.textContent = '75%';
+          progressMsg.textContent = 'Guardando URLs en el archivo JSON...';
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            progressBar.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressMsg.textContent = '¡Carga completada!';
+
+            // Mostrar éxito
+            successDesc.textContent = `Se subieron con éxito ${result.urls.length} fotos a Vercel Blob y se asociaron al inmueble.`;
+            successFeedback.classList.remove('hidden');
+            successFeedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Resetear formulario
+            form.reset();
+            fileListContainer.classList.add('hidden');
+            fileList.innerHTML = '';
+          } else {
+            throw new Error(result.error || 'Ocurrió un error inesperado al subir la galería.');
+          }
+        } catch (error) {
+          errorMsg.textContent = error.message;
+          errorFeedback.classList.remove('hidden');
+          errorFeedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } finally {
+          btnSubmit.removeAttribute('disabled');
+          setTimeout(() => {
+            progressContainer.classList.add('hidden');
+            progressBar.style.width = '0%';
+            progressPercent.textContent = '0%';
+          }, 3000);
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initUploadFotos);
+    document.addEventListener('astro:page-load', initUploadFotos);
+  </script>
+
+</body>
+</html>
+
+<style>
+  .admin-input {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #0b192c;
+    width: 100%;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .admin-input::placeholder {
+    color: #94a3b8;
+  }
+  .admin-input:focus {
+    outline: none;
+    border-color: #c9a84c;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  }
+</style>

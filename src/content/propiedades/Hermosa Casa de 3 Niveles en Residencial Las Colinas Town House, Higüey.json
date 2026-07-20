@@ -1,0 +1,25 @@
+{
+  "descripcion": "Descubre esta elegante y espaciosa residencia, ubicada en un exclusivo residencial totalmente cerrado con doble acceso, ideal para quienes buscan comodidad, seguridad y calidad de vida.\n\n Primer Nivel\n\t•\tSala recibidor\n\t•\tSala principal\n\t•\tBaño de visitas\n\t•\tCocina fría y cocina caliente\n\t•\tComedor\n\t•\tTerraza en madera\n\t•\tAmplio patio\n\t•\tCuarto de servicio\n\t•\tÁrea de lavado\n\n Segundo Nivel\n\t•\t3 habitaciones, cada una con su baño\n\t•\tHabitación principal con walk-in closet\n\n Tercer Nivel\n\t•\tFamily room acondicionado\n\t•\tEscritorio\n\t•\tAmplio librero\n",
+  "precio": 307.08,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 4,
+  "parqueos": 1,
+  "latitud": 18.618,
+  "longitud": -68.733,
+  "ubicacion": "Zanjul",
+  "imagenPrincipal": "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/imagenPrincipal.jpg",
+  "galeria": [
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/0.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/1.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/2.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/3.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/4.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/5.jpg",
+    "../../assets/propiedades/Hermosa Casa de 3 Niveles en Residencial Las Colinas Town House, Higüey/galeria/6.jpg"
+  ]
+}

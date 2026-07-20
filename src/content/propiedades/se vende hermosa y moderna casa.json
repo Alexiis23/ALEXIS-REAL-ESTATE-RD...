@@ -1,0 +1,23 @@
+{
+  "descripcion": "Materiales de calidad,\n puertas en Roble,\n pisos porcelanato,\nSeguridad 24/7,\nTítulo y deslinde al día",
+  "precio": 133.068,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "En planos",
+  "habitaciones": 3,
+  "banos": 2,
+  "parqueos": 1,
+  "area": 132,
+  "latitud": 18.584,
+  "longitud": -68.723,
+  "ubicacion": "Higuey",
+  "imagenPrincipal": "../../assets/propiedades/se vende hermosa y moderna casa/imagenPrincipal.jpg",
+  "galeria": [
+    "../../assets/propiedades/se vende hermosa y moderna casa/galeria/0.jpg",
+    "../../assets/propiedades/se vende hermosa y moderna casa/galeria/1.jpg",
+    "../../assets/propiedades/se vende hermosa y moderna casa/galeria/2.jpg",
+    "../../assets/propiedades/se vende hermosa y moderna casa/galeria/3.jpg"
+  ]
+}

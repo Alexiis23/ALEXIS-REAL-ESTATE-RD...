@@ -1,0 +1,25 @@
+{
+  "descripcion": "4 Amplias Habitaciones cada una con su baños \n\nHermosa Cocina\nSala- Ante Sala\nMarquesina para 4 vehículos \nTerraza\nAmplio Patio\n\nPrecio $50,000\n2 depósitos y medio de gestión inmobiliaria más 3,000 de contrato \n",
+  "precio": 850,
+  "regimen": "Alquiler",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 4,
+  "parqueos": 1,
+  "latitud": 18.59,
+  "longitud": -68.705,
+  "ubicacion": "Higuey",
+  "imagenPrincipal": "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/imagenPrincipal.jpg",
+  "galeria": [
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/0.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/1.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/2.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/3.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/4.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/5.jpg",
+    "../../assets/propiedades/Se Alquila Hermosa Casa Ubicada en el Residencial Los Caraballo/galeria/6.jpg"
+  ]
+}

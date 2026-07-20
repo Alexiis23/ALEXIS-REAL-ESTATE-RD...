@@ -1,0 +1,23 @@
+{
+  "descripcion": "Una excelente oportunidad para vivir con comodidad o realizar una inversión segura.",
+  "precio": 156.952,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 3,
+  "parqueos": 2,
+  "area": 290,
+  "latitud": 18.603,
+  "longitud": -68.718,
+  "ubicacion": "Residencial luisa perla, Higuey",
+  "imagenPrincipal": "../../assets/propiedades/magnífica casa en el prestigioso Residencial Anamelia/imagenPrincipal.jpg",
+  "galeria": [
+    "../../assets/propiedades/magnífica casa en el prestigioso Residencial Anamelia/galeria/0.jpg",
+    "../../assets/propiedades/magnífica casa en el prestigioso Residencial Anamelia/galeria/1.jpg",
+    "../../assets/propiedades/magnífica casa en el prestigioso Residencial Anamelia/galeria/2.jpg",
+    "../../assets/propiedades/magnífica casa en el prestigioso Residencial Anamelia/galeria/3.jpg"
+  ]
+}

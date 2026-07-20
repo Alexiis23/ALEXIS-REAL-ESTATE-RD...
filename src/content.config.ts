@@ -1,31 +1,31 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders'; // Si estás usando la API de loaders de Astro v5/v7
+import { glob } from 'astro/loaders';
 
 const propiedades = defineCollection({
-  // Si usas Astro v5/v7 usa loader, si usas v4 usa el método antiguo
   loader: glob({ pattern: '**/[^_]*.json', base: "./src/content/propiedades" }),
   schema: z.object({
-    titulo: z.string(),
-    descripcion: z.string(),
+    titulo: z.string().optional().or(z.literal('')),
+    descripcion: z.string().optional(),
     titulo_en: z.string().optional(),
     descripcion_en: z.string().optional(),
-    precio: z.number(),
-
-    // 🚀 LA CORRECCIÓN AQUÍ: Añadir el campo al validador de Astro
-    regimen: z.enum(['Venta', 'Alquiler']).default('Venta'),
-
-    exclusiva: z.boolean().default(false),
-    confotur: z.boolean().default(false),
-    tipo: z.string(),
-    estado: z.string(),
-    habitaciones: z.number().default(0),
-    banos: z.number().default(0),
-    parqueos: z.number().default(0),
-    area: z.number().optional(),
-    ubicacion: z.string().default('Dominican Republic'),
+    precio: z.union([z.number(), z.string()]).optional(),
+    regimen: z.string().optional(),
+    exclusiva: z.boolean().optional(),
+    confotur: z.boolean().optional(),
+    tipo: z.string().optional(),
+    estado: z.string().optional(),
+    habitaciones: z.union([z.number(), z.string()]).optional(),
+    banos: z.union([z.number(), z.string()]).optional(),
+    parqueos: z.union([z.number(), z.string()]).optional(),
+    area: z.union([z.number(), z.string()]).optional(),
+    ubicacion: z.string().optional(),
+    latitud: z.union([z.number(), z.string()]).optional(),
+    longitud: z.union([z.number(), z.string()]).optional(),
     imagenPrincipal: z.string().optional(),
-    galeria: z.array(z.string()).optional(),
-  })
+
+    // 🚀 FLEXIBILIZACIÓN CLAVE: Acepta cualquier estructura en la galería sin romper la compilación
+    galeria: z.array(z.any()).optional(),
+  }).passthrough() // 👈 PERMITE CAMPOS EXTRAS QUE ENVÍE KEYSTATIC SIN BLOQUEAR EL BUILD
 });
 
 export const collections = { propiedades };

@@ -180,7 +180,7 @@ const WHATSAPP_PHONE = "18295259993";
         </p>
       ) : (
         allPropiedades.map((p, index) => {
-          const urlSlugSegura = p.id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-');
+          // Use p.id directly so it matches the exact Keystatic entry ID used by [id].astro SSR lookup
           return (
             <div
               class="propiedad-card bg-white border border-slate-200/80 overflow-hidden flex flex-col justify-between group"
@@ -191,7 +191,7 @@ const WHATSAPP_PHONE = "18295259993";
             >
               <div>
                 <!-- 🌟 CORRECCIÓN: Enrutamiento internacionalizado a /en/propiedades/ -->
-                <a href={"/en/propiedades/" + urlSlugSegura} class="prop-img-wrap block aspect-video">
+                <a href={`/en/propiedades/${p.id}`} class="prop-img-wrap block aspect-video">
                   <Image
                     src={p.data.imagenMetadata}
                     alt={`Main view of ${p.data.titulo}`}
@@ -218,7 +218,7 @@ const WHATSAPP_PHONE = "18295259993";
                   <div class="text-xs font-bold text-gold uppercase tracking-widest">{p.data.tipo}</div>
                   <h3 class="mt-2 text-xl font-bold text-navy leading-snug hover:text-gold-dark transition-colors line-clamp-2">
                     <!-- 🌟 CORRECCIÓN: Enrutamiento internacionalizado a /en/propiedades/ -->
-                    <a href={"/en/propiedades/" + urlSlugSegura}>{p.data.titulo}</a>
+                    <a href={`/en/propiedades/${p.id}`}>{p.data.titulo}</a>
                   </h3>
                   <p class="mt-1 text-sm text-warm-gray flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5 text-gold shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>

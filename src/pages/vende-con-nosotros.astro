@@ -205,16 +205,15 @@ const beneficios = [
           </div>
         </div>
 
-        <!-- Formspree Form -->
+        <!-- Formulario de Captación Centralizado -->
         <form
           id="captacion-form"
-          action={`https://formspree.io/f/${FORMSPREE_ID}`}
           method="POST"
           class="p-8 md:p-10 space-y-6"
         >
-          <!-- Hidden tracking field -->
-          <input type="hidden" name="subject" value="Nueva propiedad de {{Nombre Completo}} - Alexis RD Real Estate" />
-          <input type="hidden" name="Tipo de Formulario" value="Captación de Propiedad" />
+          <!-- Hidden tracking fields -->
+          <input type="hidden" name="form_type" value="Captación - Vende con Nosotros" />
+          <input type="hidden" name="property_title" value="Solicitud de Valoración / Publicación de Propiedad" />
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -227,7 +226,7 @@ const beneficios = [
               <input
                 type="text"
                 id="nombre"
-                name="Nombre Completo"
+                name="name"
                 required
                 placeholder="Ej: Juan Pérez García"
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
@@ -243,7 +242,7 @@ const beneficios = [
               <input
                 type="email"
                 id="email"
-                name="Correo"
+                name="email"
                 required
                 placeholder="tu@email.com"
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
@@ -259,7 +258,7 @@ const beneficios = [
               <input
                 type="tel"
                 id="telefono"
-                name="Teléfono"
+                name="phone"
                 required
                 placeholder="+1 (809) 000-0000"
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
@@ -274,7 +273,7 @@ const beneficios = [
               </label>
               <select
                 id="tipo-propiedad"
-                name="Tipo de Propiedad"
+                name="tipo-propiedad"
                 required
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
               >
@@ -299,7 +298,7 @@ const beneficios = [
               <input
                 type="text"
                 id="ubicacion"
-                name="Ubicación de la Propiedad"
+                name="ubicacion"
                 required
                 placeholder="Ej: Piantini, Santo Domingo"
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
@@ -315,7 +314,7 @@ const beneficios = [
               <input
                 type="text"
                 id="precio-estimado"
-                name="Precio Estimado"
+                name="precio-estimado"
                 placeholder="Ej: $250,000 — o 'No sé'"
                 class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all"
               />
@@ -330,7 +329,7 @@ const beneficios = [
             </label>
             <textarea
               id="detalles"
-              name="Detalles Adicionales"
+              name="detalles"
               rows={4}
               placeholder="Cuéntanos más sobre tu propiedad: metros cuadrados, número de habitaciones, condición actual, si ya está amueblada, si deseas venderla o alquilarla, etc."
               class="bg-offwhite border border-slate-200 rounded-xl px-4 py-3 text-sm text-navy placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-all resize-none"
@@ -400,44 +399,66 @@ const beneficios = [
   <Footer lang="es" />
   <AccessibilityWidget lang="es" />
 
-  <script>
-    const form = document.getElementById('captacion-form') as HTMLFormElement | null;
-    const btnEnviar = document.getElementById('btn-enviar-captacion');
-    const successMsg = document.getElementById('form-success');
-    const errorMsg = document.getElementById('form-error');
+  <script is:inline>
+    function initCaptacionForm() {
+      const form = document.getElementById('captacion-form');
+      const btnEnviar = document.getElementById('btn-enviar-captacion');
+      const successMsg = document.getElementById('form-success');
+      const errorMsg = document.getElementById('form-error');
 
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!form) return;
+      if (!form || form.dataset.listenerAttached) return;
+      form.dataset.listenerAttached = 'true';
 
-      btnEnviar?.setAttribute('disabled', 'true');
-      if (btnEnviar) btnEnviar.textContent = 'Enviando...';
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { Accept: 'application/json' },
-        });
+        btnEnviar.setAttribute('disabled', 'true');
+        const originalText = btnEnviar.innerHTML;
+        btnEnviar.textContent = 'Enviando...';
 
-        if (response.ok) {
-          form.reset();
-          successMsg?.classList.remove('hidden');
-          errorMsg?.classList.add('hidden');
-          successMsg?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-          throw new Error('Response not OK');
+        try {
+          const formData = new FormData(form);
+          
+          // Agrupar los campos adicionales para enviarlos dentro del campo "message"
+          const tipoPropiedad = formData.get('tipo-propiedad') || 'No especificado';
+          const ubicacion = formData.get('ubicacion') || 'No especificada';
+          const precioEstimado = formData.get('precio-estimado') || 'No especificado';
+          const detalles = formData.get('detalles') || 'Sin detalles adicionales';
+
+          const combinedMessage = `Detalles de Captación de Propiedad:
+- Tipo de Inmueble: ${tipoPropiedad}
+- Ubicación: ${ubicacion}
+- Precio Estimado: ${precioEstimado}
+- Información / Detalles Adicionales: ${detalles}`;
+
+          formData.set('message', combinedMessage);
+
+          const response = await fetch('/api/contacto', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            form.reset();
+            successMsg.classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            throw new Error();
+          }
+        } catch (error) {
+          errorMsg.classList.remove('hidden');
+          successMsg.classList.add('hidden');
+          errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } finally {
+          btnEnviar.removeAttribute('disabled');
+          btnEnviar.innerHTML = originalText;
         }
-      } catch {
-        errorMsg?.classList.remove('hidden');
-        successMsg?.classList.add('hidden');
-      } finally {
-        btnEnviar?.removeAttribute('disabled');
-        if (btnEnviar) btnEnviar.innerHTML = `
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-          Enviar Solicitud Gratuita`;
-      }
-    });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCaptacionForm);
+    document.addEventListener('astro:page-load', initCaptacionForm);
   </script>
 
 </body>

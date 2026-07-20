@@ -164,14 +164,14 @@ const contactChannels = [
             </div>
           </div>
 
-          <!-- Formspree Form -->
+          <!-- Formulario de Contacto Centralizado -->
           <form
             id="contacto-form"
-            action={`https://formspree.io/f/${FORMSPREE_ID}`}
             method="POST"
             class="p-8 md:p-10 space-y-5"
           >
-            <input type="hidden" name="Formulario" value="Contacto General" />
+            <input type="hidden" name="form_type" value="Contacto General desde Pagina de Contacto" />
+            <input type="hidden" name="property_title" value="Consulta General de Mercado" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <!-- Nombre -->
@@ -180,7 +180,7 @@ const contactChannels = [
                   Nombre Completo <span class="text-gold">*</span>
                 </label>
                 <input
-                  type="text" id="nombre" name="Nombre" required
+                  type="text" id="nombre" name="name" required
                   placeholder="Tu nombre"
                   class="contact-input"
                 />
@@ -192,7 +192,7 @@ const contactChannels = [
                   Correo Electrónico <span class="text-gold">*</span>
                 </label>
                 <input
-                  type="email" id="correo" name="Correo" required
+                  type="email" id="correo" name="email" required
                   placeholder="tu@email.com"
                   class="contact-input"
                 />
@@ -205,7 +205,7 @@ const contactChannels = [
                 Teléfono / WhatsApp
               </label>
               <input
-                type="tel" id="telefono" name="Teléfono"
+                type="tel" id="telefono" name="phone"
                 placeholder="+1 (809) 000-0000"
                 class="contact-input"
               />
@@ -216,7 +216,7 @@ const contactChannels = [
               <label for="asunto" class="text-xs font-bold text-navy uppercase tracking-wider">
                 Asunto <span class="text-gold">*</span>
               </label>
-              <select id="asunto" name="Asunto" required class="contact-input">
+              <select id="asunto" name="asunto" required class="contact-input">
                 <option value="" disabled selected>Selecciona un tema...</option>
                 <option value="Consulta de Compra">Consulta de Compra</option>
                 <option value="Consulta de Alquiler">Consulta de Alquiler</option>
@@ -232,7 +232,7 @@ const contactChannels = [
                 Mensaje <span class="text-gold">*</span>
               </label>
               <textarea
-                id="mensaje" name="Mensaje" required rows={5}
+                id="mensaje" name="message" required rows={5}
                 placeholder="Cuéntanos en qué podemos ayudarte. Cuantos más detalles nos das, mejor podemos orientarte..."
                 class="contact-input resize-none"
               ></textarea>
@@ -276,37 +276,58 @@ const contactChannels = [
   <Footer lang="es" />
   <AccessibilityWidget lang="es" />
 
-  <script>
-    const form = document.getElementById('contacto-form') as HTMLFormElement | null;
-    const btn = document.getElementById('btn-contacto');
-    const successEl = document.getElementById('contact-success');
-    const errorEl = document.getElementById('contact-error');
+  <script is:inline>
+    function initContactoForm() {
+      const form = document.getElementById('contacto-form');
+      const btn = document.getElementById('btn-contacto');
+      const successEl = document.getElementById('contact-success');
+      const errorEl = document.getElementById('contact-error');
 
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!form) return;
-      btn?.setAttribute('disabled', 'true');
-      if (btn) btn.textContent = 'Enviando...';
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { Accept: 'application/json' },
-        });
-        if (res.ok) {
-          form.reset();
-          successEl?.classList.remove('hidden');
-          errorEl?.classList.add('hidden');
-          successEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else throw new Error();
-      } catch {
-        errorEl?.classList.remove('hidden');
-        successEl?.classList.add('hidden');
-      } finally {
-        btn?.removeAttribute('disabled');
-        if (btn) btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg> Enviar Mensaje`;
-      }
-    });
+      if (!form || form.dataset.listenerAttached) return;
+      form.dataset.listenerAttached = 'true';
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        btn.setAttribute('disabled', 'true');
+        const originalText = btn.innerHTML;
+        btn.textContent = 'Enviando...';
+
+        try {
+          const formData = new FormData(form);
+          
+          // Combinar Asunto y Mensaje original para el campo 'message' que espera la API
+          const asunto = formData.get('asunto') || 'Consulta General';
+          const originalMessage = formData.get('message') || '';
+          const combinedMessage = `Tema/Asunto: ${asunto}\n\nMensaje:\n${originalMessage}`;
+          formData.set('message', combinedMessage);
+
+          const res = await fetch('/api/contacto', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (res.ok) {
+            form.reset();
+            successEl.classList.remove('hidden');
+            errorEl.classList.add('hidden');
+            successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          } else {
+            throw new Error();
+          }
+        } catch (error) {
+          errorEl.classList.remove('hidden');
+          successEl.classList.add('hidden');
+          errorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } finally {
+          btn.removeAttribute('disabled');
+          btn.innerHTML = originalText;
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initContactoForm);
+    document.addEventListener('astro:page-load', initContactoForm);
   </script>
 
 </body>

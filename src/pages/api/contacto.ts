@@ -5,37 +5,37 @@ import { Resend } from 'resend';
 export const prerender = false;
 
 // Inicializamos Resend de forma segura con la variable de entorno
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
+// Cambia la inicialización por esta línea defensiva:
+const resend = new Resend(import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY);
 export const POST: APIRoute = async ({ request }) => {
-    try {
-        // 1. Extraer los datos enviados de forma asíncrona desde el formulario de la web
-        const data = await request.formData();
-        const nombre = data.get('name')?.toString() || 'Cliente Anónimo';
-        const email = data.get('email')?.toString() || '';
-        const telefono = data.get('phone')?.toString() || 'No especificado';
-        const mensaje = data.get('message')?.toString() || '';
+  try {
+    // 1. Extraer los datos enviados de forma asíncrona desde el formulario de la web
+    const data = await request.formData();
+    const nombre = data.get('name')?.toString() || 'Cliente Anónimo';
+    const email = data.get('email')?.toString() || '';
+    const telefono = data.get('phone')?.toString() || 'No especificado';
+    const mensaje = data.get('message')?.toString() || '';
 
-        // Datos dinámicos para identificar qué propiedad está consultando el usuario
-        const propiedadTitulo = data.get('property_title')?.toString() || '';
-        const propiedadUrl = data.get('property_url')?.toString() || '';
-        const tipoFormulario = data.get('form_type')?.toString() || 'Contacto General';
+    // Datos dinámicos para identificar qué propiedad está consultando el usuario
+    const propiedadTitulo = data.get('property_title')?.toString() || '';
+    const propiedadUrl = data.get('property_url')?.toString() || '';
+    const tipoFormulario = data.get('form_type')?.toString() || 'Contacto General';
 
-        // 2. Validación básica de seguridad en el servidor
-        if (!email) {
-            return new Response(JSON.stringify({ error: 'El correo electrónico es requerido.' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
+    // 2. Validación básica de seguridad en el servidor
+    if (!email) {
+      return new Response(JSON.stringify({ error: 'El correo electrónico es requerido.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-        // 3. Estructurar el Asunto del correo según el origen del Lead
-        const asunto = propiedadTitulo
-            ? `🏠 Consulta Inmueble: ${propiedadTitulo} - ${nombre}`
-            : `📩 Nuevo Lead: ${tipoFormulario} - ${nombre}`;
+    // 3. Estructurar el Asunto del correo según el origen del Lead
+    const asunto = propiedadTitulo
+      ? `🏠 Consulta Inmueble: ${propiedadTitulo} - ${nombre}`
+      : `📩 Nuevo Lead: ${tipoFormulario} - ${nombre}`;
 
-        // Plantilla HTML Premium Corporativa (Azul Marino #0B192C + Dorado #C9A84C)
-        const htmlTemplate = `
+    // Plantilla HTML Premium Corporativa (Azul Marino #0B192C + Dorado #C9A84C)
+    const htmlTemplate = `
       <div style="background-color: #F8F7F4; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b;">
         <div style="max-width: 600px; margin: 0 auto; background: #0B192C; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(11,25,44,0.15); border: 1px solid rgba(201,168,76,0.25);">
           
@@ -88,33 +88,33 @@ export const POST: APIRoute = async ({ request }) => {
       </div>
     `;
 
-        // 4. Disparar el correo usando el Dominio Corporativo Oficial
-        const response = await resend.emails.send({
-            from: 'ALEXIS REAL ESTATE RD <consultas@alexisRealState.com>', // 🌟 REMITENTE CORPORATIVO AUTORIZADO
-            to: 'alexisre.rd@gmail.com',                                  // 🌟 DESTINATARIO: Tu papá recibe el lead directo
-            replyTo: email,                                               // Permite responderle al cliente dándole al botón "Responder" en Gmail
-            subject: asunto,
-            html: htmlTemplate,
-        });
+    // 4. Disparar el correo usando el Dominio Corporativo Oficial
+    const response = await resend.emails.send({
+      from: 'ALEXIS REAL ESTATE RD <consultas@alexisrealstate.com>', // 🌟 REMITENTE CORPORATIVO AUTORIZADO
+      to: 'alexisre.rd@gmail.com',                                  // 🌟 DESTINATARIO: Tu papá recibe el lead directo
+      replyTo: email,                                               // Permite responderle al cliente dándole al botón "Responder" en Gmail
+      subject: asunto,
+      html: htmlTemplate,
+    });
 
-        if (response.error) {
-            console.error("Error devuelto por Resend API:", response.error);
-            return new Response(JSON.stringify({ error: response.error.message }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        return new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-
-    } catch (error: any) {
-        console.error("Error crítico en la ejecución del Endpoint:", error);
-        return new Response(JSON.stringify({ error: 'Fallo interno de servidor al procesar el lead.' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
+    if (response.error) {
+      console.error("Error devuelto por Resend API:", response.error);
+      return new Response(JSON.stringify({ error: response.error.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+  } catch (error: any) {
+    console.error("Error crítico en la ejecución del Endpoint:", error);
+    return new Response(JSON.stringify({ error: 'Fallo interno de servidor al procesar el lead.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 };

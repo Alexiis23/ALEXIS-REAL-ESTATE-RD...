@@ -6,6 +6,8 @@ import Footer from '../../components/Footer.astro';
 import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
 import { getCollection } from 'astro:content';
 
+export const prerender = false;
+
 // Obtener todas las propiedades para mostrarlas en el desplegable
 const propertiesCollection = await getCollection('propiedades');
 const properties = propertiesCollection.map((entry) => {

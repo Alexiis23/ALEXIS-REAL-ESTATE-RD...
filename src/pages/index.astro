@@ -7,6 +7,7 @@ import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import { Image } from 'astro:assets';
 import logoEmpresa from '../assets/images/logo-alexis-rd.jpg';
 import fallbackImage from '../assets/images/prueba-inmobiliaria.jpg';
+import { slugify } from '../utils/slugify';
 
 const WHATSAPP_PHONE = "18295259993";
 
@@ -16,7 +17,7 @@ const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.
 const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
 const featuredProps = Object.entries(modulosJSON).slice(0, 3).map(([ruta, modulo]) => {
   const c = modulo as any;
-  const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
+  const id = slugify(ruta.split('/').pop()?.replace('.json', '') || 'property');
   const precio = parseInt(String(c.precio || '0').replace(/[^0-9]/g, ''), 10) || 0;
   // Use raw id for URL - [id].astro uses getEntry which needs the exact Keystatic entry id
   

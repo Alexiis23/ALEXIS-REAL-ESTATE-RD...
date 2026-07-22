@@ -6,23 +6,17 @@ import Footer from "../../components/Footer.astro";
 import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
 import * as deepl from "deepl-node";
+import { slugify } from "../../utils/slugify";
 
 const { id } = Astro.params;
 
 // Intentar recuperar directamente por ID primero
 let entry = await getEntry("propiedades", id || "");
 
-// Si no se encuentra (debido a diferencias de casing/slug en Keystatic), buscamos en la colección por slug
+// Si no se encuentra (debido a diferencias de casing/slug en Keystatic), buscamos en la colección por slug normalizado
 if (!entry && id) {
   const todas = await getCollection("propiedades");
-  entry = todas.find((item) => {
-    const slugSeguro = item.id
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]/g, "-");
-    return slugSeguro === id;
-  });
+  entry = todas.find((item) => slugify(item.id) === id);
 }
 
 if (!entry) {
@@ -70,7 +64,23 @@ const fotosGaleria = galeriaRaw
 const rutaPrincipal = String(entry.data.imagenPrincipal || "").replace(/^\.\.\/\.\.\//, "/src/");
 const imagenPrincipalResuelta = imagenes[rutaPrincipal]?.default || null;
 
-// 4. CONFIGURACIÓN DE LA API DE TRADUCCIÓN (DEEPL SHIELD)
+// 4. COMBINAR TODAS LAS FOTOS PARA EL CARRUSEL (locales + URLs externas de Vercel Blob)
+const todasLasFotos: Array<{ type: 'local'; meta: any } | { type: 'url'; src: string }> = [];
+if (imagenPrincipalResuelta) {
+  todasLasFotos.push({ type: 'local', meta: imagenPrincipalResuelta });
+}
+galeriaRaw.forEach((rutaRaw: string) => {
+  const ruta = String(rutaRaw || '');
+  if (ruta.startsWith('http')) {
+    todasLasFotos.push({ type: 'url', src: ruta });
+  } else {
+    const rutaPublica = ruta.replace(/^\.\.\/\.\.\//, '/src/');
+    const meta = imagenes[rutaPublica]?.default;
+    if (meta) todasLasFotos.push({ type: 'local', meta });
+  }
+});
+
+// 5. CONFIGURACIÓN DE LA API DE TRADUCCIÓN (DEEPL SHIELD)
 const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
 let translator: any = null;
 
@@ -203,57 +213,94 @@ const WHATSAPP_PHONE = "18295259993";
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- COLUMNA IZQUIERDA: Multimedia, Galería y Descripción -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- Contenedor Multimedia Principal -->
-          <div class="space-y-6">
-            <div
-              class="w-full rounded-xl overflow-hidden bg-slate-100 shadow-sm relative aspect-video md:aspect-[21/9]"
-            >
-              {
-                imagenPrincipalResuelta ? (
-                  <Image
-                    src={imagenPrincipalResuelta}
-                    alt={titulo}
-                    width={1200}
-                    height={514}
-                    format="webp"
-                    loading="eager"
-                    class="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div class="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400">
-                    <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span class="text-xs font-semibold">Sin imagen disponible</span>
+          <!-- Carrusel Multimedia Premium -->
+          {todasLasFotos.length > 0 ? (
+            <div id="gallery-carousel">
+              <div id="carousel-viewport" class="relative aspect-video rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(11,25,44,0.25)] bg-slate-100">
+                {todasLasFotos.map((foto, i) => (
+                  <div class={`carousel-slide ${i === 0 ? 'is-active' : ''}`} data-index={i}>
+                    {foto.type === 'local' ? (
+                      <Image
+                        src={foto.meta}
+                        alt={`${tituloOriginal} \u2013 Foto ${i + 1} de ${todasLasFotos.length}`}
+                        width={1200}
+                        height={675}
+                        format="webp"
+                        quality={85}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={foto.src}
+                        alt={`${tituloOriginal} \u2013 Foto ${i + 1} de ${todasLasFotos.length}`}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        class="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                )
-              }
-            </div>
+                ))}
 
-            <!-- Galería de fotos secundarias -->
-            {
-              fotosGaleria.length > 0 && (
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                  <h3 class="text-xl font-bold text-navy mb-4 border-b border-slate-100 pb-2">
-                    Galería de Fotos
-                  </h3>
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    {fotosGaleria.map((imgMeta, index) => (
-                      <div class="aspect-video overflow-hidden rounded-xl border border-slate-200 shadow-sm group cursor-pointer">
-                        <Image
-                          src={imgMeta}
-                          alt={`Foto ${index + 1} de ${tituloOriginal}`}
-                          format="webp"
-                          quality={75}
-                          class="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
-                        />
-                      </div>
-                    ))}
+                {todasLasFotos.length > 1 && (
+                  <div id="carousel-counter" class="absolute top-4 right-4 bg-navy/80 backdrop-blur-sm text-white text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/10 z-20 tracking-wide">
+                    1 / {todasLasFotos.length}
                   </div>
+                )}
+
+                {todasLasFotos.length > 1 && (
+                  <button id="carousel-prev" type="button" aria-label="Foto anterior" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-navy/60 backdrop-blur-sm border border-gold/20 text-gold flex items-center justify-center hover:bg-navy/90 hover:border-gold/50 hover:scale-110 active:scale-95 transition-all duration-200 shadow-lg cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                )}
+
+                {todasLasFotos.length > 1 && (
+                  <button id="carousel-next" type="button" aria-label="Siguiente foto" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-navy/60 backdrop-blur-sm border border-gold/20 text-gold flex items-center justify-center hover:bg-navy/90 hover:border-gold/50 hover:scale-110 active:scale-95 transition-all duration-200 shadow-lg cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                )}
+              </div>
+
+              {todasLasFotos.length > 1 && (
+                <div id="carousel-thumbs" class="flex gap-2.5 mt-4 overflow-x-auto pb-2 scroll-smooth px-0.5">
+                  {todasLasFotos.map((foto, i) => (
+                    <button
+                      type="button"
+                      class={`carousel-thumb shrink-0 w-20 h-14 rounded-xl overflow-hidden border-2 border-transparent opacity-50 hover:opacity-90 transition-all duration-200 cursor-pointer ${i === 0 ? 'carousel-thumb-active' : ''}`}
+                      data-index={i}
+                      aria-label={`Ir a foto ${i + 1}`}
+                    >
+                      {foto.type === 'local' ? (
+                        <Image
+                          src={foto.meta}
+                          alt={`Miniatura ${i + 1}`}
+                          width={120}
+                          height={80}
+                          format="webp"
+                          quality={50}
+                          loading="lazy"
+                          class="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <img
+                          src={foto.src}
+                          alt={`Miniatura ${i + 1}`}
+                          loading="lazy"
+                          class="w-full h-full object-cover"
+                        />
+                      )}
+                    </button>
+                  ))}
                 </div>
-              )
-            }
-          </div>
+              )}
+            </div>
+          ) : (
+            <div class="w-full rounded-3xl overflow-hidden bg-slate-100 shadow-sm relative aspect-video flex flex-col items-center justify-center text-slate-400">
+              <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="text-xs font-semibold">Sin imagen disponible</span>
+            </div>
+          )}
 
           <!-- Descripción -->
           <div
@@ -646,6 +693,41 @@ const WHATSAPP_PHONE = "18295259993";
     <Footer lang="es" />
     <AccessibilityWidget lang="es" />
 
+    <style is:global>
+      .carousel-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        z-index: 0;
+        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: opacity;
+      }
+      .carousel-slide.is-active {
+        opacity: 1;
+        z-index: 10;
+      }
+      .carousel-thumb-active {
+        border-color: #C9A84C !important;
+        opacity: 1 !important;
+        box-shadow: 0 4px 8px -2px rgba(201, 168, 76, 0.25);
+      }
+      #carousel-thumbs {
+        scrollbar-width: thin;
+        scrollbar-color: #C9A84C #f1f5f9;
+      }
+      #carousel-thumbs::-webkit-scrollbar {
+        height: 4px;
+      }
+      #carousel-thumbs::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 999px;
+      }
+      #carousel-thumbs::-webkit-scrollbar-thumb {
+        background: #C9A84C;
+        border-radius: 999px;
+      }
+    </style>
+
     <!-- LÓGICA DE CONTROLADORES -->
     <script
       is:inline
@@ -658,12 +740,59 @@ const WHATSAPP_PHONE = "18295259993";
       }}
     >
       const initProptechModules = () => {
+        // --- CARRUSEL INTERACTIVO DE GALERÍA ---
+        const carouselViewport = document.getElementById('carousel-viewport');
+        if (carouselViewport && !carouselViewport.dataset.carouselInit) {
+          carouselViewport.dataset.carouselInit = 'true';
+          const allSlides = carouselViewport.querySelectorAll('.carousel-slide');
+          const allThumbs = document.querySelectorAll('.carousel-thumb');
+          const counterEl = document.getElementById('carousel-counter');
+          const prevBtn = document.getElementById('carousel-prev');
+          const nextBtn = document.getElementById('carousel-next');
+          let currentIdx = 0;
+          const totalCount = allSlides.length;
+
+          function goToSlide(idx) {
+            allSlides[currentIdx].classList.remove('is-active');
+            if (allThumbs[currentIdx]) allThumbs[currentIdx].classList.remove('carousel-thumb-active');
+            currentIdx = ((idx % totalCount) + totalCount) % totalCount;
+            allSlides[currentIdx].classList.add('is-active');
+            if (allThumbs[currentIdx]) {
+              allThumbs[currentIdx].classList.add('carousel-thumb-active');
+              allThumbs[currentIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            if (counterEl) counterEl.textContent = (currentIdx + 1) + ' / ' + totalCount;
+          }
+
+          if (prevBtn) prevBtn.addEventListener('click', function() { goToSlide(currentIdx - 1); });
+          if (nextBtn) nextBtn.addEventListener('click', function() { goToSlide(currentIdx + 1); });
+          allThumbs.forEach(function(thumb) {
+            thumb.addEventListener('click', function() { goToSlide(parseInt(thumb.dataset.index, 10)); });
+          });
+
+          // Soporte táctil (swipe en móviles)
+          let touchStartX = 0;
+          carouselViewport.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+          carouselViewport.addEventListener('touchend', function(e) {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) goToSlide(diff > 0 ? currentIdx + 1 : currentIdx - 1);
+          });
+
+          // Soporte de teclado (flechas izquierda/derecha)
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') goToSlide(currentIdx - 1);
+            if (e.key === 'ArrowRight') goToSlide(currentIdx + 1);
+          });
+        }
+
+        // --- MAPA DE UBICACIÓN APROXIMADA ---
         const mapaContenedor = document.getElementById("map-individual");
-        if (mapaContenedor && typeof L !== "undefined") {
+        if (mapaContenedor && !mapaContenedor.dataset.mapInit && typeof L !== "undefined") {
+          mapaContenedor.dataset.mapInit = 'true';
           const validLat = Number(lat) || 18.4231;
           const validLng = Number(lng) || -69.4124;
 
-          const map = L.map("map-individual").setView([validLat, validLng], 14);
+          const map = L.map("map-individual", { scrollWheelZoom: false }).setView([validLat, validLng], 13);
 
           L.tileLayer(
             "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
@@ -673,10 +802,21 @@ const WHATSAPP_PHONE = "18295259993";
             },
           ).addTo(map);
 
+          // Círculo de zona aproximada en lugar de pin exacto (privacidad de ubicación)
+          L.circle([validLat, validLng], {
+            radius: 400,
+            color: '#C9A84C',
+            fillColor: '#C9A84C',
+            fillOpacity: 0.12,
+            weight: 2,
+            opacity: 0.5,
+          }).addTo(map);
+
+          // Marcador central discreto
           const marker = L.marker([validLat, validLng]).addTo(map);
           marker
             .bindPopup(
-              `<b style="font-family: 'Inter', sans-serif; color: #0B192C;">${titulo}</b>`,
+              '<b style="font-family: Inter, sans-serif; color: #0B192C;">Ubicación aproximada</b>',
             )
             .openPopup();
 

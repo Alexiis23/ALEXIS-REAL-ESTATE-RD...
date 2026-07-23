@@ -3,13 +3,13 @@ import { put } from '@vercel/blob';
 
 export const prerender = false;
 
-// Configuración de GitHub desde variables de entorno
+// Variables de entorno para GitHub API
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN || process.env.GITHUB_TOKEN;
 const GITHUB_OWNER = import.meta.env.GITHUB_OWNER || process.env.GITHUB_OWNER || 'Alexiis23';
 const GITHUB_REPO = import.meta.env.GITHUB_REPO || process.env.GITHUB_REPO || 'ALEXIS-REAL-ESTATE-RD';
 const GITHUB_BRANCH = 'main';
 
-// Función para normalizar cadenas (ignora mayúsculas, tildes, espacios y guiones)
+// Función ayudante para normalizar nombres (elimina tildes, guiones, espacios y tildes)
 const normalizar = (texto: string) =>
   texto
     .toLowerCase()
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
     const files = data.getAll('fotos');
     const adminPassword = data.get('adminPassword')?.toString();
 
-    // 1. Verificación de Contraseña de Seguridad
+    // 1. Verificación de Contraseña Administrativa
     const correctPassword =
       import.meta.env.ADMIN_PASSWORD ||
       process.env.ADMIN_PASSWORD ||
@@ -57,7 +57,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (!GITHUB_TOKEN) {
       return new Response(
-        JSON.stringify({ error: 'La variable de entorno GITHUB_TOKEN no está configurada en Vercel.' }),
+        JSON.stringify({
+          error: 'Falta la variable GITHUB_TOKEN en Vercel. Asegúrese de agregarla y hacer Redeploy.',
+        }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -86,8 +88,9 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // 4. Buscar el archivo JSON en GitHub usando la API de GitHub
+    // 4. Consultar la carpeta de propiedades en el repositorio privado
     const folderUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/src/content/propiedades?ref=${GITHUB_BRANCH}`;
+
     const folderRes = await fetch(folderUrl, {
       headers: {
         Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -97,7 +100,10 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     if (!folderRes.ok) {
-      throw new Error(`No se pudo consultar la carpeta de propiedades en GitHub (HTTP ${folderRes.status}).`);
+      const errText = await folderRes.text();
+      throw new Error(
+        `Error al consultar repositorio privado (${folderRes.status}): ${errText}. Revisa que GITHUB_TOKEN tenga acceso 'repo'.`
+      );
     }
 
     const folderItems: Array<{ name: string; path: string; sha: string }> = await folderRes.json();
@@ -116,7 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // 5. Obtener el contenido actual del archivo JSON desde GitHub
+    // 5. Obtener el archivo JSON actual desde GitHub
     const fileUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${targetFile.path}?ref=${GITHUB_BRANCH}`;
     const fileRes = await fetch(fileUrl, {
       headers: {
@@ -128,18 +134,16 @@ export const POST: APIRoute = async ({ request }) => {
 
     const fileData = await fileRes.json();
     const currentSha = fileData.sha;
-
-    // Decodificar el contenido de Base64
     const contentDecoded = Buffer.from(fileData.content, 'base64').toString('utf-8');
     const propertyJson = JSON.parse(contentDecoded);
 
-    // Inicializar galeria si no existe y añadir las nuevas fotos
+    // Añadir las nuevas fotos de Vercel Blob
     if (!Array.isArray(propertyJson.galeria)) {
       propertyJson.galeria = [];
     }
     propertyJson.galeria.push(...uploadedUrls);
 
-    // 6. Hacer COMMIT directo en la rama main vía GitHub API
+    // 6. Hacer COMMIT automático en GitHub mediante la API REST
     const updatedContentBase64 = Buffer.from(
       JSON.stringify(propertyJson, null, 2),
       'utf-8'
@@ -156,7 +160,7 @@ export const POST: APIRoute = async ({ request }) => {
           'User-Agent': 'Astro-PropTech-App',
         },
         body: JSON.stringify({
-          message: `feat(admin): agregar ${uploadedUrls.length} fotos a la galeria de ${propertySlug}`,
+          message: `feat(galeria): agregar ${uploadedUrls.length} fotos a ${propertySlug}`,
           content: updatedContentBase64,
           sha: currentSha,
           branch: GITHUB_BRANCH,
@@ -166,15 +170,15 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (!updateRes.ok) {
       const errData = await updateRes.json();
-      throw new Error(`Error al hacer commit en GitHub: ${errData.message}`);
+      throw new Error(`Error en el commit de GitHub: ${errData.message}`);
     }
 
-    // 7. Respuesta exitosa
+    // 7. Respuesta de éxito
     return new Response(
       JSON.stringify({
         success: true,
         urls: uploadedUrls,
-        message: `¡Fotos subidas a Vercel Blob y commit realizado en GitHub con éxito!`,
+        message: '¡Fotos subidas a Vercel Blob y sincronizadas en GitHub con éxito!',
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );

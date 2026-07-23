@@ -91,16 +91,23 @@ export const POST: APIRoute = async ({ request }) => {
     // 4. Actualizar el archivo JSON de la propiedad correspondiente
     const propiedadesDir = path.join(process.cwd(), 'src', 'content', 'propiedades');
 
-    // Leer todos los archivos de la carpeta para encontrar el slug correcto
+    // Función ayudante para normalizar nombres (elimina tildes, guiones, espacios y símbolos)
+    const normalizar = (texto: string) =>
+      texto
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Quita tildes (á -> a, í -> i)
+        .replace(/[^a-z0-9]/g, '');      // Quita espacios, guiones y símbolos
+
     const filesInDir = await fs.readdir(propiedadesDir);
     const targetFile = filesInDir.find(
-      (file) => file.toLowerCase().replace(/\.json$/, '') === propertySlug.toLowerCase()
+      (file) => normalizar(file.replace(/\.json$/, '')) === normalizar(propertySlug)
     );
 
     if (!targetFile) {
       return new Response(
         JSON.stringify({
-          error: `No se encontró el archivo JSON para la propiedad: ${propertySlug}. Archivos disponibles: ${filesInDir.join(', ')}`,
+          error: `No se encontró el archivo JSON para la propiedad: ${propertySlug}`,
         }),
         {
           status: 404,

@@ -89,8 +89,28 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 4. Actualizar el archivo JSON de la propiedad correspondiente
-    const jsonPath = path.join(process.cwd(), 'src', 'content', 'propiedades', `${propertySlug}.json`);
-    
+    const propiedadesDir = path.join(process.cwd(), 'src', 'content', 'propiedades');
+
+    // Leer todos los archivos de la carpeta para encontrar el slug correcto
+    const filesInDir = await fs.readdir(propiedadesDir);
+    const targetFile = filesInDir.find(
+      (file) => file.toLowerCase().replace(/\.json$/, '') === propertySlug.toLowerCase()
+    );
+
+    if (!targetFile) {
+      return new Response(
+        JSON.stringify({
+          error: `No se encontró el archivo JSON para la propiedad: ${propertySlug}. Archivos disponibles: ${filesInDir.join(', ')}`,
+        }),
+        {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const jsonPath = path.join(propiedadesDir, targetFile);
+
     // Verificar si el archivo JSON existe
     try {
       await fs.access(jsonPath);

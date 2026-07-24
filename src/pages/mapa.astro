@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import AccessibilityWidget from "../components/AccessibilityWidget.astro";
 import fallbackImage from "../assets/images/prueba-inmobiliaria.jpg";
+import { resolverPrecios } from "../utils/currency";
 
 // 1. Recuperar todas las propiedades indexadas con sus coordenadas
 const allPropiedades = await getCollection("propiedades");
@@ -28,6 +29,11 @@ const propiedadesJSON = await Promise.all(
     const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
     const dataPlana = p.data as any;
 
+    const { usd: precioUsd, dop: precioDop } = resolverPrecios(
+      dataPlana.precioUsd ?? p.data.precio,
+      dataPlana.precioDop
+    );
+
     const popupImgOptimized = await getImage({
       src: imgMeta,
       width: 240,
@@ -38,8 +44,10 @@ const propiedadesJSON = await Promise.all(
 
     return {
       id: p.id,
-      titulo: p.data.titulo || "Propiedad en Inventario", // 🌟 Evita h3 vacíos
-      precio: p.data.precio,
+      titulo: p.data.titulo || "Propiedad en Inventario",
+      precio: precioUsd,
+      precioUsd,
+      precioDop,
       tipo: p.data.tipo || "Inmueble",
       ubicacion: p.data.ubicacion || "República Dominicana",
       lat: Number(p.data.latitud),
@@ -174,6 +182,9 @@ const datosSegurosParaMapa = propiedadesJSON.map((p) => ({
                     <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-800">
                       <span class="text-[13px] font-black text-white">
                         USD ${Number(p.precio).toLocaleString("en-US")}
+                      </span>
+                      <span class="text-[11px] font-bold text-slate-400">
+                        RD$ {Number(p.precioDop).toLocaleString("es-DO")}
                       </span>
                       <span class="text-[12px] font-bold text-[#C9A84C] flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
                         Ver ficha ›

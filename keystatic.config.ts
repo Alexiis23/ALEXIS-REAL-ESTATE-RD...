@@ -44,9 +44,13 @@ export default config({
         }),
 
         // --- SECCIÓN 3: DATOS COMERCIALES Y FINANCIEROS ---
-        precio: fields.number({
-          label: 'Precio de Venta o Renta (USD)',
-          description: 'Solo números, sin comas ni puntos. Ej: 285000'
+        precioUsd: fields.number({
+          label: 'Precio en Dólares (USD) - OPCIONAL',
+          description: 'Ingresa el precio en USD. Si dejas vacío el campo en DOP, se calculará automáticamente. Si ingresas ambos, se respetan los dos valores. Ej: 285000'
+        }),
+        precioDop: fields.number({
+          label: 'Precio en Pesos Dominicanos (DOP) - OPCIONAL',
+          description: 'Ingresa el precio en RD$. Si dejas vacío el campo en USD, se calculará automáticamente. Si ingresas ambos, se respetan los dos valores. Ej: 18700000'
         }),
         regimen: fields.select({
           label: 'Tipo de Contrato (Transacción)',

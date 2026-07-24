@@ -7,6 +7,7 @@ import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
 import * as deepl from "deepl-node";
 import { slugify } from "../../utils/slugify";
+import { resolverPrecios } from "../../utils/currency";
 
 const { id } = Astro.params;
 
@@ -37,7 +38,10 @@ let descripcion = descripcionOriginal;
 let tipo = tipoOriginal;
 let estado = estadoOriginal;
 
-const precio = Number(entry.data.precio) || 0;
+const { usd: precioUsd, dop: precioDop } = resolverPrecios(
+  (entry.data as any).precioUsd ?? entry.data.precio,
+  (entry.data as any).precioDop
+);
 const ubicacion = entry.data.ubicacion || "República Dominicana";
 const confotur = Boolean(entry.data.confotur);
 const habitaciones = Number(entry.data.habitaciones) || 0;
@@ -109,7 +113,7 @@ const WHATSAPP_PHONE = "18295259993";
     <!-- 2. La descripción para buscadores en Español -->
     <meta
       name="description"
-      content={`Exclusiva propiedad en ${ubicacion}. Precio: USD $${precio.toLocaleString("en-US")}. Habitaciones: ${habitaciones} | Baños: ${banos}. Ver detalles, fotos y mapa de ubicación.`}
+      content={`Exclusiva propiedad en ${ubicacion}. Precio: USD $${precioUsd.toLocaleString("en-US")} / RD$ ${precioDop.toLocaleString("es-DO")}. Habitaciones: ${habitaciones} | Baños: ${banos}. Ver detalles, fotos y mapa de ubicación.`}
     />
 
     <!-- 3. Metadatos de Redes Sociales y WhatsApp en Español (Open Graph) -->
@@ -120,7 +124,7 @@ const WHATSAPP_PHONE = "18295259993";
     />
     <meta
       property="og:description"
-      content={`Oportunidad de Inversión en ${ubicacion}. Precio: USD $${precio.toLocaleString("en-US")}. Haz clic para ver todos los detalles y fotos.`}
+      content={`Oportunidad de Inversión en ${ubicacion}. Precio: USD $${precioUsd.toLocaleString("en-US")} / RD$ ${precioDop.toLocaleString("es-DO")}. Haz clic para ver todos los detalles y fotos.`}
     />
 
     <!-- Imagen de miniatura para compartir por WhatsApp -->
@@ -329,8 +333,11 @@ const WHATSAPP_PHONE = "18295259993";
               class="text-xs font-bold text-warm-gray uppercase tracking-widest"
               >Precio de Venta</span
             >
-            <div class="text-3xl font-black text-navy mt-1 mb-6">
-              USD ${precio.toLocaleString("en-US")}
+            <div class="text-3xl font-black text-navy mt-1">
+              USD ${precioUsd.toLocaleString("en-US")}
+            </div>
+            <div class="text-lg font-bold text-warm-gray mb-6">
+              RD$ {precioDop.toLocaleString("es-DO")}
             </div>
             <a
               href={`https://wa.me/${WHATSAPP_PHONE}?text=Hola%20Alexis,%20solicito%20atención%20personalizada%20y%20detalles%20financieros%20para%20la%20propiedad:%20"${encodeURIComponent(titulo)}".`}
@@ -735,7 +742,7 @@ const WHATSAPP_PHONE = "18295259993";
         lat: latitud,
         lng: longitud,
         titulo: titulo,
-        precioPropiedad: precio,
+        precioPropiedad: precioUsd,
         tieneConfotur: confotur,
       }}
     >

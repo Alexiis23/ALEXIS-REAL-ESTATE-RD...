@@ -8,6 +8,7 @@ import Buscador from '../../components/buscador.astro';
 import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
 import fallbackImage from '../../assets/images/prueba-inmobiliaria.jpg';
 import * as deepl from 'deepl-node';
+import { resolverPrecios } from '../../utils/currency';
 
 const translateTipo: Record<string, string> = {
   'apartamento': 'Apartment', 'villa': 'Villa', 'casa': 'House',
@@ -40,6 +41,7 @@ const propiedadesBase = propertiesCollection.map((entry) => {
   const id = entry.id;
   const rawPrecio = String(contenido.precio || '0');
   const validatedPrecio = parseInt(rawPrecio.replace(/[^0-9]/g, ''), 10) || 0;
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios((contenido as any).precioUsd ?? validatedPrecio, (contenido as any).precioDop);
   const tipoOrig = String(contenido.tipo || 'apartamento').toLowerCase().trim();
   const estadoOrig = String(contenido.estado || 'en planos').toLowerCase().trim();
 
@@ -51,7 +53,9 @@ const propiedadesBase = propertiesCollection.map((entry) => {
     id,
     imagenMetadata: imgMeta,
     imagenPrincipal: contenido.imagenPrincipal || '',
-    precio: validatedPrecio,
+    precio: precioUsd,
+    precioUsd,
+    precioDop,
     confotur: Boolean(contenido.confotur),
     habitaciones: Number(contenido.habitaciones) || 0,
     banos: Number(contenido.banos) || 0,
@@ -97,6 +101,8 @@ const allPropiedades = await Promise.all(
         titulo: finalTitulo,
         descripcion: finalDesc,
         precio: p.precio,
+        precioUsd: p.precioUsd,
+        precioDop: p.precioDop,
         ubicacion: p.ubicacion,
         tipo: p.tipo,
         estado: p.estado,
@@ -234,7 +240,8 @@ const WHATSAPP_PHONE = "18295259993";
                 <div class="flex items-center justify-between">
                   <div class="flex flex-col">
                     <span class="text-xs font-semibold text-warm-gray uppercase tracking-wider">Investment Price</span>
-                    <span class="text-xl font-black text-navy">USD ${p.data.precio.toLocaleString('en-US')}</span>
+                    <span class="text-xl font-black text-navy">USD ${p.data.precioUsd.toLocaleString('en-US')}</span>
+                    <span class="text-xs font-bold text-warm-gray">RD$ {p.data.precioDop.toLocaleString('es-DO')}</span>
                   </div>
                   <a
                     href={`https://wa.me/${WHATSAPP_PHONE}?text=Hi%20Alexis,%20I'm%20interested%20in%20the%20property:%20"${encodeURIComponent(p.data.titulo)}"%20in%20${encodeURIComponent(p.data.ubicacion)}.`}

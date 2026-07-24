@@ -7,6 +7,7 @@ import Footer from "../components/Footer.astro";
 import Buscador from "../components/buscador.astro";
 import AccessibilityWidget from "../components/AccessibilityWidget.astro";
 import fallbackImage from "../assets/images/prueba-inmobiliaria.jpg";
+import { resolverPrecios } from "../utils/currency";
 
 const propertiesCollection = await getCollection("propiedades");
 const imagenes = import.meta.glob<{ default: ImageMetadata }>(
@@ -18,9 +19,9 @@ const allPropiedades = propertiesCollection.map((entry) => {
   const contenido = entry.data;
   const id = entry.id;
 
-  const rawPrecioString = String(contenido.precio || "0");
-  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");
-  const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
+  const rawPrecioUsd = (contenido as any).precioUsd ?? contenido.precio;
+  const rawPrecioDop = (contenido as any).precioDop;
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios(rawPrecioUsd, rawPrecioDop);
 
   const rutaRaw = String(contenido.imagenPrincipal || "");
   const imagenPublica = rutaRaw
@@ -35,7 +36,9 @@ const allPropiedades = propertiesCollection.map((entry) => {
       descripcion:
         contenido.descripcion ||
         "Descubre esta increíble oportunidad inmobiliaria en República Dominicana.",
-      precio: validatedPrecioNum,
+      precio: precioUsd,
+      precioUsd,
+      precioDop,
       ubicacion: contenido.ubicacion || "República Dominicana",
       tipo: contenido.tipo || "Apartamento",
       estado: contenido.estado || "En planos",
@@ -256,7 +259,10 @@ const WHATSAPP_PHONE = "18295259993";
                           Precio
                         </span>
                         <span class="text-xl font-black text-navy">
-                          USD ${p.data.precio.toLocaleString("en-US")}
+                          USD ${p.data.precioUsd.toLocaleString("en-US")}
+                        </span>
+                        <span class="text-xs font-bold text-warm-gray">
+                          RD$ {p.data.precioDop.toLocaleString("es-DO")}
                         </span>
                       </div>
                       <a

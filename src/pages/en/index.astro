@@ -11,6 +11,7 @@ import * as deepl from 'deepl-node';
 
 import logoEmpresa from '../../assets/images/logo-alexis-rd.jpg';
 import fallbackImage from '../../assets/images/prueba-inmobiliaria.jpg';
+import { resolverPrecios } from '../../utils/currency';
 
 const t = useTranslations('en');
 const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
@@ -41,10 +42,8 @@ const propiedadesBase = Object.entries(modulosJSON).map(([ruta, modulo]) => {
   const contenido = modulo as any;
   const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
   
-  const rawPrecioString = String(contenido.precio || '0');
-  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, '');
-  const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
-  
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios(contenido.precioUsd ?? contenido.precio, contenido.precioDop);
+
   const tipoOriginal = String(contenido.tipo || 'apartamento').toLowerCase().trim();
   const estadoOriginal = String(contenido.estado || 'en planos').toLowerCase().trim();
 
@@ -54,7 +53,9 @@ const propiedadesBase = Object.entries(modulosJSON).map(([ruta, modulo]) => {
 
   return {
     id: id,
-    precio: validatedPrecioNum,
+    precio: precioUsd,
+    precioUsd,
+    precioDop,
     ubicacion: contenido.ubicacion || 'Dominican Republic',
     tipo: translateTipo[tipoOriginal] || contenido.tipo || 'Apartment',
     estado: translateEstado[estadoOriginal] || contenido.estado || 'Under Construction',
@@ -104,6 +105,8 @@ const allPropiedades = await Promise.all(
         titulo: finalTitulo,
         descripcion: finalDesc,
         precio: p.precio,
+        precioUsd: p.precioUsd,
+        precioDop: p.precioDop,
         ubicacion: p.ubicacion,
         tipo: p.tipo,
         estado: p.estado,
@@ -128,6 +131,8 @@ const featuredProps = allPropiedades.slice(0, 3).map(p => {
     titulo: p.data.titulo,
     ubicacion: cleanUbicacion,
     precio: p.data.precio,
+    precioUsd: p.data.precioUsd,
+    precioDop: p.data.precioDop,
     tipo: p.data.tipo,
     imagenPrincipal: p.data.imagenPrincipal,
     imagenMetadata: p.data.imagenMetadata,
@@ -422,7 +427,8 @@ const stats = [
               <h3 class="mt-2 font-bold text-navy text-base leading-snug line-clamp-2 group-hover:text-gold-dark transition-colors">{p.titulo}</h3>
               <p class="mt-1 text-xs text-warm-gray">{p.ubicacion}</p>
               <div class="flex items-center justify-between w-full mt-auto pt-3 border-t border-slate-100/60">
-                <span class="text-lg font-black text-navy">USD ${p.precio.toLocaleString('en-US')}</span>
+                <span class="text-lg font-black text-navy">USD ${p.precioUsd.toLocaleString('en-US')}</span>
+                <span class="text-xs text-warm-gray block">RD$ {p.precioDop.toLocaleString('es-DO')}</span>
                 <span class="text-xs text-gold font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   View details
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>

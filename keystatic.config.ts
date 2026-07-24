@@ -52,6 +52,10 @@ export default config({
           label: 'Precio en Pesos Dominicanos (DOP) - OPCIONAL',
           description: 'Ingresa el precio en RD$. Si dejas vacío el campo en USD, se calculará automáticamente. Si ingresas ambos, se respetan los dos valores. Ej: 18700000'
         }),
+        precio: fields.number({
+          label: '⚠️ Precio Antiguo (NO USAR — campo legacy)',
+          description: 'Este campo existe solo por compatibilidad con propiedades anteriores. Usa los campos de arriba (USD o DOP).'
+        }),
         regimen: fields.select({
           label: 'Tipo de Contrato (Transacción)',
           description: 'Determina si saldrá en la sección de Comprar o de Alquilar.',

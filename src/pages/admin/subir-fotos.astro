@@ -433,7 +433,7 @@ const properties = propertiesCollection.map((entry) => {
           }
         }
 
-        // Procesar el envío
+        // Procesar el envío — sube cada foto individualmente para no exceder el límite de Vercel
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
 
@@ -447,63 +447,104 @@ const properties = propertiesCollection.map((entry) => {
           successFeedback.classList.add("hidden");
           errorFeedback.classList.add("hidden");
 
-          // Habilitar barra de carga
+          // Activar barra de carga
           btnSubmit.setAttribute("disabled", "true");
           progressContainer.classList.remove("hidden");
 
-          // Simular progreso de preparación inicial
-          progressBar.style.width = "10%";
-          progressPercent.textContent = "10%";
-          progressMsg.textContent = `Preparando ${files.length} archivos para subir...`;
+          progressBar.style.width = "5%";
+          progressPercent.textContent = "5%";
+          progressMsg.textContent = `Preparando ${files.length} foto(s) para subir…`;
+
+          const totalFiles = files.length;
+          const uploadedUrls = [];
+          const failedFiles = [];
 
           try {
-            const formData = new FormData();
-            formData.append("propertySlug", propertySlug);
-            formData.append("adminPassword", adminPassword);
-            for (let i = 0; i < files.length; i++) {
-              formData.append("fotos", files[i]);
+            // ── PASO 1: Subir cada foto individualmente a Vercel Blob ──
+            for (let i = 0; i < totalFiles; i++) {
+              const file = files[i];
+              const current = i + 1;
+
+              // Progreso proporcional: 5% → 85% repartido entre todas las fotos
+              const pct = Math.round(5 + (80 * current) / totalFiles);
+              progressBar.style.width = `${pct}%`;
+              progressPercent.textContent = `${pct}%`;
+              progressMsg.textContent = `Subiendo foto ${current} de ${totalFiles}: ${file.name}`;
+
+              const fd = new FormData();
+              fd.append("mode", "blob");
+              fd.append("propertySlug", propertySlug);
+              fd.append("adminPassword", adminPassword);
+              fd.append("foto", file);
+
+              try {
+                const res = await fetch("/api/subir-galeria", {
+                  method: "POST",
+                  body: fd,
+                });
+                const json = await res.json();
+
+                if (res.ok && json.success) {
+                  uploadedUrls.push(json.url);
+                } else {
+                  failedFiles.push(`${file.name}: ${json.error || "error desconocido"}`);
+                }
+              } catch (fetchErr) {
+                failedFiles.push(`${file.name}: ${fetchErr.message}`);
+              }
             }
 
-            progressBar.style.width = "35%";
-            progressPercent.textContent = "35%";
-            progressMsg.textContent =
-              "Cargando datos y subiendo a Vercel Blob...";
-
-            // Hacemos el fetch al endpoint
-            const response = await fetch("/api/subir-galeria", {
-              method: "POST",
-              body: formData,
-            });
-
-            progressBar.style.width = "75%";
-            progressPercent.textContent = "75%";
-            progressMsg.textContent = "Guardando URLs en el archivo JSON...";
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-              progressBar.style.width = "100%";
-              progressPercent.textContent = "100%";
-              progressMsg.textContent = "¡Carga completada!";
-
-              // Mostrar éxito
-              successDesc.textContent = `Se subieron con éxito ${result.urls.length} fotos a Vercel Blob y se asociaron al inmueble.`;
-              successFeedback.classList.remove("hidden");
-              successFeedback.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-              });
-
-              // Resetear formulario
-              form.reset();
-              fileListContainer.classList.add("hidden");
-              fileList.innerHTML = "";
-            } else {
+            // Si no se subió ninguna foto, abortar
+            if (uploadedUrls.length === 0) {
               throw new Error(
-                result.error ||
-                  "Ocurrió un error inesperado al subir la galería.",
+                "No se pudo subir ninguna foto. " + failedFiles.join("; ")
               );
             }
+
+            // ── PASO 2: Commit único en GitHub con todas las URLs ──
+            progressBar.style.width = "90%";
+            progressPercent.textContent = "90%";
+            progressMsg.textContent = "Guardando URLs en el archivo JSON de GitHub…";
+
+            const commitFd = new FormData();
+            commitFd.append("mode", "commit");
+            commitFd.append("propertySlug", propertySlug);
+            commitFd.append("adminPassword", adminPassword);
+            commitFd.append("urls", JSON.stringify(uploadedUrls));
+
+            const commitRes = await fetch("/api/subir-galeria", {
+              method: "POST",
+              body: commitFd,
+            });
+            const commitResult = await commitRes.json();
+
+            if (!commitRes.ok || !commitResult.success) {
+              throw new Error(
+                commitResult.error ||
+                  "Error al guardar las URLs en GitHub."
+              );
+            }
+
+            // ── Éxito ──
+            progressBar.style.width = "100%";
+            progressPercent.textContent = "100%";
+            progressMsg.textContent = "¡Carga completada!";
+
+            let successText = `Se subieron con éxito ${uploadedUrls.length} foto(s) a Vercel Blob y se asociaron al inmueble.`;
+            if (failedFiles.length > 0) {
+              successText += ` (${failedFiles.length} foto(s) fallaron: ${failedFiles.join(", ")})`;
+            }
+            successDesc.textContent = successText;
+            successFeedback.classList.remove("hidden");
+            successFeedback.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+            });
+
+            // Resetear formulario
+            form.reset();
+            fileListContainer.classList.add("hidden");
+            fileList.innerHTML = "";
           } catch (error) {
             errorMsg.textContent = error.message;
             errorFeedback.classList.remove("hidden");

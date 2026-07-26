@@ -19,7 +19,7 @@ const allPropiedades = propertiesCollection.map((entry) => {
   const contenido = entry.data;
   const id = entry.id;
 
-  const rawPrecioUsd = (contenido as any).precioUsd ?? contenido.precio;
+  const rawPrecioUsd = (contenido as any).precioUsd;
   const rawPrecioDop = (contenido as any).precioDop;
   const { usd: precioUsd, dop: precioDop } = resolverPrecios(rawPrecioUsd, rawPrecioDop);
 
@@ -181,7 +181,7 @@ const WHATSAPP_PHONE = "18295259993";
                   class="propiedad-card bg-white border border-slate-200/80 overflow-hidden flex flex-col justify-between group"
                   data-tipo={p.data.tipo}
                   data-estado={p.data.estado}
-                  data-precio={p.data.precio}
+                  data-precio={p.data.precioUsd}
                   data-contrato="venta"
                 >
                   <div>

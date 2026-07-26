@@ -6,6 +6,7 @@ import Footer from "../../../components/Footer.astro";
 import AccessibilityWidget from "../../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
 import * as deepl from "deepl-node";
+import { resolverPrecios } from "../../../utils/currency";
 
 const { id } = Astro.params;
 
@@ -133,7 +134,10 @@ if (translator) {
   estadoTraducido = estadoOriginal;
 }
 
-const precio = Number(entry.data.precio) || 0;
+const { usd: precioUsd, dop: precioDop } = resolverPrecios(
+  dataPlana.precioUsd,
+  dataPlana.precioDop
+);
 const ubicacion = entry.data.ubicacion || "Dominican Republic";
 const confotur = Boolean(entry.data.confotur);
 const habitaciones = Number(entry.data.habitaciones) || 0;
@@ -159,7 +163,7 @@ const WHATSAPP_PHONE = "18295259993";
     <!-- Descripción para buscadores -->
     <meta
       name="description"
-      content={`Exclusive property in ${ubicacion}. Price: USD $${precio.toLocaleString("en-US")}. Beds: ${habitaciones} | Baths: ${banos}. View details, photos and location map.`}
+      content={`Exclusive property in ${ubicacion}. Price: USD $${precioUsd.toLocaleString("en-US")} / RD$ ${precioDop.toLocaleString("es-DO")}. Beds: ${habitaciones} | Baths: ${banos}. View details, photos and location map.`}
     />
 
     <!-- Metadatos de Redes Sociales y WhatsApp (Open Graph) -->
@@ -170,7 +174,7 @@ const WHATSAPP_PHONE = "18295259993";
     />
     <meta
       property="og:description"
-      content={`Investment Opportunity in ${ubicacion}. Price: USD $${precio.toLocaleString("en-US")}. Click for full details and photos.`}
+      content={`Investment Opportunity in ${ubicacion}. Price: USD $${precioUsd.toLocaleString("en-US")} / RD$ ${precioDop.toLocaleString("es-DO")}. Click for full details and photos.`}
     />
     <meta
       property="og:image"
@@ -350,8 +354,11 @@ const WHATSAPP_PHONE = "18295259993";
               class="text-xs font-bold text-warm-gray uppercase tracking-widest"
               >Investment Price</span
             >
-            <div class="text-3xl font-black text-navy mt-1 mb-6">
-              USD ${precio.toLocaleString("en-US")}
+            <div class="text-3xl font-black text-navy mt-1">
+              USD ${precioUsd.toLocaleString("en-US")}
+            </div>
+            <div class="text-lg font-bold text-warm-gray mb-6">
+              RD$ {precioDop.toLocaleString("es-DO")}
             </div>
             <a
               href={`https://wa.me/${WHATSAPP_PHONE}?text=Hi%20Alexis,%20I%20am%20requesting%20personalized%20advisory%20and%20financial%20details%20for%20the%20property:%20"${encodeURIComponent(tituloTraducido)}".`}
@@ -664,7 +671,7 @@ const WHATSAPP_PHONE = "18295259993";
         lat: latitud,
         lng: longitud,
         titulo: tituloTraducido,
-        precioPropiedad: precio,
+        precioPropiedad: precioUsd,
         tieneConfotur: confotur,
       }}
     >

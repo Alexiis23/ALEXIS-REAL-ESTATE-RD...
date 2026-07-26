@@ -30,7 +30,7 @@ const propiedadesJSON = await Promise.all(
     const dataPlana = p.data as any;
 
     const { usd: precioUsd, dop: precioDop } = resolverPrecios(
-      dataPlana.precioUsd ?? p.data.precio,
+      dataPlana.precioUsd,
       dataPlana.precioDop
     );
 
@@ -63,7 +63,7 @@ const propiedadesJSON = await Promise.all(
 const datosSegurosParaMapa = propiedadesJSON.map((p) => ({
   id: p.id,
   titulo: p.titulo,
-  precio: p.precio,
+  precio: p.precioUsd,
   tipo: p.tipo,
   ubicacion: p.ubicacion,
   lat: p.lat,
@@ -181,7 +181,7 @@ const datosSegurosParaMapa = propiedadesJSON.map((p) => ({
                     </div>
                     <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-800">
                       <span class="text-[13px] font-black text-white">
-                        USD ${Number(p.precio).toLocaleString("en-US")}
+                        USD ${Number(p.precioUsd).toLocaleString("en-US")}
                       </span>
                       <span class="text-[11px] font-bold text-slate-400">
                         RD$ {Number(p.precioDop).toLocaleString("es-DO")}

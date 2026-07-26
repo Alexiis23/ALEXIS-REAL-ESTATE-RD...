@@ -8,7 +8,6 @@ const propiedades = defineCollection({
     descripcion: z.string().optional(),
     titulo_en: z.string().optional(),
     descripcion_en: z.string().optional(),
-    precio: z.union([z.number(), z.string()]).optional(), // legacy — fallback para precioUsd
     precioUsd: z.union([z.number(), z.string()]).optional(),
     precioDop: z.union([z.number(), z.string()]).optional(),
     regimen: z.string().optional(),

@@ -42,7 +42,7 @@ const propiedadesBase = Object.entries(modulosJSON).map(([ruta, modulo]) => {
   const contenido = modulo as any;
   const id = ruta.split('/').pop()?.replace('.json', '') || 'property';
   
-  const { usd: precioUsd, dop: precioDop } = resolverPrecios(contenido.precioUsd ?? contenido.precio, contenido.precioDop);
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios(contenido.precioUsd, contenido.precioDop);
 
   const tipoOriginal = String(contenido.tipo || 'apartamento').toLowerCase().trim();
   const estadoOriginal = String(contenido.estado || 'en planos').toLowerCase().trim();

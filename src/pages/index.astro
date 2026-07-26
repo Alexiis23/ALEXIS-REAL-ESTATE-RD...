@@ -19,7 +19,7 @@ const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eag
 const featuredProps = Object.entries(modulosJSON).slice(0, 3).map(([ruta, modulo]) => {
   const c = modulo as any;
   const id = slugify(ruta.split('/').pop()?.replace('.json', '') || 'property');
-  const { usd: precioUsd, dop: precioDop } = resolverPrecios(c.precioUsd ?? c.precio, c.precioDop);
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios(c.precioUsd, c.precioDop);
   // Use raw id for URL - [id].astro uses getEntry which needs the exact Keystatic entry id
   
   const rutaRaw = String(c.imagenPrincipal || '');

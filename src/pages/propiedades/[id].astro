@@ -39,7 +39,7 @@ let tipo = tipoOriginal;
 let estado = estadoOriginal;
 
 const { usd: precioUsd, dop: precioDop } = resolverPrecios(
-  (entry.data as any).precioUsd ?? entry.data.precio,
+  (entry.data as any).precioUsd,
   (entry.data as any).precioDop
 );
 const ubicacion = entry.data.ubicacion || "República Dominicana";

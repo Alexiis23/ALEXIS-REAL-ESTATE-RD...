@@ -7,6 +7,7 @@ import Buscador from "../../components/buscador.astro";
 import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
 import fallbackImage from "../../assets/images/prueba-inmobiliaria.jpg";
+import { resolverPrecios } from "../../utils/currency";
 
 const imagenes = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}",
@@ -36,9 +37,10 @@ const allPropiedades = propertiesCollection.map((entry) => {
   const contenido = entry.data;
   const id = entry.id;
 
-  const rawPrecioString = String(contenido.precio || "0");
-  const cleanPrecioString = rawPrecioString.replace(/[^0-9]/g, "");
-  const validatedPrecioNum = parseInt(cleanPrecioString, 10) || 0;
+  const { usd: precioUsd, dop: precioDop } = resolverPrecios(
+    (contenido as any).precioUsd,
+    (contenido as any).precioDop
+  );
 
   const tipoOriginal = String(contenido.tipo || "apartamento")
     .toLowerCase()
@@ -60,7 +62,9 @@ const allPropiedades = propertiesCollection.map((entry) => {
         contenido.descripcion_en ||
         contenido.descripcion ||
         "Discover this amazing real estate opportunity.",
-      precio: validatedPrecioNum,
+      precio: precioUsd,
+      precioUsd,
+      precioDop,
       ubicacion: contenido.ubicacion || "Dominican Republic",
       tipo: translateTipo[tipoOriginal] || contenido.tipo || "Apartment",
       estado:
@@ -212,7 +216,7 @@ const WHATSAPP_PHONE = "18295259993";
                   class="propiedad-card bg-white border border-slate-200/80 overflow-hidden flex flex-col justify-between group"
                   data-tipo={p.data.tipo}
                   data-estado={p.data.estado}
-                  data-precio={p.data.precio}
+                  data-precio={p.data.precioUsd}
                   data-contrato={p.data.tipoContrato}
                 >
                   <div>
@@ -290,7 +294,10 @@ const WHATSAPP_PHONE = "18295259993";
                           {isAlquiler ? "Rent / month" : "Investment Price"}
                         </span>
                         <span class="text-xl font-black text-navy">
-                          USD ${Number(p.data.precio).toLocaleString("en-US")}
+                          USD ${Number(p.data.precioUsd).toLocaleString("en-US")}
+                        </span>
+                        <span class="text-xs font-bold text-warm-gray">
+                          RD$ {Number(p.data.precioDop).toLocaleString("es-DO")}
                         </span>
                       </div>
                       <a

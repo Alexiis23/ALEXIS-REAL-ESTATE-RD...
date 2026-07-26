@@ -1,0 +1,18 @@
+{
+  "descripcion": "Vive o invierte en una de las zonas de mayor plusvalía y crecimiento de Punta Cana, estratégicamente ubicada a pocos minutos de Downtown Punta Cana.\n\nMás que una casa, un estilo de vida. Disfruta de comodidad, seguridad y un entorno ideal para vivir o generar ingresos con alquileres vacacionales.\n\nCaracterísticas de la propiedad:\n3 amplias habitaciones\n3.5 baños\nPiscina privada\nTotalmente amueblada\n365 m² de construcción\n600 m² de terreno\n\nAmenidades de Vista Cana:\nPlaya artificial\nColegios\nPlaza comercial\nRestaurantes\nPiscinas\nSeguridad 24/7",
+  "precioUsd": 750000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 3.5,
+  "parqueos": 0,
+  "area": 365,
+  "latitud": 18.634,
+  "longitud": -68.431,
+  "ubicacion": "Punta Cana",
+  "imagenPrincipal": "../../assets/propiedades/Se Vende Exclusiva y Hermosa Villa en Vista Cana, Punta Cana/imagenPrincipal.jpg",
+  "galeria": []
+}

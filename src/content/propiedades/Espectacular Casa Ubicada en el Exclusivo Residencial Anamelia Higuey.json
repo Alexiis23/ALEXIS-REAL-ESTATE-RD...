@@ -1,0 +1,18 @@
+{
+  "descripcion": "Vive el lujo y la comodidad en esta Maravillosa Casa, lista para mudarte.\n\nCaracterísticas:\n\n-4 Habitaciones amplias (Incluyendo la de Servicio )\n-Cocina Fría y Caliente\n-5 Baños modernos\n-2 niveles\n-Piscina privada\n-Bar\n-Área de BBQ\n-Área de lavado\n600 metros de Terreno \nPrecio: $480,000 Dólares negociable \n\nTítulo y Deslinde, Listo Para Transferir, para una negociación Rápida y Segura.\n\nFinanciamiento Disponible, con el banco de Su Preferencia.",
+  "precioUsd": 480000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 5,
+  "parqueos": 1,
+  "area": 600,
+  "latitud": 18.598,
+  "longitud": -68.721,
+  "ubicacion": "Anamelia Higuey",
+  "imagenPrincipal": "../../assets/propiedades/Espectacular Casa Ubicada en el Exclusivo Residencial Anamelia Higuey/imagenPrincipal.jpg",
+  "galeria": []
+}

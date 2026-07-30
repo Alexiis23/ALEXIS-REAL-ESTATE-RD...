@@ -14,5 +14,15 @@
   "longitud": -68.394,
   "ubicacion": "Punta cana",
   "imagenPrincipal": "../../assets/propiedades/Exclusiva Villa en Punta Cana/imagenPrincipal.jpg",
-  "galeria": []
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/7b9a7356-6d37-4e54-9f5b-dc670873bf21-1785434268564.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/27e3c70b-34ff-45e0-94a1-85e3dabac119-1785434269773.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/56ff5cd1-9a18-4b11-ba5a-9f4fda8e91e6-1785434271148.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/408e05db-587e-4bd5-8a1b-c5b976958b22-1785434271878.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/90101d84-a7c7-4c8e-949a-a9cca2b9c361-1785434272963.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/81725808-cd7f-4f1f-b617-22e93c761486-1785434274377.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/aa5b8ddd-55fa-4cc6-8f62-913e8a2d87b5-1785434275823.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/bd29af65-490e-480a-864c-1517bcabd28e-1785434276848.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/exclusiva-villa-en-punta-cana/bf58be1e-4b14-4bc8-801d-55832ff39453-1785434278307.jpg"
+  ]
 }

@@ -1,11 +1,12 @@
 {
+  "titulo": "Terreno en Primera Línea de Playa – Miches, República Dominicana",
   "descripcion": "Una excelente oportunidad de inversión en una de las zonas con mayor crecimiento turístico del país.\n\nCaracterísticas:\n* Precio: US$220/ m² (negociable)\n* 370 metros lineales de frente de playa\n* Superficie: 600,000 m²\n\nIdeal para:\n\t•\tHoteles y resorts\n\t•\tVillas de lujo\n\t•\tProyectos turísticos\n\t•\tDesarrollo inmobiliario de alto nivel\n\nFinanciamiento disponible con el banco de su preferencia.\n\nUbicado a solo 90 minutos del Aeropuerto Internacional de Punta Cana.\n\nLa zona ya cuenta con más de 10 hoteles y resorts construidos, lo que la convierte en un destino con gran potencial de desarrollo y valorización.",
   "precioUsd": 132000000,
   "regimen": "Venta",
   "exclusiva": false,
   "confotur": false,
   "tipo": "Solar",
-  "estado": "En planos",
+  "estado": "Listo",
   "habitaciones": 0,
   "banos": 0,
   "parqueos": 0,
@@ -15,9 +16,9 @@
   "ubicacion": "Miches",
   "imagenPrincipal": "../../assets/propiedades/Terreno en Primera Línea de Playa – Miches, República Dominicann/imagenPrincipal.jpg",
   "galeria": [
-    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-en-primera-l%C3%ADnea-de-playa--miches-rep%C3%BAblica-dominicann/86e3a6e9-33b5-40f1-8efd-21f8a9365874-1785338444459.jpg",
-    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-en-primera-l%C3%ADnea-de-playa--miches-rep%C3%BAblica-dominicann/699094cb-60f2-4191-ba72-251e172d14c2-1785338445367.jpg",
-    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-en-primera-l%C3%ADnea-de-playa--miches-rep%C3%BAblica-dominicann/868600e2-35cb-4182-ab2a-e84dc32bf02a-1785338445957.jpg",
-    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-en-primera-l%C3%ADnea-de-playa--miches-rep%C3%BAblica-dominicann/af9d8f33-41e3-4a5d-8aeb-6a86d4a02236-1785338446679.jpg"
+    null,
+    null,
+    null,
+    null
   ]
 }

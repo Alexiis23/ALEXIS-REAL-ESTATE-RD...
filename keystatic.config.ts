@@ -5,7 +5,7 @@ export default config({
   storage: import.meta.env.PROD
     ? {
       kind: 'github',
-      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD',
+      repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD...',
     }
     : {
       kind: 'local',

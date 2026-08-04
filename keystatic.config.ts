@@ -2,7 +2,7 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   // 🌐 Modo de almacenamiento híbrido: GitHub en Vercel, Local en desarrollo
-  storage: process.env.NODE_ENV === 'production'
+  storage: import.meta.env.PROD
     ? {
       kind: 'github',
       repo: 'Alexiis23/ALEXIS-REAL-ESTATE-RD',

@@ -1,11 +1,12 @@
 {
+  "titulo": "exclusiva villa en punta cana",
   "descripcion": "Descubre esta espectacular propiedad, ideal para vivir o invertir en una de las zonas más exclusivas del Caribe.\n\nCaracterísticas:\n3,000 m² de terreno\n5 amplias habitaciones, cada una con su baño privado\n2 salas de estar\nCocina\nTerraza\nPiscina\nHermosa jardinería\nAmplio patio\n\nTítulo deslindado\n\nPrecio: US$450,000 (¡Negociable!)\n\nNo dejes pasar esta excelente oportunidad de adquirir una villa con amplios espacios y gran potencial de valorización en Punta Cana.",
   "precioUsd": 450000,
   "regimen": "Venta",
   "exclusiva": false,
   "confotur": false,
   "tipo": "Villa",
-  "estado": "En planos",
+  "estado": "Listo",
   "habitaciones": 5,
   "banos": 5,
   "parqueos": 1,

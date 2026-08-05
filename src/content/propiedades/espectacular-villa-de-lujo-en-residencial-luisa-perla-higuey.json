@@ -1,0 +1,18 @@
+{
+  "titulo": "Espectacular villa de lujo en residencial Luisa Perla, Higuey",
+  "descripcion": "Descubre esta impresionante propiedad de alto nivel, diseñada para brindar comodidad, elegancia y amplios espacios para toda la familia.\n\nCaracterísticas:\nTerreno: 788 m²\nConstrucción: 540 m²\n2 salas\nComedor\nCocina en cedro\nÁrea de lavado\nHabitación de servicio\nCava de vinos subterránea\nPiscina de 50 m²\n9 habitaciones\nHabitación principal con kitchenette\nÁrea de bar\nHome office\nHome cinema\n2 baños para visitas\n\nUna residencia exclusiva que combina lujo, confort y funcionalidad, ideal para quienes buscan una propiedad de alto estándar.",
+  "precioUsd": 925000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Villa",
+  "estado": "Listo",
+  "habitaciones": 9,
+  "banos": 9,
+  "parqueos": 1,
+  "area": 788,
+  "latitud": 18.604,
+  "longitud": -68.72,
+  "ubicacion": "Luisa Perla, Higuey",
+  "galeria": []
+}

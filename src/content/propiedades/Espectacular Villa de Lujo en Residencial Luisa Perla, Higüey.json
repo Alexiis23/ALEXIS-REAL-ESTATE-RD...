@@ -1,0 +1,28 @@
+{
+  "descripcion": "Descubre esta impresionante propiedad de alto nivel, diseñada para brindar comodidad, elegancia y amplios espacios para toda la familia.\n\nCaracterísticas:\nTerreno: 788 m²\nConstrucción: 540 m²\n2 salas\nComedor\nCocina en cedro\nÁrea de lavado\nHabitación de servicio\nCava de vinos subterránea\nPiscina de 50 m²\n9 habitaciones\nHabitación principal con kitchenette\nÁrea de bar\nHome office\nHome cinema\n2 baños para visitas\n\nUna residencia exclusiva que combina lujo, confort y funcionalidad, ideal para quienes buscan una propiedad de alto estándar.",
+  "precioUsd": 925000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Villa",
+  "estado": "Listo",
+  "habitaciones": 9,
+  "banos": 9,
+  "parqueos": 1,
+  "area": 788,
+  "latitud": 18.604,
+  "longitud": -68.719,
+  "ubicacion": "Luisa Perla, Higuey",
+  "imagenPrincipal": "../../assets/propiedades/Espectacular Villa de Lujo en Residencial Luisa Perla, Higüey/imagenPrincipal.jpg",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/0f9d04c5-b5d1-438e-8d82-db42e5ee2a21-1786028389964.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/1ebf43b3-cf99-400c-85f1-ac6f60d7f8fe-1786028391507.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/6ea2adb3-d14b-42d0-9980-37a6bc8e2fe5-1786028392703.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/7f82bef8-ce01-43e2-8379-ac440a3b0a73-1786028394390.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/37f87de2-fce8-4b57-9d18-3810adf79b0c-1786028395442.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/133ebf9d-3df7-4346-a73e-2e5473b4d7b3-1786028397506.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/a0331619-309a-47df-94b6-4dbc3fa65d2c-1786028398704.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/cdd49ea6-f8e0-435b-a164-1b8c9a7d2ff4-1786028399998.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/espectacular-villa-de-lujo-en-residencial-luisa-perla-hig%C3%BCey/fe33e93f-44df-4c1c-891e-a1535f19b47a-1786028401260.jpg"
+  ]
+}

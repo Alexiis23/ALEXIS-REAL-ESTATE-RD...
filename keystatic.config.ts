@@ -99,28 +99,13 @@ export default config({
         longitud: fields.number({ label: 'Coordenada de Longitud (Mapa)', description: 'Ej. -68.72' }),
         ubicacion: fields.text({ label: 'Ubicación de Referencia', description: 'Ej. Luisa Perla, Higüey' }),
 
-        // --- SECCIÓN 6: MULTIMEDIA VÍA URL (VERCEL BLOB) ---
-        imagenPrincipal: fields.text({
-          label: '📸 Foto Principal (URL de Portada)',
-          description:
-            'Pega aquí la URL pública de la imagen de portada (Vercel Blob). Ejemplo: https://t6x9ajl…/mi-foto.jpg',
-        }),
-        galeria: fields.array(
-          fields.text({
-            label: 'URL de Foto Secundaria',
-            description: 'Pega la URL pública de Vercel Blob para esta imagen.',
-          }),
-          {
-            label: '🖼️ Galería de Fotos Secundarias (URLs)',
-            itemLabel: (props) => props.value ? '✅ ' + props.value.substring(0, 60) + '…' : '➕ Añadir URL de foto',
-          }
-        ),
-
-        // --- SECCIÓN 7: ACCESO RÁPIDO AL CARGADOR MASIVO ---
-        ayudaGaleria: fields.text({
-          label: '👉 ¿Quieres subir o cambiar la galería de fotos masivamente? Visita /admin/subir-fotos',
-          description:
-            '🔗 ACCESO DIRECTO: Abre tu navegador en /admin/subir-fotos para cargar múltiples fotos de forma masiva a Vercel Blob y asociarlas automáticamente a esta propiedad. Este campo es solo informativo, no necesitas escribir nada aquí.',
+        // --- SECCIÓN 6: FOTO PRINCIPAL (ARRASTRAR / SOLTAR) ---
+        // La galería de fotos secundarias se gestiona desde /admin/subir-fotos
+        imagenPrincipal: fields.image({
+          label: '📸 Foto Principal (Portada del Inmueble)',
+          description: 'Arrastra o selecciona la imagen de portada. La galería secundaria se sube desde /admin/subir-fotos.',
+          directory: 'public/images/propiedades',
+          publicPath: '/images/propiedades/',
         })
       },
     }),

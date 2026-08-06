@@ -99,20 +99,16 @@ export default config({
         longitud: fields.number({ label: 'Coordenada de Longitud (Mapa)', description: 'Ej. -68.72' }),
         ubicacion: fields.text({ label: 'Ubicación de Referencia', description: 'Ej. Luisa Perla, Higüey' }),
 
-        // --- SECCIÓN 6: FOTO PRINCIPAL ---
-        imagenPrincipal: fields.text({
-          label: '📸 Foto Principal (URL o ruta de Portada)',
-          description: 'Pega la URL de Vercel Blob o la ruta local de la imagen de portada.',
+        // --- SECCIÓN 6: FOTO PRINCIPAL (Arrastra o selecciona) ---
+        imagenPrincipal: fields.image({
+          label: '📸 Foto Principal (Portada)',
+          description: 'Arrastra o selecciona la imagen de portada del inmueble.',
+          directory: 'src/assets/propiedades',
+          publicPath: '../../assets/propiedades/',
         }),
-
-        // --- GALERÍA (NO TOCAR — se gestiona desde /admin/subir-fotos) ---
         galeria: fields.array(
-          fields.text({ label: 'URL de foto' }),
-          {
-            label: '⚠️ Galería – NO EDITAR AQUÍ. Usa /admin/subir-fotos para subir fotos masivamente.',
-            description: 'Este campo se actualiza automáticamente desde el cargador masivo. No modifiques las URLs manualmente.',
-            itemLabel: (props) => props.value ? '🖼️ ' + props.value.substring(0, 50) + '…' : 'URL vacía',
-          }
+          fields.text({ label: 'URL' }),
+          { label: 'Fotos de la galería', itemLabel: (props) => props.value || 'Foto' }
         )
       },
     }),

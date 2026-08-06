@@ -1,0 +1,17 @@
+{
+  "descripcion": "Ubicación: Residencial Anamelia, Higüey, provincia La Altagracia, República Dominicana.\n\nTítulo y deslinde al día.\n\nCaracterísticas:\n308 m² de terreno\n3 habitaciones\n2 baños\nMarquesina para 2 vehículos\nCisterna\nÁrea de lavado\nAmplio patio\nTerraza\nGalería\nSala\nComedor\nAmplia cocina\nFinanciamiento disponible \nnegociable",
+  "precioDop": 10600000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 2,
+  "parqueos": 1,
+  "area": 308,
+  "latitud": 18.596,
+  "longitud": -68.722,
+  "imagenPrincipal": "../../assets/propiedades/Hermosa casa de 3 habitaciones en el hermoso residencial Anamelia, Higuey/imagenPrincipal.jpg",
+  "galeria": []
+}

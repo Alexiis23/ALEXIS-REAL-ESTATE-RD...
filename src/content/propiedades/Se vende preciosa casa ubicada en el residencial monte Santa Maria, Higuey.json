@@ -13,5 +13,15 @@
   "latitud": 18.623,
   "longitud": -68.736,
   "imagenPrincipal": "../../assets/propiedades/Se vende preciosa casa ubicada en el residencial monte Santa Maria, Higuey/imagenPrincipal.jpg",
-  "galeria": []
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/4c98725f-f1f8-4242-9779-cd72876f9596-1786051166245.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/62b69a6b-c6fd-4711-a33d-7ea8ae0a0349-1786051167468.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/57954f34-c1a4-4516-9131-f6953bd42ea3-1786051168372.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/52978665-55b9-4250-ba8f-7fc0d59f992c-1786051169270.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/ac2bab42-c04e-465c-8fd4-60afd650c48a-1786051170446.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/c6e7770e-ba2e-4bbc-b90f-e780462f6675-1786051171627.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/c128fe9b-9b95-475f-b594-c659a8cafc4a-1786051172728.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/c5311373-c622-4eb5-8648-86f448b1ec0d-1786051173894.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-vende-preciosa-casa-ubicada-en-el-residencial-monte-santa-maria-higuey/f5eb8fe3-9420-4119-8d0f-844627d633ee-1786051175333.jpg"
+  ]
 }

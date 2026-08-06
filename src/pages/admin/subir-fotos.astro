@@ -8,13 +8,48 @@ import { getCollection } from "astro:content";
 
 export const prerender = false;
 
+import type { ImageMetadata } from "astro";
+
+// Resolver imágenes locales de assets
+const imagenes = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP,JPG,PNG}",
+  { eager: true }
+);
+
 // Obtener todas las propiedades para mostrarlas en el desplegable
 const propertiesCollection = await getCollection("propiedades");
 const properties = propertiesCollection.map((entry) => {
-  const img = entry.data.imagenPrincipal || '';
-  const galeria = Array.isArray(entry.data.galeria) ? entry.data.galeria : [];
-  // Usar imagenPrincipal si es URL pública, sino la primera foto de galeria
-  const previewUrl = img.startsWith('http') ? img : (galeria.find((u: any) => typeof u === 'string' && u.startsWith('http')) || '');
+  const imgRaw = String(entry.data.imagenPrincipal || "");
+  let previewUrl = "";
+
+  if (imgRaw.startsWith("http://") || imgRaw.startsWith("https://")) {
+    previewUrl = imgRaw;
+  } else if (imgRaw) {
+    const rutaPublica = imgRaw.replace(/^\.\.\/\.\.\//, "/src/");
+    const meta = imagenes[rutaPublica]?.default;
+    if (meta) {
+      previewUrl = meta.src;
+    }
+  }
+
+  // Fallback a la galería solo si no hay imagen principal
+  if (!previewUrl && Array.isArray(entry.data.galeria)) {
+    for (const gItem of entry.data.galeria) {
+      const gRaw = String(gItem || "");
+      if (gRaw.startsWith("http://") || gRaw.startsWith("https://")) {
+        previewUrl = gRaw;
+        break;
+      } else if (gRaw) {
+        const rPub = gRaw.replace(/^\.\.\/\.\.\//, "/src/");
+        const meta = imagenes[rPub]?.default;
+        if (meta) {
+          previewUrl = meta.src;
+          break;
+        }
+      }
+    }
+  }
+
   return {
     id: entry.id,
     titulo: entry.data.titulo || entry.id.replace(/-/g, " "),

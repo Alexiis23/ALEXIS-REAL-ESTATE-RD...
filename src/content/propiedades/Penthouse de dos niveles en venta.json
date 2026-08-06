@@ -1,0 +1,18 @@
+{
+  "descripcion": "Características:\n226 m² de construcción\n3er y 4to nivel\n4 habitaciones\nHabitación principal con baño privado y walk-in closet\nAmplia sala\nCocina\nComedor\nBalcón\nÁrea de lavado\nArmario para ropa blanca\nParqueo doble\n\nPrecio: USD$140,000 (ligeramente negociable)\n\n📑 Título y deslinde\n🏦 Financiamiento disponible\n\nUna excelente oportunidad para vivir con comodidad, amplitud y en una ubicación estratégica.\n",
+  "precioUsd": 140000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 3,
+  "parqueos": 2,
+  "area": 226,
+  "latitud": 18.623,
+  "longitud": -68.735,
+  "ubicacion": "Monte Santa Maria",
+  "imagenPrincipal": "../../assets/propiedades/Penthouse de dos niveles en venta/imagenPrincipal.jpg",
+  "galeria": []
+}

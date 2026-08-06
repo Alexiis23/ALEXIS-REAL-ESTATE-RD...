@@ -1,0 +1,17 @@
+{
+  "descripcion": "3 Amplias Habitaciones más 1 Habitación afuera de servicio con su baño\n4 Baños \nSala Super Amplia \nCocina  \nArea de lavado\nPatio Amplio \nDepósito \nPortón eléctrico\nMarquesina para 4 Vehículos \nArea verde y jardinería \n\n802 metros de terreno \n476 metros de construcción ",
+  "precioDop": 15900000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 4,
+  "parqueos": 1,
+  "area": 802,
+  "latitud": 18.623,
+  "longitud": -68.736,
+  "imagenPrincipal": "../../assets/propiedades/Se vende preciosa casa ubicada en el residencial monte Santa Maria, Higuey/imagenPrincipal.jpg",
+  "galeria": []
+}

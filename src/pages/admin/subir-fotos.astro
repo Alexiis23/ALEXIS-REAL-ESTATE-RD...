@@ -11,11 +11,20 @@ export const prerender = false;
 // Obtener todas las propiedades para mostrarlas en el desplegable
 const propertiesCollection = await getCollection("propiedades");
 const properties = propertiesCollection.map((entry) => {
+  const img = entry.data.imagenPrincipal || '';
+  const galeria = Array.isArray(entry.data.galeria) ? entry.data.galeria : [];
+  // Usar imagenPrincipal si es URL pública, sino la primera foto de galeria
+  const previewUrl = img.startsWith('http') ? img : (galeria.find((u: any) => typeof u === 'string' && u.startsWith('http')) || '');
   return {
     id: entry.id,
     titulo: entry.data.titulo || entry.id.replace(/-/g, " "),
+    previewUrl,
   };
 });
+
+// Mapa de ID → URL de preview para el JS del cliente
+const previewMap: Record<string, string> = {};
+properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
 ---
 
 <!doctype html>
@@ -154,6 +163,40 @@ const properties = propertiesCollection.map((entry) => {
                 ))
               }
             </select>
+
+            <!-- Preview de la imagen principal -->
+            <div id="property-preview" class="hidden mt-4 rounded-2xl overflow-hidden border border-slate-200 bg-[#f8fafc] transition-all duration-300">
+              <div class="flex items-center gap-4 p-4">
+                <div id="preview-img-container" class="w-28 h-20 rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
+                  <img id="preview-img" src="" alt="Portada de la propiedad" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-bold text-navy uppercase tracking-wider">Propiedad seleccionada</p>
+                  <p id="preview-title" class="text-sm font-semibold text-slate-700 truncate mt-0.5"></p>
+                </div>
+                <div class="shrink-0">
+                  <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-200">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                    Confirmada
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Placeholder sin imagen -->
+            <div id="property-preview-no-img" class="hidden mt-4 rounded-2xl overflow-hidden border border-amber-200 bg-amber-50/50 p-4 transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p id="preview-title-no-img" class="text-sm font-semibold text-amber-800 truncate"></p>
+                  <p class="text-xs text-amber-600 mt-0.5">Esta propiedad aún no tiene imagen de portada.</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- 2. Carga Múltiple de Fotos -->
@@ -364,7 +407,12 @@ const properties = propertiesCollection.map((entry) => {
     <Footer lang="es" />
     <AccessibilityWidget lang="es" />
 
+    <script type="application/json" id="preview-map-data" set:html={JSON.stringify(previewMap)}></script>
+
     <script is:inline>
+      // Leer el mapa de previews inyectado desde el servidor
+      const PREVIEW_MAP = JSON.parse(document.getElementById('preview-map-data').textContent || '{}');
+
       function initUploadFotos() {
         const form = document.getElementById("upload-form");
         const dropzone = document.getElementById("dropzone");
@@ -386,10 +434,40 @@ const properties = propertiesCollection.map((entry) => {
         const errorFeedback = document.getElementById("feedback-error");
         const errorMsg = document.getElementById("error-msg");
 
+        const propertyPreview = document.getElementById('property-preview');
+        const propertyPreviewNoImg = document.getElementById('property-preview-no-img');
+        const previewImg = document.getElementById('preview-img');
+        const previewTitle = document.getElementById('preview-title');
+        const previewTitleNoImg = document.getElementById('preview-title-no-img');
+        const propertySelect = document.getElementById('propertySlug');
+
         if (!form || form.dataset.listenerAttached) return;
         form.dataset.listenerAttached = "true";
 
         // Configurar Drag & Drop del selector
+        // Preview de imagen al seleccionar propiedad
+        propertySelect.addEventListener('change', function() {
+          const selectedId = this.value;
+          const selectedText = this.options[this.selectedIndex].text.split(' (')[0];
+          const imgUrl = PREVIEW_MAP[selectedId] || '';
+
+          if (imgUrl) {
+            previewImg.src = imgUrl;
+            previewImg.onerror = function() {
+              propertyPreview.classList.add('hidden');
+              previewTitleNoImg.textContent = selectedText;
+              propertyPreviewNoImg.classList.remove('hidden');
+            };
+            previewTitle.textContent = selectedText;
+            propertyPreview.classList.remove('hidden');
+            propertyPreviewNoImg.classList.add('hidden');
+          } else {
+            propertyPreview.classList.add('hidden');
+            previewTitleNoImg.textContent = selectedText;
+            propertyPreviewNoImg.classList.remove('hidden');
+          }
+        });
+
         dropzone.addEventListener("click", () => fileInput.click());
 
         dropzone.addEventListener("dragover", (e) => {

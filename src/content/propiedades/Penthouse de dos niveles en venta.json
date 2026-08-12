@@ -1,0 +1,24 @@
+{
+  "descripcion": "Características:\n226 m² de construcción\n3er y 4to nivel\n4 habitaciones\nHabitación principal con baño privado y walk-in closet\nAmplia sala\nCocina\nComedor\nBalcón\nÁrea de lavado\nArmario para ropa blanca\nParqueo doble\n\nPrecio: USD$140,000 (ligeramente negociable)\n\n📑 Título y deslinde\n🏦 Financiamiento disponible\n\nUna excelente oportunidad para vivir con comodidad, amplitud y en una ubicación estratégica.\n",
+  "precioUsd": 140000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 3,
+  "parqueos": 2,
+  "area": 226,
+  "latitud": 18.623,
+  "longitud": -68.735,
+  "ubicacion": "Monte Santa Maria",
+  "imagenPrincipal": "../../assets/propiedades/Penthouse de dos niveles en venta/imagenPrincipal.jpg",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/penthouse-de-dos-niveles-en-venta/1ffd810b-4df6-4db2-ad4a-2434de29371a-1786051087032.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/penthouse-de-dos-niveles-en-venta/2c188917-7702-429f-b767-aa26d8d79977-1786051088116.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/penthouse-de-dos-niveles-en-venta/20d1e849-d4d8-4877-a6c9-d1a838c26c96-1786051089360.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/penthouse-de-dos-niveles-en-venta/45e0cbfc-e2c1-420c-b8a3-c65f2546e18d-1786051090369.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/penthouse-de-dos-niveles-en-venta/fcf10fcd-7c47-43c4-8dbd-1131dfd8bff3-1786051091357.jpg"
+  ]
+}

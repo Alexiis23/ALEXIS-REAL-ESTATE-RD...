@@ -1,0 +1,127 @@
+---
+// src/pages/aviso-legal.astro
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import AccessibilityWidget from '../components/AccessibilityWidget.astro';
+---
+
+<!DOCTYPE html>
+<html lang="es" class="bg-offwhite text-slate-900">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviso Legal | Alexis Real Estate RD</title>
+  <meta name="description" content="Aviso Legal de Alexis Real Estate RD. Información sobre el titular del sitio web, propiedad intelectual y enlaces a terceros." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+  <Navbar lang="es" currentPage="aviso-legal" />
+
+  <!-- ─── HERO ─────────────────────────── -->
+  <section class="relative overflow-hidden pt-28 pb-14">
+    <div class="absolute inset-0 bg-gradient-to-br from-navy via-[#0a1f38] to-[#071627]"></div>
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <div class="absolute bottom-0 left-1/4 w-96 h-64 bg-gold/6 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <span class="inline-flex items-center gap-2 bg-gold/15 text-gold text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-gold/25 mb-5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Información Legal
+      </span>
+      <h1 class="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight font-display">
+        Aviso <span class="text-gold">Legal</span>
+      </h1>
+      <p class="mt-4 text-white/60 text-base max-w-2xl mx-auto leading-relaxed">
+        Información legal sobre el uso y acceso a este sitio web.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── CONTENT ─────────────────────────── -->
+  <main class="flex-1 -mt-6">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div class="bg-white rounded-2xl shadow-xl shadow-navy/5 border border-slate-100 overflow-hidden">
+
+        <!-- Titular -->
+        <div class="p-8 sm:p-10 border-b border-slate-100">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center">
+              <svg class="w-5 h-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-navy tracking-tight">Titular del sitio web</h2>
+              <div class="mt-3 space-y-1.5 text-sm text-slate-600 leading-relaxed">
+                <p><span class="font-semibold text-slate-800">Empresa:</span> Alexis Real Estate RD...</p>
+                <p><span class="font-semibold text-slate-800">Ubicación:</span> República Dominicana</p>
+                <p>
+                  <span class="font-semibold text-slate-800">Contacto:</span>
+                  <a href="mailto:alexisre.rd@gmail.com" class="text-gold hover:text-gold/80 transition-colors underline underline-offset-2">alexisre.rd@gmail.com</a>
+                  &nbsp;|&nbsp;
+                  <a href="tel:+18295259993" class="text-gold hover:text-gold/80 transition-colors underline underline-offset-2">+1 (829) 525-9993</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Objeto -->
+        <div class="p-8 sm:p-10 border-b border-slate-100">
+          <div class="flex items-start gap-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-gold/10 text-gold text-sm font-bold flex items-center justify-center">1</span>
+            <div>
+              <h2 class="text-lg font-bold text-navy tracking-tight">Objeto</h2>
+              <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                El presente Aviso Legal regula el uso y acceso al sitio web <a href="https://www.alexisrealstate.com" class="text-gold hover:text-gold/80 transition-colors underline underline-offset-2 font-medium" target="_blank" rel="noopener noreferrer">https://www.alexisrealstate.com</a> (en adelante, "el Sitio Web"), propiedad de Alexis Real Estate RD.... La navegación por el Sitio Web atribuye la condición de usuario e implica la aceptación plena de todas las disposiciones incluidas en este texto.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Propiedad Intelectual e Industrial -->
+        <div class="p-8 sm:p-10 border-b border-slate-100">
+          <div class="flex items-start gap-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-gold/10 text-gold text-sm font-bold flex items-center justify-center">2</span>
+            <div>
+              <h2 class="text-lg font-bold text-navy tracking-tight">Propiedad Intelectual e Industrial</h2>
+              <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                Todos los contenidos presentados en este Sitio Web —incluyendo textos, imágenes, logotipos, diseños, estructura de navegación, marcas, fotografías y código fuente— están protegidos por las leyes de propiedad intelectual e industrial de la República Dominicana e internacionales. Queda prohibida su reproducción, distribución o modificación sin la autorización expresa y por escrito de Alexis Real Estate RD.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Enlaces a Terceros -->
+        <div class="p-8 sm:p-10">
+          <div class="flex items-start gap-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-gold/10 text-gold text-sm font-bold flex items-center justify-center">3</span>
+            <div>
+              <h2 class="text-lg font-bold text-navy tracking-tight">Enlaces a Terceros</h2>
+              <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                Este Sitio Web puede contener enlaces o accesos a plataformas de terceros (como WhatsApp, servicios de mapas o portales de desarrolladores inmobiliarios). Alexis Real Estate RD no se hace responsable del contenido, políticas de privacidad o prácticas de dichos sitios externos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Back link -->
+      <div class="mt-8 text-center">
+        <a href="/" class="inline-flex items-center gap-2 text-sm text-navy/60 hover:text-gold transition-colors duration-200 font-medium">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Volver al inicio
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer lang="es" />
+  <AccessibilityWidget />
+</body>
+</html>

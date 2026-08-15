@@ -18,27 +18,29 @@ const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.
 const modulosJSON = import.meta.glob('/src/content/propiedades/**/*.json', { eager: true });
 const featuredProps = Object.entries(modulosJSON).slice(0, 3).map(([ruta, modulo]) => {
   const c = modulo as any;
-  const id = slugify(ruta.split('/').pop()?.replace('.json', '') || 'property');
+  const rawFileName = decodeURIComponent(ruta.split('/').pop()?.replace('.json', '') || 'property');
+  const id = slugify(rawFileName);
   const { usd: precioUsd, dop: precioDop } = resolverPrecios(c.precioUsd, c.precioDop);
-  // Use raw id for URL - [id].astro uses getEntry which needs the exact Keystatic entry id
   
   const rutaRaw = String(c.imagenPrincipal || '');
   const imagenPublica = rutaRaw ? rutaRaw.replace(/^\.\.\/\.\.\//, '/src/') : '';
   const imgMeta = imagenes[imagenPublica]?.default || fallbackImage;
 
-    const cleanUbicacion = c.ubicacion ? String(c.ubicacion).replace(/\b\w/g, char => char.toUpperCase()) : 'República Dominicana';
+  const cleanUbicacion = c.ubicacion ? String(c.ubicacion).replace(/\b\w/g, char => char.toUpperCase()) : 'República Dominicana';
+  const rawTitle = c.titulo || rawFileName.replace(/-/g, ' ');
+  const cleanTitle = rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
 
-    return { 
-      id, 
-      titulo: c.titulo || id, 
-      ubicacion: cleanUbicacion, 
-      precioUsd,
-      precioDop, 
-      tipo: c.tipo || 'Propiedad', 
-      imagenPrincipal: c.imagenPrincipal || '', 
-      imagenMetadata: imgMeta,
-      estado: c.estado || '' 
-    };
+  return { 
+    id, 
+    titulo: cleanTitle, 
+    ubicacion: cleanUbicacion, 
+    precioUsd,
+    precioDop, 
+    tipo: c.tipo || 'Propiedad', 
+    imagenPrincipal: c.imagenPrincipal || '', 
+    imagenMetadata: imgMeta,
+    estado: c.estado || '' 
+  };
 });
 
 const stats = [

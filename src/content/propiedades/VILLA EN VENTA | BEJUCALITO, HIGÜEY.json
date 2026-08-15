@@ -14,5 +14,12 @@
   "longitud": -68.88,
   "ubicacion": "Bejucalito, Higuey",
   "imagenPrincipal": "../../assets/propiedades/VILLA EN VENTA | BEJUCALITO, HIGÜEY/imagenPrincipal.jpeg",
-  "galeria": []
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/01cab50d-c0d7-4b8e-aa7e-2271e9d7b735-1786808701522.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/35cf6f44-af7e-44c6-8cd1-d772c8f0c812-1786808702918.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/989bc842-2f3e-4cba-8275-53c7b3c6eb87-1786808703986.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/b3ab8162-67f0-4a0f-ba8b-3a48dcd3c373-1786808705120.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/c2c611b8-d0db-409e-bb18-d98712aaff2e-1786808705909.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/cac8c67c-81c3-4e3a-9385-e954299092d7-1786808706998.jpg"
+  ]
 }

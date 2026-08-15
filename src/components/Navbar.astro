@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import logoEmpresa from "../assets/images/logo-alexis-rd.jpg";
+import logoEmpresa from "../assets/images/logo-alexis-rd.png";
 
 interface Props {
   lang?: "es" | "en";
@@ -65,14 +65,14 @@ const captacionLink = isEn
         href={isEn ? "/en" : "/"}
         class="flex items-center h-full py-2 shrink-0"
       >
-        <div class="relative overflow-hidden flex items-center justify-center rounded-lg bg-navy/20 backdrop-blur-[2px] p-1 border border-white/5">
+        <div class="flex items-center justify-center">
           <Image
             src={logoEmpresa}
-            alt="Alexis Real Estate RD..."
-            height={52}
+            alt="Alexis RD Properties"
+            height={80}
             quality="max"
             loading="eager"
-            class="h-13 w-auto object-contain mix-blend-screen contrast-125 brightness-110 filter drop-shadow-[0_2px_8px_rgba(201,168,76,0.3)]"
+            class="h-20 w-auto object-contain drop-shadow-[0_2px_8px_rgba(201,168,76,0.3)]"
           />
         </div>
       </a>

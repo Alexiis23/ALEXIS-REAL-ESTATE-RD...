@@ -7,6 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   output: 'server', // 🌟 OBLIGATORIO: Activa el motor SSR dinámico para las APIs en la nube
   adapter: vercel(),
+  webAnalytics: {
+    enabled: true,
+  },
   integrations: [
     react(),
     keystatic(), // Vincula automáticamente el panel administrativo a las rutas de Astro

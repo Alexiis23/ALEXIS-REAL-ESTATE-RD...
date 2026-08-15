@@ -1,13 +1,14 @@
 ---
 // src/layouts/Layout.astro
+import Analytics from "@vercel/analytics/astro";
 interface Props {
 	title?: string;
 	description?: string;
 }
 
-const { 
-	title = "ALEXIS REAL ESTATE RD... | Propiedades Premium en República Dominicana", 
-	description = "Asesoría inmobiliaria premium y corretaje en la República Dominicana. Encuentra apartamentos, villas y terrenos de alta rentabilidad." 
+const {
+	title = "ALEXIS REAL ESTATE RD... | Propiedades Premium en República Dominicana",
+	description = "Asesoría inmobiliaria premium y corretaje en la República Dominicana. Encuentra apartamentos, villas y terrenos de alta rentabilidad.",
 } = Astro.props;
 ---
 
@@ -15,11 +16,12 @@ const {
 <html lang="es" class="bg-offwhite text-slate-900">
 	<head>
 		<meta charset="utf-8" />
+		<Analytics />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		
+
 		<!-- SEO Meta Tags -->
 		<title>{title}</title>
 		<meta name="description" content={description} />

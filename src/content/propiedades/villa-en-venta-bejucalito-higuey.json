@@ -1,0 +1,25 @@
+{
+  "descripcion": "Carretera Santana, Bejucalito, Higüey\nA solo 20 minutos de Higüey.\n\nUna impresionante propiedad de 38 tareas, ideal para quienes buscan privacidad, amplitud, naturaleza y comodidad en un mismo lugar.\n\nDISTRIBUCIÓN DE LA VILLA\n\nPrimer nivel\n* 1 habitación\n* Área de parrillada al aire libre\n* Acceso a amplias áreas verdes y frutales\n\nSegundo nivel\n* 4 habitaciones, todas con balcón\n* Antesala\n* Cocina caliente y cocina fría\n* Comedor\n* Sala familiar\n* Amplia terraza\n\nTercer nivel\n* Terraza con vista panorámica \n\nÁREAS EXTERIORES\n* Más de 3 áreas verdes de descanso\n* Piscina \n* Zona techada de BBQ\n* Marquesina con capacidad para más de 6 vehículos \n* Puertas y ventanas con shutters\n\nÁRBOLES FRUTALES\nLa propiedad cuenta con una variedad de árboles y cultivos, incluyendo:\n Mango\n Níspero\n Cacao\n Café\n Plátano\n Guineíto\n\n CASA PARA EMPLEADOS\n* 2 habitaciones\n* 1 baño\n* Sala\n* Cocina\n* Balcón\n* Área de lavado\n\nTerreno: 38 tareas\nPrecio: US$1,300,000 negociable\n\nUna propiedad única para vivir, vacacionar o invertir, rodeada de naturaleza y con amplios espacios para disfrutar en familia.",
+  "precioUsd": 1300003,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Villa",
+  "estado": "Listo",
+  "habitaciones": 5,
+  "banos": 3,
+  "parqueos": 1,
+  "area": 25600,
+  "latitud": 18.678,
+  "longitud": -68.88,
+  "ubicacion": "Bejucalito, Higuey",
+"imagenPrincipal": "../../assets/propiedades/villa-en-venta-bejucalito-higuey/imagenPrincipal.jpeg",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/01cab50d-c0d7-4b8e-aa7e-2271e9d7b735-1786808701522.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/35cf6f44-af7e-44c6-8cd1-d772c8f0c812-1786808702918.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/989bc842-2f3e-4cba-8275-53c7b3c6eb87-1786808703986.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/b3ab8162-67f0-4a0f-ba8b-3a48dcd3c373-1786808705120.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/c2c611b8-d0db-409e-bb18-d98712aaff2e-1786808705909.jpg",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-en-venta--bejucalito-hig%C3%BCey/cac8c67c-81c3-4e3a-9385-e954299092d7-1786808706998.jpg"
+  ]
+}

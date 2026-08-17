@@ -13,7 +13,7 @@ import type { ImageMetadata } from "astro";
 // Resolver imágenes locales de assets
 const imagenes = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP,JPG,PNG}",
-  { eager: true }
+  { eager: true },
 );
 
 // Obtener todas las propiedades para mostrarlas en el desplegable
@@ -59,7 +59,9 @@ const properties = propertiesCollection.map((entry) => {
 
 // Mapa de ID → URL de preview para el JS del cliente
 const previewMap: Record<string, string> = {};
-properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
+properties.forEach((p) => {
+  previewMap[p.id] = p.previewUrl;
+});
 ---
 
 <!doctype html>
@@ -199,18 +201,40 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
             </select>
 
             <!-- Preview de la imagen principal -->
-            <div id="property-preview" class="hidden mt-4 rounded-2xl overflow-hidden border border-slate-200 bg-[#f8fafc] transition-all duration-300">
+            <div
+              id="property-preview"
+              class="hidden mt-4 rounded-2xl overflow-hidden border border-slate-200 bg-[#f8fafc] transition-all duration-300"
+            >
               <div class="flex items-center gap-4 p-4">
-                <div id="preview-img-container" class="w-28 h-20 rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm">
-                  <img id="preview-img" src="" alt="Portada de la propiedad" class="w-full h-full object-cover" />
+                <div
+                  id="preview-img-container"
+                  class="w-28 h-20 rounded-xl overflow-hidden bg-slate-200 shrink-0 shadow-sm"
+                >
+                  <img
+                    id="preview-img"
+                    src=""
+                    alt="Portada de la propiedad"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs font-bold text-navy uppercase tracking-wider">Propiedad seleccionada</p>
-                  <p id="preview-title" class="text-sm font-semibold text-slate-700 truncate mt-0.5"></p>
+                  <p
+                    class="text-xs font-bold text-navy uppercase tracking-wider"
+                  >
+                    Propiedad seleccionada
+                  </p>
+                  <p
+                    id="preview-title"
+                    class="text-sm font-semibold text-slate-700 truncate mt-0.5"
+                  >
+                  </p>
                 </div>
                 <div class="shrink-0">
-                  <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-200">
-                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  <span
+                    class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-200"
+                  >
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"
+                    ></span>
                     Confirmada
                   </span>
                 </div>
@@ -218,16 +242,37 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
             </div>
 
             <!-- Placeholder sin imagen -->
-            <div id="property-preview-no-img" class="hidden mt-4 rounded-2xl overflow-hidden border border-amber-200 bg-amber-50/50 p-4 transition-all duration-300">
+            <div
+              id="property-preview-no-img"
+              class="hidden mt-4 rounded-2xl overflow-hidden border border-amber-200 bg-amber-50/50 p-4 transition-all duration-300"
+            >
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                <div
+                  class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-5 h-5 text-amber-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
-                  <p id="preview-title-no-img" class="text-sm font-semibold text-amber-800 truncate"></p>
-                  <p class="text-xs text-amber-600 mt-0.5">Esta propiedad aún no tiene imagen de portada.</p>
+                  <p
+                    id="preview-title-no-img"
+                    class="text-sm font-semibold text-amber-800 truncate"
+                  >
+                  </p>
+                  <p class="text-xs text-amber-600 mt-0.5">
+                    Esta propiedad aún no tiene imagen de portada.
+                  </p>
                 </div>
               </div>
             </div>
@@ -441,11 +486,60 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
     <Footer lang="es" />
     <AccessibilityWidget lang="es" />
 
-    <script type="application/json" id="preview-map-data" set:html={JSON.stringify(previewMap)}></script>
+    <script
+      type="application/json"
+      id="preview-map-data"
+      set:html={JSON.stringify(previewMap)}
+    />
 
     <script is:inline>
-      // Leer el mapa de previews inyectado desde el servidor
-      const PREVIEW_MAP = JSON.parse(document.getElementById('preview-map-data').textContent || '{}');
+      const PREVIEW_MAP = JSON.parse(
+        document.getElementById("preview-map-data").textContent || "{}",
+      );
+
+      // ── Utilidad de compresión WebP en el navegador ──
+      async function comprimirFoto(file, maxWidth = 1920, calidad = 0.8) {
+        return new Promise((resolve) => {
+          // Si ya es un archivo WebP ligero, no re-procesar
+          if (file.type === "image/webp" && file.size < 800 * 1024) {
+            return resolve(file);
+          }
+
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              let width = img.width;
+              let height = img.height;
+
+              if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, width, height);
+
+              canvas.toBlob(
+                (blob) => {
+                  const nombreLimpio =
+                    file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                  resolve(
+                    new File([blob], nombreLimpio, { type: "image/webp" }),
+                  );
+                },
+                "image/webp",
+                calidad,
+              );
+            };
+          };
+        });
+      }
 
       function initUploadFotos() {
         const form = document.getElementById("upload-form");
@@ -468,37 +562,41 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
         const errorFeedback = document.getElementById("feedback-error");
         const errorMsg = document.getElementById("error-msg");
 
-        const propertyPreview = document.getElementById('property-preview');
-        const propertyPreviewNoImg = document.getElementById('property-preview-no-img');
-        const previewImg = document.getElementById('preview-img');
-        const previewTitle = document.getElementById('preview-title');
-        const previewTitleNoImg = document.getElementById('preview-title-no-img');
-        const propertySelect = document.getElementById('propertySlug');
+        const propertyPreview = document.getElementById("property-preview");
+        const propertyPreviewNoImg = document.getElementById(
+          "property-preview-no-img",
+        );
+        const previewImg = document.getElementById("preview-img");
+        const previewTitle = document.getElementById("preview-title");
+        const previewTitleNoImg = document.getElementById(
+          "preview-title-no-img",
+        );
+        const propertySelect = document.getElementById("propertySlug");
 
         if (!form || form.dataset.listenerAttached) return;
         form.dataset.listenerAttached = "true";
 
-        // Configurar Drag & Drop del selector
-        // Preview de imagen al seleccionar propiedad
-        propertySelect.addEventListener('change', function() {
+        // Manejador del cambio de propiedad
+        propertySelect.addEventListener("change", function () {
           const selectedId = this.value;
-          const selectedText = this.options[this.selectedIndex].text.split(' (')[0];
-          const imgUrl = PREVIEW_MAP[selectedId] || '';
+          const selectedText =
+            this.options[this.selectedIndex].text.split(" (")[0];
+          const imgUrl = PREVIEW_MAP[selectedId] || "";
 
           if (imgUrl) {
             previewImg.src = imgUrl;
-            previewImg.onerror = function() {
-              propertyPreview.classList.add('hidden');
+            previewImg.onerror = function () {
+              propertyPreview.classList.add("hidden");
               previewTitleNoImg.textContent = selectedText;
-              propertyPreviewNoImg.classList.remove('hidden');
+              propertyPreviewNoImg.classList.remove("hidden");
             };
             previewTitle.textContent = selectedText;
-            propertyPreview.classList.remove('hidden');
-            propertyPreviewNoImg.classList.add('hidden');
+            propertyPreview.classList.remove("hidden");
+            propertyPreviewNoImg.classList.add("hidden");
           } else {
-            propertyPreview.classList.add('hidden');
+            propertyPreview.classList.add("hidden");
             previewTitleNoImg.textContent = selectedText;
-            propertyPreviewNoImg.classList.remove('hidden');
+            propertyPreviewNoImg.classList.remove("hidden");
           }
         });
 
@@ -535,9 +633,9 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
               li.className =
                 "flex justify-between items-center border-b border-slate-100 pb-1";
               li.innerHTML = `
-              <span class="truncate max-w-[80%]">${file.name}</span>
-              <span class="text-slate-400 font-mono">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
-            `;
+            <span class="truncate max-w-[80%]">${file.name}</span>
+            <span class="text-slate-400 font-mono">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+          `;
               fileList.appendChild(li);
             });
           } else {
@@ -545,49 +643,49 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
           }
         }
 
-        // Procesar el envío — sube cada foto individualmente para no exceder el límite de Vercel
+        // Procesamiento con compresión en el cliente
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
 
-          const propertySlug = document.getElementById("propertySlug").value;
+          const propertySlug = propertySelect.value;
           const adminPassword = document.getElementById("adminPassword").value;
-          const files = fileInput.files;
+          const rawFiles = Array.from(fileInput.files);
 
-          if (!propertySlug || files.length === 0 || !adminPassword) return;
+          if (!propertySlug || rawFiles.length === 0 || !adminPassword) return;
 
-          // Ocultar feedback previo
           successFeedback.classList.add("hidden");
           errorFeedback.classList.add("hidden");
 
-          // Activar barra de carga
           btnSubmit.setAttribute("disabled", "true");
           progressContainer.classList.remove("hidden");
 
           progressBar.style.width = "5%";
           progressPercent.textContent = "5%";
-          progressMsg.textContent = `Preparando ${files.length} foto(s) para subir…`;
+          progressMsg.textContent = `Optimizando ${rawFiles.length} foto(s)...`;
 
-          const totalFiles = files.length;
           const uploadedUrls = [];
           const failedFiles = [];
 
           try {
-            // ── PASO 1: Subir cada foto individualmente a Vercel Blob ──
-            for (let i = 0; i < totalFiles; i++) {
-              const file = files[i];
+            // ── PASO 1: Comprimir y subir individualmente a Vercel Blob ──
+            for (let i = 0; i < rawFiles.length; i++) {
+              const originalFile = rawFiles[i];
               const current = i + 1;
 
-              // Progreso proporcional: 5% → 85% repartido entre todas las fotos
-              const pct = Math.round(5 + (80 * current) / totalFiles);
-              progressBar.style.width = `${pct}%`;
-              progressPercent.textContent = `${pct}%`;
-              progressMsg.textContent = `Subiendo foto ${current} de ${totalFiles}: ${file.name}`;
+              progressMsg.textContent = `Optimizando y subiendo (${current}/${rawFiles.length}): ${originalFile.name}`;
+
+              // Compresión en el navegador
+              const optimizedFile = await comprimirFoto(
+                originalFile,
+                1920,
+                0.8,
+              );
 
               const fd = new FormData();
               fd.append("mode", "blob");
               fd.append("propertySlug", propertySlug);
               fd.append("adminPassword", adminPassword);
-              fd.append("foto", file);
+              fd.append("foto", optimizedFile);
 
               try {
                 const res = await fetch("/api/subir-galeria", {
@@ -599,24 +697,30 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
                 if (res.ok && json.success) {
                   uploadedUrls.push(json.url);
                 } else {
-                  failedFiles.push(`${file.name}: ${json.error || "error desconocido"}`);
+                  failedFiles.push(
+                    `${originalFile.name}: ${json.error || "error en Blob"}`,
+                  );
                 }
               } catch (fetchErr) {
-                failedFiles.push(`${file.name}: ${fetchErr.message}`);
+                failedFiles.push(`${originalFile.name}: ${fetchErr.message}`);
               }
+
+              const pct = Math.round(5 + (80 * current) / rawFiles.length);
+              progressBar.style.width = `${pct}%`;
+              progressPercent.textContent = `${pct}%`;
             }
 
-            // Si no se subió ninguna foto, abortar
             if (uploadedUrls.length === 0) {
               throw new Error(
-                "No se pudo subir ninguna foto. " + failedFiles.join("; ")
+                "No se pudo subir ninguna foto. " + failedFiles.join("; "),
               );
             }
 
-            // ── PASO 2: Commit único en GitHub con todas las URLs ──
+            // ── PASO 2: Commit único en GitHub con las URLs ──
             progressBar.style.width = "90%";
             progressPercent.textContent = "90%";
-            progressMsg.textContent = "Guardando URLs en el archivo JSON de GitHub…";
+            progressMsg.textContent =
+              "Guardando URLs en el archivo JSON de GitHub...";
 
             const commitFd = new FormData();
             commitFd.append("mode", "commit");
@@ -632,19 +736,18 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
 
             if (!commitRes.ok || !commitResult.success) {
               throw new Error(
-                commitResult.error ||
-                  "Error al guardar las URLs en GitHub."
+                commitResult.error || "Error al guardar las URLs en GitHub.",
               );
             }
 
-            // ── Éxito ──
+            // ── Éxito Final ──
             progressBar.style.width = "100%";
             progressPercent.textContent = "100%";
             progressMsg.textContent = "¡Carga completada!";
 
-            let successText = `Se subieron con éxito ${uploadedUrls.length} foto(s) a Vercel Blob y se asociaron al inmueble.`;
+            let successText = `Se subieron y optimizaron con éxito ${uploadedUrls.length} foto(s).`;
             if (failedFiles.length > 0) {
-              successText += ` (${failedFiles.length} foto(s) fallaron: ${failedFiles.join(", ")})`;
+              successText += ` (${failedFiles.length} fallaron: ${failedFiles.join(", ")})`;
             }
             successDesc.textContent = successText;
             successFeedback.classList.remove("hidden");
@@ -653,7 +756,6 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
               block: "nearest",
             });
 
-            // Resetear formulario
             form.reset();
             fileListContainer.classList.add("hidden");
             fileList.innerHTML = "";
@@ -670,7 +772,7 @@ properties.forEach((p) => { previewMap[p.id] = p.previewUrl; });
               progressContainer.classList.add("hidden");
               progressBar.style.width = "0%";
               progressPercent.textContent = "0%";
-            }, 3000);
+            }, 4000);
           }
         });
       }

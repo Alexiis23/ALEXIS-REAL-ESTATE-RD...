@@ -1,0 +1,18 @@
+{
+  "descripcion": "A solo 600 m de Playa Las Ballenas\nPrecio: $298,500 USD\n\nTownhouse bien mantenido, listo para venta\n\nCaracterísticas principales\n\n135 m² de construcción (2 niveles)\n256 m² de terreno\nPiscina privada\n2 habitaciones con closets\n2.5 baños\n\nBungaló independiente\n\n15 m²\nBaño privado\nPreinstalación para A/C\n\nDistribución\n\nSala\nCocina equipada (incluye nevera)\nComedor\nÁrea de lavado\nTerraza techada en pino tratado\n\nDetalles adicionales\n\n2 parqueos privados\nPortón eléctrico + intercomunicador\nA/C y abanicos en todas las habitaciones\nPuertas y muebles de cocina en roble\nCocina y baños con granito\nInversor 5.5 kW con baterías\nPisos de porcelanato\nCalentador eléctrico\nCisterna de agua + sistema séptico",
+  "precioUsd": 298500,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Villa",
+  "estado": "Listo",
+  "habitaciones": 2,
+  "banos": 2.5,
+  "parqueos": 2,
+  "area": 256,
+  "latitud": 19.305,
+  "longitud": -68.575,
+  "ubicacion": "Villa mar - Las terrenas ",
+  "imagenPrincipal": "../../assets/propiedades/Villa Mar — Townhouse en Las Terrenas/imagenPrincipal.jpg",
+  "galeria": []
+}

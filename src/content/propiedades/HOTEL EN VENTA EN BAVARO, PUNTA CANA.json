@@ -13,5 +13,14 @@
   "latitud": 18.609,
   "longitud": -68.379,
   "imagenPrincipal": "../../assets/propiedades/HOTEL EN VENTA EN BAVARO, PUNTA CANA/imagenPrincipal.jpg",
-  "galeria": []
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/3e3bd0f3-9d28-42c5-aa4a-16cacb0d16be-1786988670940.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/44b7913b-d698-4c21-8cda-2dc728b33331-1786988672010.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/76b9e430-4d96-453f-99e9-c4745d44e39d-1786988672766.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/5325ec6c-df94-42b5-84cc-c0a551b5f7f0-1786988673285.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/49027970-18ae-4357-b60a-ac42a9cec44c-1786988673687.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/90793182-2a2f-4bf8-88f6-f9e80acf5d9e-1786988674531.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/d1d74702-2b0b-496d-91e2-c3da18748e3a-1786988675006.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/hotel-en-venta-en-bavaro-punta-cana/f93d0e0d-9feb-4407-94ef-6ed87dd5262f-1786988675477.webp"
+  ]
 }

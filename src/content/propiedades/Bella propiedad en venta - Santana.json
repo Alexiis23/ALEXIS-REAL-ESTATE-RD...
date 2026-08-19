@@ -1,0 +1,18 @@
+{
+  "descripcion": "Propiedad en venta — 1,000 m²\n\n¡Excelente oportunidad para vivienda, recreación o eventos!\n\nLa propiedad cuenta con:\n\t•\t2 habitaciones\n\t•\t1 baño dentro de la casa\n\t•\t1 cocina\n\t•\tSala-comedor\n\t•\tGalería en L, ideal para compartir y realizar eventos\n\t•\tTerraza con cocina de gas\n\t•\tAmplia terraza para eventos, con cocina, asador para carnes al carbón y anafe a carbón\n\t•\tPiscina con capacidad aproximada para 15 personas\n\t•\tBaño de doble cabina en el área de la piscina\n\t•\tCuarto amplio multiuso en el patio\n\t•\tPatio completamente sembrado de grama verde\n\t•\tGazebo\n\t•\tPortón eléctrico\n\t•\tCerco eléctrico\n\t•\tAgua permanente\n\t•\tSistema de seguridad\n\t•\tPozo séptico\n\t•\tPropiedad deslindada\n\nTerreno: 1,000 m²\nPrecio: RD$11,500,000",
+  "precioDop": 11500000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 2,
+  "banos": 1,
+  "parqueos": 1,
+  "area": 1000,
+  "latitud": 18.278,
+  "longitud": -70.214,
+  "ubicacion": "Santana",
+  "imagenPrincipal": "../../assets/propiedades/Bella propiedad en venta - Santana/imagenPrincipal.jpg",
+  "galeria": []
+}

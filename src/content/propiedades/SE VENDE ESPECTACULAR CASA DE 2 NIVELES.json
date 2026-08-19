@@ -1,0 +1,18 @@
+{
+  "descripcion": "Residencial Turístico Sans Souci\n570 metros de terreno\nPrecio: US$1,100,000\nTítulo presente\nFacilidades de financiamiento\n\n6 HABITACIONES EN TOTAL\n\nPRIMER NIVEL\n\n* Sala\n* Comedor\n* Cocina amplia con desayunador\n* Cocina caliente\n* Terraza\n* Piscina \n* Balcón\n* 2 marquesinas con capacidad para 4 vehículos \n* ½ baño\n* Habitación de servicio con su baño\n* Amplio patio\n* Área de lavado\n\nSEGUNDO NIVEL\n\n* 5 habitaciones\n* Habitación principal con clóset, baño y balcón\n* 1 baño común\n* Balcón\n* Acceso a la terraza\n* Amplia terraza techada\n\nTERMINACIONES Y EQUIPAMIENTO\n\n* Maderas en Roble Andino\n* Pisos en porcelanato\n* Decoración con fascias\n* Preinstalación para inversor\n* Fachada moderna\n* Cisterna\n* Pozo sumergible\n* Tinaco\n* Caseta de bomba\n* Puertas en roble\n* Salidas para aire acondicionado\n* Cuarto de máquinas\n\nUna propiedad amplia, moderna y exclusiva, ideal para quienes buscan confort, privacidad y excelentes espacios.",
+  "precioUsd": 1100000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 6,
+  "banos": 2,
+  "parqueos": 1,
+  "area": 570,
+  "latitud": 18.471,
+  "longitud": -69.856,
+  "ubicacion": "Santo Domingo Este, Sans Souci",
+  "imagenPrincipal": "../../assets/propiedades/SE VENDE ESPECTACULAR CASA DE 2 NIVELES/imagenPrincipal.jpg",
+  "galeria": []
+}

@@ -1,0 +1,18 @@
+{
+  "descripcion": "Precio: US$215,000 (negociable)\n\nUbicado en una zona de gran crecimiento y alta plusvalía, ideal para vivir o invertir.\n\nCaracterísticas:\n • 121 m² de construcción\n • 2 habitaciones + mezanine adaptado como 3ra habitación\n • 2 parqueos\n • Totalmente amueblado\n • A solo 5 minutos de la playa\n • A 8 minutos del Aeropuerto de La Romana\n • A 10 minutos de Casa de Campo\n\n Zona con importantes desarrollos inmobiliarios y gran potencial de valorización.",
+  "precioUsd": 215000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 2,
+  "banos": 2,
+  "parqueos": 2,
+  "area": 121,
+  "latitud": 18.349,
+  "longitud": -68.824,
+  "ubicacion": "Dominicus, Bayahibe",
+  "imagenPrincipal": "../../assets/propiedades/Se vende espectacular apartamento amueblado en Dominicus, Bayahibe/imagenPrincipal.jpg",
+  "galeria": []
+}

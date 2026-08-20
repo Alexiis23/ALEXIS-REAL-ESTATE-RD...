@@ -4,6 +4,8 @@ import "../../styles/global.css";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
+import VideoTour from "../../components/VideoTour.astro";
+import GaleriaMosaico from "../../components/GaleriaMosaico.astro";
 import { Image } from "astro:assets";
 import * as deepl from "deepl-node";
 import { slugify } from "../../utils/slugify";
@@ -88,6 +90,10 @@ galeriaRaw.forEach((rutaRaw: string) => {
     if (meta) todasLasFotos.push({ type: "local", meta });
   }
 });
+
+const urlsFotos: string[] = todasLasFotos.map((f) =>
+  f.type === "local" ? f.meta.src : f.src,
+);
 
 // 5. CONFIGURACIÓN DE LA API DE TRADUCCIÓN (DEEPL SHIELD)
 const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
@@ -221,152 +227,8 @@ const WHATSAPP_PHONE = "18295259993";
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- COLUMNA IZQUIERDA: Multimedia, Galería y Descripción -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- Carrusel Multimedia Premium -->
-          {
-            todasLasFotos.length > 0 ? (
-              <div id="gallery-carousel">
-                <div
-                  id="carousel-viewport"
-                  class="relative aspect-video rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(11,25,44,0.25)] bg-slate-100"
-                >
-                  {todasLasFotos.map((foto, i) => (
-                    <div
-                      class={`carousel-slide ${i === 0 ? "is-active" : ""}`}
-                      data-index={i}
-                    >
-                      {foto.type === "local" ? (
-                        <Image
-                          src={foto.meta}
-                          alt={`${tituloOriginal} \u2013 Foto ${i + 1} de ${todasLasFotos.length}`}
-                          width={1200}
-                          height={675}
-                          format="webp"
-                          quality={85}
-                          loading={i === 0 ? "eager" : "lazy"}
-                          class="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={foto.src}
-                          alt={`${tituloOriginal} \u2013 Foto ${i + 1} de ${todasLasFotos.length}`}
-                          loading={i === 0 ? "eager" : "lazy"}
-                          class="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                  ))}
-
-                  {todasLasFotos.length > 1 && (
-                    <div
-                      id="carousel-counter"
-                      class="absolute top-4 right-4 bg-navy/80 backdrop-blur-sm text-white text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/10 z-20 tracking-wide"
-                    >
-                      1 / {todasLasFotos.length}
-                    </div>
-                  )}
-
-                  {todasLasFotos.length > 1 && (
-                    <button
-                      id="carousel-prev"
-                      type="button"
-                      aria-label="Foto anterior"
-                      class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-navy/60 backdrop-blur-sm border border-gold/20 text-gold flex items-center justify-center hover:bg-navy/90 hover:border-gold/50 hover:scale-110 active:scale-95 transition-all duration-200 shadow-lg cursor-pointer"
-                    >
-                      <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2.5"
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                    </button>
-                  )}
-
-                  {todasLasFotos.length > 1 && (
-                    <button
-                      id="carousel-next"
-                      type="button"
-                      aria-label="Siguiente foto"
-                      class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-navy/60 backdrop-blur-sm border border-gold/20 text-gold flex items-center justify-center hover:bg-navy/90 hover:border-gold/50 hover:scale-110 active:scale-95 transition-all duration-200 shadow-lg cursor-pointer"
-                    >
-                      <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2.5"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-
-                {todasLasFotos.length > 1 && (
-                  <div
-                    id="carousel-thumbs"
-                    class="flex gap-2.5 mt-4 overflow-x-auto pb-2 scroll-smooth px-0.5"
-                  >
-                    {todasLasFotos.map((foto, i) => (
-                      <button
-                        type="button"
-                        class={`carousel-thumb shrink-0 w-20 h-14 rounded-xl overflow-hidden border-2 border-transparent opacity-50 hover:opacity-90 transition-all duration-200 cursor-pointer ${i === 0 ? "carousel-thumb-active" : ""}`}
-                        data-index={i}
-                        aria-label={`Ir a foto ${i + 1}`}
-                      >
-                        {foto.type === "local" ? (
-                          <Image
-                            src={foto.meta}
-                            alt={`Miniatura ${i + 1}`}
-                            width={120}
-                            height={80}
-                            format="webp"
-                            quality={50}
-                            loading="lazy"
-                            class="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <img
-                            src={foto.src}
-                            alt={`Miniatura ${i + 1}`}
-                            loading="lazy"
-                            class="w-full h-full object-cover"
-                          />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div class="w-full rounded-3xl overflow-hidden bg-slate-100 shadow-sm relative aspect-video flex flex-col items-center justify-center text-slate-400">
-                <svg
-                  class="w-12 h-12 mb-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                <span class="text-xs font-semibold">Sin imagen disponible</span>
-              </div>
-            )
-          }
+          <!-- Galería Mosaico Editorial con Lightbox Fullscreen -->
+          <GaleriaMosaico fotos={urlsFotos} titulo={tituloOriginal} />
 
           <!-- Descripción -->
           <div
@@ -383,6 +245,15 @@ const WHATSAPP_PHONE = "18295259993";
               {descripcion}
             </p>
           </div>
+
+          {/* Recorrido Virtual en Video (solo si la propiedad tiene videoUrl) */}
+          {(entry.data as any).videoUrl && (
+            <VideoTour
+              videoUrl={(entry.data as any).videoUrl}
+              tituloPropiedad={tituloOriginal}
+              tipoVideo={(entry.data as any).tipoVideo}
+            />
+          )}
         </div>
 
         <!-- COLUMNA DERECHA: Conversión, Características, Mapa y Calculadora -->
@@ -416,86 +287,93 @@ const WHATSAPP_PHONE = "18295259993";
             </a>
           </div>
 
-          <!-- Formulario HTML -->
-          <form id="contact-form" class="space-y-4">
-            <!-- Datos ocultos para enriquecer el correo dinámicamente -->
-            <input
-              type="hidden"
-              name="property_title"
-              value={entry.data.titulo}
-            />
-            <input type="hidden" name="property_url" value={Astro.url.href} />
-            <input
-              type="hidden"
-              name="form_type"
-              value="Consulta de Propiedad"
-            />
+          <!-- Formulario de Contacto Adaptativo (Claro / Oscuro) -->
+          <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+            <h3 class="text-sm font-black text-navy uppercase tracking-wider mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Solicitar Información
+            </h3>
+            <form id="contact-form" class="space-y-4">
+              <!-- Datos ocultos para enriquecer el correo dinámicamente -->
+              <input
+                type="hidden"
+                name="property_title"
+                value={entry.data.titulo}
+              />
+              <input type="hidden" name="property_url" value={Astro.url.href} />
+              <input
+                type="hidden"
+                name="form_type"
+                value="Consulta de Propiedad"
+              />
 
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-300 uppercase mb-1"
-                >Nombre Completo</label
-              >
-              <input
-                type="text"
-                name="name"
-                required
-                class="w-full bg-[#112036] border border-slate-700 rounded-lg p-3 text-white text-sm focus:border-[#C9A84C] outline-none"
-                placeholder="Ej. Juan Pérez"
-              />
-            </div>
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-300 uppercase mb-1"
-                >Correo</label
-              >
-              <input
-                type="email"
-                name="email"
-                required
-                class="w-full bg-[#112036] border border-slate-700 rounded-lg p-3 text-white text-sm focus:border-[#C9A84C] outline-none"
-                placeholder="juan@correo.com"
-              />
-            </div>
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-300 uppercase mb-1"
-                >Teléfono</label
-              >
-              <input
-                type="tel"
-                name="phone"
-                required
-                class="w-full bg-[#112036] border border-slate-700 rounded-lg p-3 text-white text-sm focus:border-[#C9A84C] outline-none"
-                placeholder="829-555-5555"
-              />
-            </div>
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-300 uppercase mb-1"
-                >Mensaje</label
-              >
-              <textarea
-                name="message"
-                rows="3"
-                required
-                class="w-full bg-[#112036] border border-slate-700 rounded-lg p-3 text-white text-sm focus:border-[#C9A84C] outline-none"
-                placeholder="Hola Alexis, me gustaría recibir más información..."
-              ></textarea>
-            </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-navy uppercase tracking-wider mb-1.5"
+                  >Nombre Completo</label
+                >
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all"
+                  placeholder="Ej. Juan Pérez"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-navy uppercase tracking-wider mb-1.5"
+                  >Correo</label
+                >
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all"
+                  placeholder="juan@correo.com"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-navy uppercase tracking-wider mb-1.5"
+                  >Teléfono</label
+                >
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all"
+                  placeholder="829-555-5555"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-navy uppercase tracking-wider mb-1.5"
+                  >Mensaje</label
+                >
+                <textarea
+                  name="message"
+                  rows="3"
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all"
+                  placeholder="Hola Alexis, me gustaría recibir más información..."
+                ></textarea>
+              </div>
 
-            <!-- Botón interactivo con micro-ajustes físicos de Tailwind -->
-            <button
-              type="submit"
-              id="submit-btn"
-              class="w-full bg-[#0B192C] border border-[#C9A84C]/20 text-white font-bold py-3 px-4 rounded-xl text-sm
-                    transition-all duration-300 ease-in-out
-                    hover:bg-[#C9A84C] hover:text-[#0B192C] hover:shadow-lg hover:shadow-[#C9A84C]/25
-                    active:scale-[0.98] focus:outline-none"
-            >
-              ENVIAR MENSAJE POR CORREO
-            </button>
-          </form>
+              <!-- Botón de envío -->
+              <button
+                type="submit"
+                id="submit-btn"
+                class="btn-contact-submit w-full font-black py-4 rounded-xl text-xs uppercase tracking-widest
+                      transition-all duration-300
+                      active:scale-[0.98] focus:outline-none cursor-pointer"
+              >
+                ENVIAR MENSAJE POR CORREO
+              </button>
+            </form>
+          </div>
 
           <!-- Banners de respuesta (Inicialmente ocultos) -->
           <div
@@ -714,7 +592,7 @@ const WHATSAPP_PHONE = "18295259993";
                   max="100"
                   step="5"
                   value="20"
-                  class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-gold"
+                  class="calc-slider-range w-full h-2 rounded-lg cursor-pointer"
                 />
               </div>
 
@@ -764,37 +642,55 @@ const WHATSAPP_PHONE = "18295259993";
     <Analytics />
 
     <style is:global>
-      .carousel-slide {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        z-index: 0;
-        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        will-change: opacity;
+      .btn-contact-submit {
+        background-color: #0B192C !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(201, 168, 76, 0.3) !important;
+        box-shadow: 0 4px 12px rgba(11, 25, 44, 0.15);
       }
-      .carousel-slide.is-active {
-        opacity: 1;
-        z-index: 10;
+      .btn-contact-submit:hover {
+        background-color: #C9A84C !important;
+        color: #0B192C !important;
+        border-color: #C9A84C !important;
+        box-shadow: 0 8px 24px rgba(201, 168, 76, 0.4) !important;
+        transform: translateY(-1px);
       }
-      .carousel-thumb-active {
-        border-color: #c9a84c !important;
-        opacity: 1 !important;
-        box-shadow: 0 4px 8px -2px rgba(201, 168, 76, 0.25);
+      /* Barra deslizadora de la calculadora visible en modo claro y oscuro */
+      .calc-slider-range {
+        -webkit-appearance: none;
+        appearance: none;
+        background: #cbd5e1 !important;
+        height: 6px !important;
+        border-radius: 9999px !important;
+        outline: none;
+        accent-color: #c9a84c !important;
       }
-      #carousel-thumbs {
-        scrollbar-width: thin;
-        scrollbar-color: #c9a84c #f1f5f9;
+      body.a11y-dark-mode .calc-slider-range {
+        background: #2a4365 !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
       }
-      #carousel-thumbs::-webkit-scrollbar {
-        height: 4px;
-      }
-      #carousel-thumbs::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 999px;
-      }
-      #carousel-thumbs::-webkit-scrollbar-thumb {
+      .calc-slider-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
         background: #c9a84c;
-        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        transition: transform 0.15s ease;
+      }
+      .calc-slider-range::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
+      .calc-slider-range::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #c9a84c;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
       }
     </style>
 
@@ -810,73 +706,6 @@ const WHATSAPP_PHONE = "18295259993";
       }}
     >
       const initProptechModules = () => {
-        // --- CARRUSEL INTERACTIVO DE GALERÍA ---
-        const carouselViewport = document.getElementById("carousel-viewport");
-        if (carouselViewport && !carouselViewport.dataset.carouselInit) {
-          carouselViewport.dataset.carouselInit = "true";
-          const allSlides =
-            carouselViewport.querySelectorAll(".carousel-slide");
-          const allThumbs = document.querySelectorAll(".carousel-thumb");
-          const counterEl = document.getElementById("carousel-counter");
-          const prevBtn = document.getElementById("carousel-prev");
-          const nextBtn = document.getElementById("carousel-next");
-          let currentIdx = 0;
-          const totalCount = allSlides.length;
-
-          function goToSlide(idx) {
-            allSlides[currentIdx].classList.remove("is-active");
-            if (allThumbs[currentIdx])
-              allThumbs[currentIdx].classList.remove("carousel-thumb-active");
-            currentIdx = ((idx % totalCount) + totalCount) % totalCount;
-            allSlides[currentIdx].classList.add("is-active");
-            if (allThumbs[currentIdx]) {
-              allThumbs[currentIdx].classList.add("carousel-thumb-active");
-              allThumbs[currentIdx].scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "center",
-              });
-            }
-            if (counterEl)
-              counterEl.textContent = currentIdx + 1 + " / " + totalCount;
-          }
-
-          if (prevBtn)
-            prevBtn.addEventListener("click", function () {
-              goToSlide(currentIdx - 1);
-            });
-          if (nextBtn)
-            nextBtn.addEventListener("click", function () {
-              goToSlide(currentIdx + 1);
-            });
-          allThumbs.forEach(function (thumb) {
-            thumb.addEventListener("click", function () {
-              goToSlide(parseInt(thumb.dataset.index, 10));
-            });
-          });
-
-          // Soporte táctil (swipe en móviles)
-          let touchStartX = 0;
-          carouselViewport.addEventListener(
-            "touchstart",
-            function (e) {
-              touchStartX = e.changedTouches[0].screenX;
-            },
-            { passive: true },
-          );
-          carouselViewport.addEventListener("touchend", function (e) {
-            const diff = touchStartX - e.changedTouches[0].screenX;
-            if (Math.abs(diff) > 50)
-              goToSlide(diff > 0 ? currentIdx + 1 : currentIdx - 1);
-          });
-
-          // Soporte de teclado (flechas izquierda/derecha)
-          document.addEventListener("keydown", function (e) {
-            if (e.key === "ArrowLeft") goToSlide(currentIdx - 1);
-            if (e.key === "ArrowRight") goToSlide(currentIdx + 1);
-          });
-        }
-
         // --- MAPA DE UBICACIÓN APROXIMADA ---
         const mapaContenedor = document.getElementById("map-individual");
         if (

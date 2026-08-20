@@ -540,7 +540,8 @@ body.a11y-dark-mode .border-slate-100 {
 
 /* Forms in Dark Mode */
 body.a11y-dark-mode select,
-body.a11y-dark-mode input {
+body.a11y-dark-mode input,
+body.a11y-dark-mode textarea {
   background-color: var(--color-surface-dark) !important;
   color: var(--color-text-dark) !important;
   border-color: var(--color-border-dark) !important;

@@ -23,6 +23,7 @@ const propiedades = defineCollection({
     latitud: z.union([z.number(), z.string()]).optional(),
     longitud: z.union([z.number(), z.string()]).optional(),
     imagenPrincipal: z.string().optional(),
+    videoUrl: z.string().url().optional(),
 
     // 🚀 FLEXIBILIZACIÓN CLAVE: Acepta cualquier estructura en la galería sin romper la compilación
     galeria: z.array(z.any()).optional(),

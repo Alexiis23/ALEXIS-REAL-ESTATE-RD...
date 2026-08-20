@@ -1,0 +1,111 @@
+---
+/**
+ * VideoTour.astro
+ * Componente "Estudio Cinema con Passe-Partout" para recorridos virtuales.
+ * Título y descripción dinámicos según tipoVideo seleccionado en Keystatic.
+ */
+interface Props {
+  videoUrl?: string;
+  tituloPropiedad?: string;
+  tipoVideo?: string;
+}
+
+const { videoUrl, tituloPropiedad = 'Inmueble', tipoVideo = 'recorrido-virtual' } = Astro.props;
+
+/**
+ * Extrae el ID del video de YouTube desde múltiples formatos:
+ * - https://youtu.be/ID_VIDEO
+ * - https://www.youtube.com/watch?v=ID_VIDEO
+ * - https://www.youtube.com/shorts/ID_VIDEO
+ * - https://www.youtube.com/embed/ID_VIDEO
+ */
+function extractYouTubeId(url?: string): string | null {
+  if (!url) return null;
+
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match?.[1]) return match[1];
+  }
+
+  return null;
+}
+
+const videoId = extractYouTubeId(videoUrl);
+const embedUrl = videoId
+  ? `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`
+  : null;
+
+// Diccionario de contenido dinámico según el tipo de video seleccionado en Keystatic
+const videoMetadataMap: Record<string, { titulo: string; descripcion: string }> = {
+  'recorrido-virtual': {
+    titulo: 'Recorrido Virtual en Video',
+    descripcion: 'Explora cada rincón y distribución de esta propiedad desde la comodidad de tu hogar.',
+  },
+  'dron-terreno': {
+    titulo: 'Vista Aérea & Topografía con Dron',
+    descripcion: 'Perspectiva aérea exclusiva para apreciar los linderos, accesos y entorno del terreno.',
+  },
+  'tour-villa': {
+    titulo: 'Video Tour Exclusivo de la Residencia',
+    descripcion: 'Descubre los acabados de lujo, áreas sociales y comodidades premium de esta villa.',
+  },
+  'tour-apartamento': {
+    titulo: 'Presentación en Video del Apartamento',
+    descripcion: 'Conoce la distribución interior, iluminación natural y amenidades del edificio.',
+  },
+  'proyecto-amenidades': {
+    titulo: 'Video del Residencial & Amenidades',
+    descripcion: 'Recorre el complejo residencial, seguridad privada y atractivos de la zona.',
+  },
+};
+
+const info = videoMetadataMap[tipoVideo] || videoMetadataMap['recorrido-virtual'];
+---
+
+{embedUrl && (
+  <section
+    class="bg-[#0b192c] rounded-3xl p-6 sm:p-8 border border-[#c9a84c]/30 shadow-2xl overflow-hidden"
+    aria-label={info.titulo}
+  >
+    <!-- Encabezado Cinema -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-[#c9a84c]/15 border border-[#c9a84c]/30 flex items-center justify-center text-[#c9a84c] shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg sm:text-xl font-black text-white tracking-tight leading-tight">{info.titulo}</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-0.5 leading-snug">{info.descripcion}</p>
+        </div>
+      </div>
+      <!-- Badge HD -->
+      <span class="hidden sm:inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm text-[10px] font-bold text-slate-200 px-3 py-1.5 rounded-full border border-white/10 uppercase tracking-wider shrink-0">
+        <svg class="w-3 h-3 text-[#c9a84c]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+        </svg>
+        HD • Recorrido Virtual
+      </span>
+    </div>
+
+    <!-- Marco del Reproductor con Passe-Partout -->
+    <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/10 shadow-inner">
+      <iframe
+        src={embedUrl}
+        title={`${info.titulo} – ${tituloPropiedad}`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy"
+        class="absolute inset-0 w-full h-full border-0"
+      ></iframe>
+    </div>
+  </section>
+)}

@@ -1,0 +1,282 @@
+---
+/**
+ * GaleriaMosaico.astro
+ * Cuadrícula editorial tipo mosaico (Estilo Airbnb Luxe / Sotheby's)
+ * con visor Lightbox modal a pantalla completa.
+ */
+interface Props {
+  fotos: string[];
+  titulo: string;
+}
+
+const { fotos = [], titulo } = Astro.props;
+const totalFotos = fotos.length;
+const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
+---
+
+{totalFotos > 0 ? (
+  <section class="relative">
+    <!-- Mosaico Desktop / Foto Única Móvil -->
+    <div class="rounded-3xl overflow-hidden border border-slate-100 shadow-md bg-slate-900 relative">
+      
+      <!-- Vista Desktop: Grid Editorial -->
+      <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[460px] relative">
+        <!-- Foto 1 (Principal Grande - 2 columnas x 2 filas) -->
+        <div
+          class="col-span-2 row-span-2 overflow-hidden relative group cursor-pointer"
+          data-foto-index="0"
+        >
+          <img
+            src={fotosMosaico[0]}
+            alt={`${titulo} - Foto 1`}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+        </div>
+
+        <!-- Fotos 2 a 5 (Laterales Derecha) -->
+        {fotosMosaico.slice(1, 5).map((foto, idx) => (
+          <div
+            class="overflow-hidden relative group cursor-pointer"
+            data-foto-index={idx + 1}
+          >
+            <img
+              src={foto}
+              alt={`${titulo} - Foto ${idx + 2}`}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+          </div>
+        ))}
+
+        <!-- Si hay menos de 5 fotos, rellenar el espacio visualmente -->
+        {fotosMosaico.length < 5 && Array.from({ length: 5 - fotosMosaico.length }).map(() => (
+          <div class="bg-slate-800/50 hidden md:block"></div>
+        ))}
+      </div>
+
+      <!-- Vista Móvil: Foto Principal con Badge de Contador -->
+      <div class="md:hidden relative aspect-[16/10] overflow-hidden cursor-pointer" data-foto-index="0">
+        <img
+          src={fotos[0]}
+          alt={titulo}
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+        <div class="absolute top-3 right-3 bg-[#0b192c]/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-md">
+          1 / {totalFotos}
+        </div>
+      </div>
+
+      <!-- Botón Flotante "Ver todas las fotos" -->
+      <button
+        id="btn-abrir-lightbox"
+        type="button"
+        class="absolute bottom-4 right-4 bg-white/90 hover:bg-[#c9a84c] text-[#0b192c] hover:text-white backdrop-blur-md px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg border border-white/50 transition-all duration-300 group z-10 cursor-pointer"
+      >
+        <svg class="w-4 h-4 text-[#c9a84c] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        </svg>
+        Ver las {totalFotos} fotos
+      </button>
+    </div>
+
+    <!-- Modal / Lightbox Fullscreen -->
+    <div
+      id="lightbox-modal"
+      class="fixed inset-0 z-50 bg-[#0b192c]/95 backdrop-blur-xl hidden flex-col justify-between p-4 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+    >
+      <!-- Barra Superior -->
+      <div class="flex items-center justify-between text-white border-b border-white/10 pb-4 shrink-0">
+        <div class="min-w-0 pr-4">
+          <p class="text-xs uppercase tracking-widest text-[#c9a84c] font-bold">Galería Exclusiva</p>
+          <h4 class="text-sm font-semibold truncate max-w-md text-slate-200">{titulo}</h4>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+          <span id="lightbox-counter" class="text-xs font-mono bg-white/10 px-3 py-1.5 rounded-full border border-white/10">
+            1 / {totalFotos}
+          </span>
+          <button
+            id="btn-cerrar-lightbox"
+            type="button"
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-lg transition-colors cursor-pointer border border-white/10"
+            aria-label="Cerrar galería"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Imagen Central con Flechas -->
+      <div class="relative flex-1 flex items-center justify-center my-4 overflow-hidden" id="lightbox-viewport">
+        {totalFotos > 1 && (
+          <button
+            id="btn-prev"
+            type="button"
+            class="absolute left-2 sm:left-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-[#c9a84c] text-white hover:text-[#0b192c] flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/15 cursor-pointer"
+            aria-label="Foto anterior"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+
+        <img
+          id="lightbox-img"
+          src=""
+          alt="Foto ampliada"
+          class="max-h-[72vh] max-w-full object-contain rounded-2xl shadow-2xl transition-opacity duration-200"
+        />
+
+        {totalFotos > 1 && (
+          <button
+            id="btn-next"
+            type="button"
+            class="absolute right-2 sm:right-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-[#c9a84c] text-white hover:text-[#0b192c] flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/15 cursor-pointer"
+            aria-label="Foto siguiente"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      <!-- Tira de Miniaturas Inferior del Modal -->
+      {totalFotos > 1 && (
+        <div class="flex gap-2 overflow-x-auto py-2 justify-start sm:justify-center max-w-4xl mx-auto w-full px-2 shrink-0 scroll-smooth">
+          {fotos.map((f, i) => (
+            <button
+              type="button"
+              class="w-14 h-10 rounded-lg overflow-hidden shrink-0 border-2 border-transparent opacity-50 hover:opacity-100 transition-all modal-thumb cursor-pointer"
+              data-thumb-index={i}
+              aria-label={`Ir a foto ${i + 1}`}
+            >
+              <img src={f} class="w-full h-full object-cover" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+) : (
+  <div class="w-full rounded-3xl overflow-hidden bg-slate-100 shadow-sm aspect-video flex flex-col items-center justify-center text-slate-400">
+    <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    <span class="text-xs font-semibold">Sin imagen disponible</span>
+  </div>
+)}
+
+<script is:inline define:vars={{ fotos }}>
+  function initLightbox() {
+    const modal = document.getElementById("lightbox-modal");
+    if (!modal) return;
+
+    const imgElement = document.getElementById("lightbox-img");
+    const counter = document.getElementById("lightbox-counter");
+    const btnCerrar = document.getElementById("btn-cerrar-lightbox");
+    const btnAbrir = document.getElementById("btn-abrir-lightbox");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const triggerItems = document.querySelectorAll("[data-foto-index]");
+    const thumbs = document.querySelectorAll(".modal-thumb");
+    const viewport = document.getElementById("lightbox-viewport");
+
+    if (!fotos || fotos.length === 0) return;
+
+    let currentIndex = 0;
+
+    function renderFoto(index) {
+      currentIndex = (index + fotos.length) % fotos.length;
+      if (imgElement) {
+        imgElement.style.opacity = "0.4";
+        imgElement.src = fotos[currentIndex];
+        imgElement.onload = () => {
+          imgElement.style.opacity = "1";
+        };
+      }
+      if (counter) {
+        counter.textContent = `${currentIndex + 1} / ${fotos.length}`;
+      }
+
+      thumbs.forEach((t, i) => {
+        if (i === currentIndex) {
+          t.classList.add("ring-2", "ring-[#c9a84c]", "!opacity-100", "scale-105");
+          t.classList.remove("opacity-50");
+          t.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        } else {
+          t.classList.remove("ring-2", "ring-[#c9a84c]", "!opacity-100", "scale-105");
+          t.classList.add("opacity-50");
+        }
+      });
+    }
+
+    function abrirModal(index = 0) {
+      renderFoto(index);
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function cerrarModal() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    triggerItems.forEach((el) => {
+      el.addEventListener("click", () => {
+        const idx = parseInt(el.getAttribute("data-foto-index") || "0", 10);
+        abrirModal(idx);
+      });
+    });
+
+    if (btnAbrir) btnAbrir.addEventListener("click", () => abrirModal(0));
+    if (btnCerrar) btnCerrar.addEventListener("click", cerrarModal);
+    if (btnPrev) btnPrev.addEventListener("click", () => renderFoto(currentIndex - 1));
+    if (btnNext) btnNext.addEventListener("click", () => renderFoto(currentIndex + 1));
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener("click", () => {
+        const idx = parseInt(thumb.getAttribute("data-thumb-index") || "0", 10);
+        renderFoto(idx);
+      });
+    });
+
+    // Navegación con teclado
+    document.addEventListener("keydown", (e) => {
+      if (modal.classList.contains("hidden")) return;
+      if (e.key === "Escape") cerrarModal();
+      if (e.key === "ArrowLeft") renderFoto(currentIndex - 1);
+      if (e.key === "ArrowRight") renderFoto(currentIndex + 1);
+    });
+
+    // Soporte para gestos táctiles (Swipe)
+    if (viewport) {
+      let touchStartX = 0;
+      viewport.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      viewport.addEventListener("touchend", (e) => {
+        const diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            renderFoto(currentIndex + 1);
+          } else {
+            renderFoto(currentIndex - 1);
+          }
+        }
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", initLightbox);
+  document.addEventListener("astro:page-load", initLightbox);
+</script>

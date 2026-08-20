@@ -61,11 +61,11 @@ export default config({
           defaultValue: 'Venta'
         }),
         exclusiva: fields.checkbox({
-          label: '¿Propiedad en Exclusiva? 👑',
+          label: '¿Propiedad en Exclusiva? ',
           description: 'ACTIVADO: Muestra pin exacto en el mapa. DESACTIVADO: Ofusca la zona (750m).'
         }),
         confotur: fields.checkbox({
-          label: '¿Aplica para Beneficio Confotur? 🌴',
+          label: '¿Aplica para Beneficio Confotur? ',
           description: 'Exime al cliente del 3% de transferencia inmobiliaria de la DGII.'
         }),
 
@@ -101,7 +101,7 @@ export default config({
 
         // --- SECCIÓN 6: FOTO PRINCIPAL (Arrastra o selecciona) ---
         imagenPrincipal: fields.image({
-          label: '📸 Foto Principal (Portada)',
+          label: 'Foto Principal (Portada)',
           description: 'Arrastra o selecciona la imagen de portada del inmueble.',
           directory: 'src/assets/propiedades',
           publicPath: '../../assets/propiedades/',
@@ -109,7 +109,26 @@ export default config({
         galeria: fields.array(
           fields.text({ label: 'URL' }),
           { label: 'Fotos de la galería', itemLabel: (props) => props.value || 'Foto' }
-        )
+        ),
+
+        // --- SECCIÓN 7: RECORRIDO VIRTUAL EN VIDEO ---
+        tipoVideo: fields.select({
+          label: 'Tipo de Video / Enfoque del Tour',
+          description: 'Selecciona el tipo de video para adaptar automáticamente el título y subtítulo en la web.',
+          options: [
+            { label: 'Recorrido Virtual General', value: 'recorrido-virtual' },
+            { label: 'Vista Aérea / Terreno con Dron', value: 'dron-terreno' },
+            { label: 'Video Tour de Villa o Casa', value: 'tour-villa' },
+            { label: 'Presentación de Apartamento', value: 'tour-apartamento' },
+            { label: 'Residencial y Amenidades', value: 'proyecto-amenidades' },
+          ],
+          defaultValue: 'recorrido-virtual',
+        }),
+        videoUrl: fields.url({
+          label: 'Enlace del Video (YouTube) - OPCIONAL',
+          description: 'Pega el enlace de YouTube del recorrido virtual. Soporta: youtu.be/ID, youtube.com/watch?v=ID, youtube.com/shorts/ID, youtube.com/embed/ID.',
+          validation: { isRequired: false }
+        }),
       },
     }),
   },

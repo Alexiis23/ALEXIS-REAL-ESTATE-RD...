@@ -5,7 +5,7 @@ import Navbar from "../../../components/Navbar.astro";
 import Footer from "../../../components/Footer.astro";
 import AccessibilityWidget from "../../../components/AccessibilityWidget.astro";
 import { Image } from "astro:assets";
-import * as deepl from "deepl-node";
+import { obtenerContenidoLocalizado } from "../../../utils/traductor";
 import { resolverPrecios } from "../../../utils/currency";
 
 const { id } = Astro.params;
@@ -53,97 +53,23 @@ const rutaPrincipal = String(entry.data.imagenPrincipal || "").replace(
 );
 const imagenPrincipalResuelta = imagenes[rutaPrincipal]?.default || null;
 
-// 3. CONFIGURACIÓN DE LA API DE TRADUCCIÓN (DEEPL SHIELD)
-const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
-let translator: any = null;
-
-try {
-  if (DEEPL_AUTH_KEY) {
-    translator = new deepl.Translator(DEEPL_AUTH_KEY);
-  }
-} catch (e) {
-  console.error("Error al inicializar el traductor en detalle:", e);
-}
-
-// Datos base en español recolectados del JSON
-const tituloOriginal = entry.data.titulo || idPropiedad.replace(/-/g, " ");
-const descripcionOriginal = entry.data.descripcion || "";
-const tipoOriginal = entry.data.tipo || "Apartamento";
-const estadoOriginal = entry.data.estado || "En planos";
-
-// 🌟 INTEGRACIÓN DEL TRADUCTOR INVISIBLE
-let tituloTraducido = entry.data.titulo_en || "";
-let descripcionTraducida = entry.data.descripcion_en || "";
-let tipoTraducido = "";
-let estadoTraducido = "";
-
-if (translator) {
-  try {
-    // Traducir el título si vino vacío de Keystatic
-    if (!tituloTraducido) {
-      const resTitulo = await translator.translateText(
-        tituloOriginal,
-        null,
-        "en-US",
-      );
-      tituloTraducido = resTitulo.text;
-    }
-
-    // Traducir la descripción si vino vacía de Keystatic
-    if (!descripcionTraducida) {
-      if (descripcionOriginal) {
-        const resDesc = await translator.translateText(
-          descripcionOriginal,
-          null,
-          "en-US",
-        );
-        descripcionTraducida = resDesc.text;
-      } else {
-        descripcionTraducida =
-          "Discover this amazing real estate opportunity in the Dominican Republic.";
-      }
-    }
-
-    // El tipo y el estado del proyecto se traducen siempre
-    const resTipo = await translator.translateText(tipoOriginal, null, "en-US");
-    tipoTraducido = resTipo.text;
-
-    const resEstado = await translator.translateText(
-      estadoOriginal,
-      null,
-      "en-US",
-    );
-    estadoTraducido = resEstado.text;
-  } catch (error) {
-    console.warn(
-      `[DeepL Detail Shield] Fallo en traducción dinámica para ${id}. Desplegando fallbacks.`,
-    );
-    if (!tituloTraducido) tituloTraducido = tituloOriginal;
-    if (!descripcionTraducida)
-      descripcionTraducida =
-        descripcionOriginal || "Discover this amazing real estate opportunity.";
-    tipoTraducido = tipoOriginal;
-    estadoTraducido = estadoOriginal;
-  }
-} else {
-  if (!tituloTraducido) tituloTraducido = tituloOriginal;
-  if (!descripcionTraducida)
-    descripcionTraducida =
-      descripcionOriginal || "Discover this amazing real estate opportunity.";
-  tipoTraducido = tipoOriginal;
-  estadoTraducido = estadoOriginal;
-}
+// 3. RESOLVER TEXTO LOCALIZADO (EN: aplica sistema de prioridad de 3 niveles via DeepL)
+const {
+  titulo: tituloTraducido,
+  descripcion: descripcionTraducida,
+  tipo: tipoTraducido,
+  estado: estadoTraducido,
+  ubicacion,
+} = await obtenerContenidoLocalizado(entry.data, "en", idPropiedad);
 
 const { usd: precioUsd, dop: precioDop } = resolverPrecios(
   dataPlana.precioUsd,
-  dataPlana.precioDop
+  dataPlana.precioDop,
 );
-const ubicacion = entry.data.ubicacion || "Dominican Republic";
 const confotur = Boolean(entry.data.confotur);
 const habitaciones = Number(entry.data.habitaciones) || 0;
 const banos = Number(entry.data.banos) || 0;
 const parqueos = Number(entry.data.parqueos) || 0;
-// 🚀 CORRECCIÓN: Usamos dataPlana para saltar la validación estricta de TypeScript temporalmente
 const latitud = Number(dataPlana.latitud) || 18.47186;
 const longitud = Number(dataPlana.longitud) || -69.89232;
 const WHATSAPP_PHONE = "18295259993";

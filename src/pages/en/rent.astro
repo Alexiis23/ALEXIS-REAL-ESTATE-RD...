@@ -30,64 +30,75 @@ const translateEstado: Record<string, string> = {
 };
 
 import { getCollection } from "astro:content";
+import { traducirTexto } from "../../utils/traductor";
 
 const propertiesCollection = await getCollection("propiedades");
 
-const allPropiedades = propertiesCollection.map((entry) => {
-  const contenido = entry.data;
-  const id = entry.id;
+const allPropiedades = await Promise.all(
+  propertiesCollection.map(async (entry) => {
+    const contenido = entry.data;
+    const id = entry.id;
 
-  const { usd: precioUsd, dop: precioDop } = resolverPrecios(
-    (contenido as any).precioUsd,
-    (contenido as any).precioDop
-  );
+    const { usd: precioUsd, dop: precioDop } = resolverPrecios(
+      (contenido as any).precioUsd,
+      (contenido as any).precioDop
+    );
 
-  const tipoOriginal = String(contenido.tipo || "apartamento")
-    .toLowerCase()
-    .trim();
-  const estadoOriginal = String(contenido.estado || "en planos")
-    .toLowerCase()
-    .trim();
+    const tipoOriginal = String(contenido.tipo || "apartamento")
+      .toLowerCase()
+      .trim();
+    const estadoOriginal = String(contenido.estado || "en planos")
+      .toLowerCase()
+      .trim();
+    const tipoContratoOriginal = (contenido.regimen || "alquiler")
+      .toLowerCase()
+      .trim();
 
-  // 🚀 CORRECCIÓN AQUÍ: Cambiamos contenido.tipoContrato por contenido.regimen
-  const tipoContratoOriginal = (contenido.regimen || "venta")
-    .toLowerCase()
-    .trim();
+    let finalTitulo = contenido.titulo_en;
+    let finalDesc = contenido.descripcion_en;
 
-  return {
-    id,
-    data: {
-      titulo: contenido.titulo_en || contenido.titulo || id.replace(/-/g, " "),
-      descripcion:
-        contenido.descripcion_en ||
-        contenido.descripcion ||
-        "Discover this amazing real estate opportunity.",
-      precio: precioUsd,
-      precioUsd,
-      precioDop,
-      ubicacion: contenido.ubicacion || "Dominican Republic",
-      tipo: translateTipo[tipoOriginal] || contenido.tipo || "Apartment",
-      estado:
-        translateEstado[estadoOriginal] ||
-        contenido.estado ||
-        "Under Construction",
-      tipoContrato: tipoContratoOriginal, // Mantiene el nombre del objeto de salida para no romper el HTML de abajo
-      confotur: Boolean(contenido.confotur),
-      habitaciones: Number(contenido.habitaciones) || 0,
-      banos: Number(contenido.banos) || 0,
-      parqueos: Number(contenido.parqueos) || 0,
-      area: Number(contenido.area) || 0,
-      imagenPrincipal: contenido.imagenPrincipal || "",
-      imagenMetadata:
-        imagenes[
-          String(contenido.imagenPrincipal || "").replace(
-            /^\.\.\/\.\.\//,
-            "/src/",
-          )
-        ]?.default || fallbackImage,
-    },
-  };
-});
+    try {
+      if (!finalTitulo) finalTitulo = await traducirTexto(contenido.titulo || id.replace(/-/g, " "));
+      if (!finalDesc) finalDesc = await traducirTexto(contenido.descripcion || "Discover this amazing real estate opportunity.");
+    } catch (err) {
+      console.warn(`Error traduciendo propiedad ${id} en rent:`, err);
+    }
+
+    if (!finalTitulo) finalTitulo = contenido.titulo || id.replace(/-/g, " ");
+    if (!finalDesc) finalDesc = contenido.descripcion || "Discover this amazing real estate opportunity.";
+
+    return {
+      id,
+      data: {
+        titulo: finalTitulo,
+        descripcion: finalDesc,
+        precio: precioUsd,
+        precioUsd,
+        precioDop,
+        ubicacion: contenido.ubicacion || "Dominican Republic",
+        tipo: translateTipo[tipoOriginal] || contenido.tipo || "Apartment",
+        estado:
+          translateEstado[estadoOriginal] ||
+          contenido.estado ||
+          "Under Construction",
+        tipoContrato: tipoContratoOriginal,
+        confotur: Boolean(contenido.confotur),
+        habitaciones: Number(contenido.habitaciones) || 0,
+        banos: Number(contenido.banos) || 0,
+        parqueos: Number(contenido.parqueos) || 0,
+        area: Number(contenido.area) || 0,
+        imagenPrincipal: contenido.imagenPrincipal || "",
+        imagenMetadata:
+          imagenes[
+            String(contenido.imagenPrincipal || "").replace(
+              /^\.\.\/\.\.\//,
+              "/src/",
+            )
+          ]?.default || fallbackImage,
+      },
+    };
+  })
+);
 
 const WHATSAPP_PHONE = "18295259993";
 ---

@@ -7,7 +7,7 @@ import AccessibilityWidget from "../../components/AccessibilityWidget.astro";
 import VideoTour from "../../components/VideoTour.astro";
 import GaleriaMosaico from "../../components/GaleriaMosaico.astro";
 import { Image } from "astro:assets";
-import * as deepl from "deepl-node";
+import { obtenerContenidoLocalizado } from "../../utils/traductor";
 import { slugify } from "../../utils/slugify";
 import { resolverPrecios } from "../../utils/currency";
 import Analytics from "@vercel/analytics/astro";
@@ -28,23 +28,17 @@ if (!entry) {
 
 const idPropiedad = entry.id;
 
-// 2. CONFIGURAR VARIABLES DE TEXTO INMEDIATAMENTE
-const tituloOriginal = entry.data.titulo || idPropiedad.replace(/-/g, " ");
-const descripcionOriginal =
-  entry.data.descripcion || "Descubre esta increíble oportunidad inmobiliaria.";
-const tipoOriginal = entry.data.tipo || "Apartamento";
-const estadoOriginal = entry.data.estado || "En planos";
+// 2. RESOLVER TEXTO LOCALIZADO (ES: sin overhead de traducción)
+const { titulo, descripcion, tipo, estado, ubicacion } =
+  await obtenerContenidoLocalizado(entry.data, 'es');
 
-let titulo = tituloOriginal;
-let descripcion = descripcionOriginal;
-let tipo = tipoOriginal;
-let estado = estadoOriginal;
+// Alias para compatibilidad con las referencias al título original en <head>
+const tituloOriginal = titulo || idPropiedad.replace(/-/g, " ");
 
 const { usd: precioUsd, dop: precioDop } = resolverPrecios(
   (entry.data as any).precioUsd,
   (entry.data as any).precioDop,
 );
-const ubicacion = entry.data.ubicacion || "República Dominicana";
 const confotur = Boolean(entry.data.confotur);
 const habitaciones = Number(entry.data.habitaciones) || 0;
 const banos = Number(entry.data.banos) || 0;
@@ -94,18 +88,6 @@ galeriaRaw.forEach((rutaRaw: string) => {
 const urlsFotos: string[] = todasLasFotos.map((f) =>
   f.type === "local" ? f.meta.src : f.src,
 );
-
-// 5. CONFIGURACIÓN DE LA API DE TRADUCCIÓN (DEEPL SHIELD)
-const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
-let translator: any = null;
-
-try {
-  if (DEEPL_AUTH_KEY) {
-    translator = new deepl.Translator(DEEPL_AUTH_KEY);
-  }
-} catch (e) {
-  console.error("Error al inicializar el traductor en detalle:", e);
-}
 
 const WHATSAPP_PHONE = "18295259993";
 ---

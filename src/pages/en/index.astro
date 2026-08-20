@@ -7,7 +7,7 @@ import Buscador from '../../components/buscador.astro';
 import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
 import { Image } from 'astro:assets'; 
 import { useTranslations } from '../../utils/i18n';
-import * as deepl from 'deepl-node';
+import { traducirTexto } from '../../utils/traductor';
 
 import logoEmpresa from '../../assets/images/logo-alexis-rd.png';
 import fallbackImage from '../../assets/images/prueba-inmobiliaria.jpg';
@@ -27,16 +27,6 @@ const translateEstado: Record<string, string> = {
   'listo para entrega': 'Ready for Delivery', 'disponible': 'Available'
 };
 
-// 🔑 Configuración del traductor seguro
-const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
-let translator: any = null;
-try {
-  if (DEEPL_AUTH_KEY) {
-    translator = new deepl.Translator(DEEPL_AUTH_KEY);
-  }
-} catch (e) {
-  console.error("Error al inicializar DeepL en index.astro:", e);
-}
 
 const propiedadesBase = Object.entries(modulosJSON).map(([ruta, modulo]) => {
   const contenido = modulo as any;
@@ -81,19 +71,12 @@ const allPropiedades = await Promise.all(
     let finalTitulo = p.tituloEnCMS;
     let finalDesc = p.descripcionEnCMS;
 
-    if (translator) {
-      try {
-        if (!finalTitulo) {
-          const res = await translator.translateText(p.tituloOriginal, null, 'en-US');
-          finalTitulo = res.text;
-        }
-        if (!finalDesc) {
-          const res = await translator.translateText(p.descripcionOriginal, null, 'en-US');
-          finalDesc = res.text;
-        }
-      } catch (err) {
-        console.warn(`Error traduciendo propiedad ${p.id} en Home:`, err);
-      }
+    // 2. TRADUCIR con el helper centralizado (caché en memoria + fallback automático)
+    try {
+      if (!finalTitulo) finalTitulo = await traducirTexto(p.tituloOriginal, null);
+      if (!finalDesc) finalDesc = await traducirTexto(p.descripcionOriginal, null);
+    } catch (err) {
+      console.warn(`Error traduciendo propiedad ${p.id} en Home:`, err);
     }
 
     if (!finalTitulo) finalTitulo = p.tituloOriginal;

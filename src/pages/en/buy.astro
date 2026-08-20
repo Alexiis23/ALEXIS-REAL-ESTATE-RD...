@@ -7,7 +7,7 @@ import Footer from '../../components/Footer.astro';
 import Buscador from '../../components/buscador.astro';
 import AccessibilityWidget from '../../components/AccessibilityWidget.astro';
 import fallbackImage from '../../assets/images/prueba-inmobiliaria.jpg';
-import * as deepl from 'deepl-node';
+import { traducirTexto } from '../../utils/traductor';
 import { resolverPrecios } from '../../utils/currency';
 
 const translateTipo: Record<string, string> = {
@@ -24,16 +24,6 @@ import { getCollection } from 'astro:content';
 const propertiesCollection = await getCollection('propiedades');
 const imagenes = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,WEBP}', { eager: true });
 
-// Configuración del traductor seguro
-const DEEPL_AUTH_KEY = "cfcc4e7f-2356-4f78-a8e3-3bc2bc6aafb4:fx";
-let translator: any = null;
-try {
-  if (DEEPL_AUTH_KEY) {
-    translator = new deepl.Translator(DEEPL_AUTH_KEY);
-  }
-} catch (e) {
-  console.error("Error al inicializar DeepL en buy.astro:", e);
-}
 
 // 1. Mapeo inicial de la data estructurada
 const propiedadesBase = propertiesCollection.map((entry) => {
@@ -75,19 +65,12 @@ const allPropiedades = await Promise.all(
     let finalTitulo = p.tituloEnCMS;
     let finalDesc = p.descripcionEnCMS;
 
-    if (translator) {
-      try {
-        if (!finalTitulo) {
-          const res = await translator.translateText(p.tituloOriginal, null, 'en-US');
-          finalTitulo = res.text;
-        }
-        if (!finalDesc) {
-          const res = await translator.translateText(p.descripcionOriginal, null, 'en-US');
-          finalDesc = res.text;
-        }
-      } catch (err) {
-        console.warn(`Error traduciendo propiedad ${p.id} en catálogo:`, err);
-      }
+    // 2. TRADUCIR con el helper centralizado (caché en memoria + fallback automático)
+    try {
+      if (!finalTitulo) finalTitulo = await traducirTexto(p.tituloOriginal, null);
+      if (!finalDesc) finalDesc = await traducirTexto(p.descripcionOriginal, null);
+    } catch (err) {
+      console.warn(`Error traduciendo propiedad ${p.id} en catálogo:`, err);
     }
 
     if (!finalTitulo) finalTitulo = p.tituloOriginal;

@@ -16,71 +16,89 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
 
 {totalFotos > 0 ? (
   <section class="relative">
-    <!-- Mosaico Desktop / Foto Única Móvil -->
+    <!-- Mosaico Desktop / Foto Única -->
     <div class="rounded-3xl overflow-hidden border border-slate-100 shadow-md bg-slate-900 relative">
-      
-      <!-- Vista Desktop: Grid Editorial -->
-      <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[460px] relative">
-        <!-- Foto 1 (Principal Grande - 2 columnas x 2 filas) -->
+      {totalFotos === 1 ? (
+        <!-- Vista Foto Única -->
         <div
-          class="col-span-2 row-span-2 overflow-hidden relative group cursor-pointer"
+          class="relative w-full h-[320px] sm:h-[400px] md:h-[460px] overflow-hidden group cursor-pointer"
           data-foto-index="0"
         >
           <img
-            src={fotosMosaico[0]}
-            alt={`${titulo} - Foto 1`}
+            src={fotos[0]}
+            alt={titulo}
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="eager"
           />
-          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
         </div>
+      ) : (
+        <!-- Vista Múltiples Fotos: Grid Editorial y Móvil -->
+        <>
+          <!-- Vista Desktop: Grid Editorial -->
+          <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[460px] relative">
+            <!-- Foto 1 (Principal Grande - 2 columnas x 2 filas) -->
+            <div
+              class="col-span-2 row-span-2 overflow-hidden relative group cursor-pointer"
+              data-foto-index="0"
+            >
+              <img
+                src={fotosMosaico[0]}
+                alt={`${titulo} - Foto 1`}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="eager"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+            </div>
 
-        <!-- Fotos 2 a 5 (Laterales Derecha) -->
-        {fotosMosaico.slice(1, 5).map((foto, idx) => (
-          <div
-            class="overflow-hidden relative group cursor-pointer"
-            data-foto-index={idx + 1}
-          >
-            <img
-              src={foto}
-              alt={`${titulo} - Foto ${idx + 2}`}
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+            <!-- Fotos 2 a 5 (Laterales Derecha) -->
+            {fotosMosaico.slice(1, 5).map((foto, idx) => (
+              <div
+                class="overflow-hidden relative group cursor-pointer"
+                data-foto-index={idx + 1}
+              >
+                <img
+                  src={foto}
+                  alt={`${titulo} - Foto ${idx + 2}`}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
+              </div>
+            ))}
+
+            <!-- Si hay menos de 5 fotos, rellenar el espacio visualmente -->
+            {fotosMosaico.length < 5 && Array.from({ length: 5 - fotosMosaico.length }).map(() => (
+              <div class="bg-slate-800/50 hidden md:block"></div>
+            ))}
           </div>
-        ))}
 
-        <!-- Si hay menos de 5 fotos, rellenar el espacio visualmente -->
-        {fotosMosaico.length < 5 && Array.from({ length: 5 - fotosMosaico.length }).map(() => (
-          <div class="bg-slate-800/50 hidden md:block"></div>
-        ))}
-      </div>
+          <!-- Vista Móvil: Foto Principal con Badge de Contador -->
+          <div class="md:hidden relative aspect-[16/10] overflow-hidden cursor-pointer" data-foto-index="0">
+            <img
+              src={fotos[0]}
+              alt={titulo}
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div class="absolute top-3 right-3 bg-[#0b192c]/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-md">
+              1 / {totalFotos}
+            </div>
+          </div>
 
-      <!-- Vista Móvil: Foto Principal con Badge de Contador -->
-      <div class="md:hidden relative aspect-[16/10] overflow-hidden cursor-pointer" data-foto-index="0">
-        <img
-          src={fotos[0]}
-          alt={titulo}
-          class="w-full h-full object-cover"
-          loading="eager"
-        />
-        <div class="absolute top-3 right-3 bg-[#0b192c]/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-md">
-          1 / {totalFotos}
-        </div>
-      </div>
-
-      <!-- Botón Flotante "Ver todas las fotos" -->
-      <button
-        id="btn-abrir-lightbox"
-        type="button"
-        class="absolute bottom-4 right-4 bg-white/90 hover:bg-[#c9a84c] text-[#0b192c] hover:text-white backdrop-blur-md px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg border border-white/50 transition-all duration-300 group z-10 cursor-pointer"
-      >
-        <svg class="w-4 h-4 text-[#c9a84c] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-        </svg>
-        Ver las {totalFotos} fotos
-      </button>
+          <!-- Botón Flotante "Ver todas las fotos" -->
+          <button
+            id="btn-abrir-lightbox"
+            type="button"
+            class="absolute bottom-4 right-4 bg-white/90 hover:bg-[#c9a84c] text-[#0b192c] hover:text-white backdrop-blur-md px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg border border-white/50 transition-all duration-300 group z-10 cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-[#c9a84c] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            Ver las {totalFotos} fotos
+          </button>
+        </>
+      )}
     </div>
 
     <!-- Modal / Lightbox Fullscreen -->

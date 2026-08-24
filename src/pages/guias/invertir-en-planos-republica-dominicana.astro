@@ -1,0 +1,245 @@
+---
+// src/pages/guias/invertir-en-planos-republica-dominicana.astro
+import GuiaLayout from "../../layouts/GuiaLayout.astro";
+import IndiceContenido, { type ItemIndice } from "../../components/guias/IndiceContenido.astro";
+import CajaAlertaJuridica from "../../components/guias/CajaAlertaJuridica.astro";
+import BannerWhatsappGuia from "../../components/guias/BannerWhatsappGuia.astro";
+import CajaProyeccionFinanciera from "../../components/guias/CajaProyeccionFinanciera.astro";
+
+const itemsIndice: ItemIndice[] = [
+  { id: "ventajas-planos", titulo: "1. Ventajas de Comprar en Preventa", tipoIcono: "chart" },
+  { id: "plan-pagos", titulo: "2. Esquema de Pagos y Cuotas", tipoIcono: "credit-card" },
+  { id: "fideicomiso", titulo: "3. Protección por Fideicomiso (Ley 189-11)", tipoIcono: "shield" },
+  { id: "riesgos-evitar", titulo: "4. Verificación de la Constructora", tipoIcono: "search" },
+  { id: "plusvalia-roi", titulo: "5. Rentabilidad y Plusvalía", tipoIcono: "money" }
+];
+---
+
+<GuiaLayout
+  titulo="Guía Completa: Cómo Invertir en Propiedades en Planos y Preventa en República Dominicana"
+  metaDescripcion="Aprende cómo funciona el plan de pagos en construcción, la protección por fideicomiso bajo la Ley 189-11 y cómo maximizar la plusvalía de tu inversión inmobiliaria."
+  categoria="Inversión & Preventa"
+  tiempoLectura="7 min"
+  fechaActualizacion="2026-08-24"
+>
+
+  <!-- ─── ÍNDICE INTERACTIVO DE CONTENIDO ─── -->
+  <IndiceContenido items={itemsIndice} />
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 1 — Ventajas de Comprar en Preventa
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="ventajas-planos" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 01</span>
+      <span>•</span>
+      <span>Estrategia Financiera</span>
+    </div>
+    <h2>1. ¿Por qué Invertir en Planos en República Dominicana?</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Comprar en preventa te permite congelar el precio más bajo por m² del proyecto y financiar el pago inicial en cuotas mensuales sin intereses durante los 18 a 36 meses de obra.
+    </div>
+
+    <p>
+      Comprar en planos o preventa significa adquirir un inmueble antes o durante su fase de edificación. Es la estrategia predilecta de inversionistas nacionales e internacionales para maximizar la rentabilidad de su capital.
+    </p>
+
+    <!-- Métricas destacadas -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
+        <span class="text-2xl sm:text-3xl font-black text-gold block">+15% a +25%</span>
+        <span class="text-xs font-bold uppercase text-navy block mt-1">Plusvalía Directa</span>
+        <p class="text-[11px] text-slate-500 mt-1">Revalorización del inmueble desde lista cero hasta la entrega de llaves.</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
+        <span class="text-2xl sm:text-3xl font-black text-navy block">0% Intereses</span>
+        <span class="text-xs font-bold uppercase text-navy block mt-1">Durante la Obra</span>
+        <p class="text-[11px] text-slate-500 mt-1">Cuotas directas al fideicomiso bancario sin recargos financieros.</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
+        <span class="text-2xl sm:text-3xl font-black text-navy block">18 a 36 Meses</span>
+        <span class="text-xs font-bold uppercase text-navy block mt-1">Plazo de Inicial</span>
+        <p class="text-[11px] text-slate-500 mt-1">Tiempo flexible para completar el porcentaje de inicial pactado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 2 — Esquema de Pagos y Cuotas
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="plan-pagos" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 02</span>
+      <span>•</span>
+      <span>Cronograma de Pagos</span>
+    </div>
+    <h2>2. Estructura Estándar del Plan de Pagos</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> El cronograma estándar se desglosa en: Reserva inicial ($1,000–$3,000 USD), Separación (10%), Cuotas de construcción (30%–40%) y Saldo contra entrega (50%–60%).
+    </div>
+
+    <p>
+      En los polos de mayor plusvalía (Punta Cana, Santo Domingo, Higüey y Las Terrenas), los desarrolladores aplican este esquema de cuatro etapas claramente diferenciadas:
+    </p>
+
+    <!-- Checklist de pasos -->
+    <div class="space-y-3 my-4">
+      <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+        <span class="w-7 h-7 rounded-xl bg-navy text-gold flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</span>
+        <div>
+          <span class="font-bold text-xs sm:text-sm text-navy block">Reserva (Bloqueo de Unidad): $1,000 – $3,000 USD</span>
+          <span class="text-xs text-slate-600 leading-relaxed block mt-0.5">Congela el precio de preventa y retira el apartamento del mercado por 15 a 30 días mientras se valida el contrato.</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+        <span class="w-7 h-7 rounded-xl bg-navy text-gold flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</span>
+        <div>
+          <span class="font-bold text-xs sm:text-sm text-navy block">Separación y Promesa de Compraventa (10%)</span>
+          <span class="text-xs text-slate-600 leading-relaxed block mt-0.5">Al firmar formalmente el contrato, se completa el 10% del valor total (restando el monto de reserva ya abonado).</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+        <span class="w-7 h-7 rounded-xl bg-navy text-gold flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</span>
+        <div>
+          <span class="font-bold text-xs sm:text-sm text-navy block">Durante la Construcción (30% a 40%)</span>
+          <span class="text-xs text-slate-600 leading-relaxed block mt-0.5">Se abona en cuotas mensuales o trimestrales sin intereses repartidas en el tiempo que dure la edificación (18 a 36 meses).</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+        <span class="w-7 h-7 rounded-xl bg-navy text-gold flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">4</span>
+        <div>
+          <span class="font-bold text-xs sm:text-sm text-navy block">Contra Entrega de Llaves (50% a 60%)</span>
+          <span class="text-xs text-slate-600 leading-relaxed block mt-0.5">Se salda al recibir la propiedad, mediante fondos propios o a través de un crédito hipotecario bancario local o internacional.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 3 — Ley de Fideicomiso Inmobiliario (Ley 189-11)
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="fideicomiso" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 03</span>
+      <span>•</span>
+      <span>Protección al Comprador</span>
+    </div>
+    <h2>3. Seguridad Jurídica: La Ley de Fideicomiso Inmobiliario (Ley 189-11)</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Bajo la Ley 189-11, tus pagos no van a la cuenta del constructor, sino a un fideicomiso bancario independiente que solo libera fondos según avance auditado de obra.
+    </div>
+
+    <p>
+      La <strong>Ley 189-11 para el Desarrollo del Mercado Hipotecario y el Fideicomiso</strong> es el marco normativo que revolucionó la seguridad de compra en República Dominicana, eliminando el riesgo de desvío de fondos.
+    </p>
+
+    <!-- Alerta jurídica de éxito -->
+    <CajaAlertaJuridica tipo="success" titulo="Garantía de la Fiduciaria Bancaria">
+      En un proyecto fideicomitido, los fondos son administrados por una fiduciaria regulada por la Superintendencia de Bancos (como Fiduciaria Banreservas, Fiduciaria BHD o Fiduciaria La Nacional). Si el proyecto no alcanzara el punto de equilibrio o sufriera cancelación, <strong>la fiduciaria reembolsa el 100% de los fondos aportados</strong> a los compradores.
+    </CajaAlertaJuridica>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 4 — Verificación de la Constructora
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="riesgos-evitar" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 04</span>
+      <span>•</span>
+      <span>Due Diligence</span>
+    </div>
+    <h2>4. Checklist de Seguridad Antes de Reservar</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Antes de transferir la reserva, exige verificar la fiduciaria asignada, la licencia ambiental del Ministerio de Medio Ambiente y el historial de obras entregadas.
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+      <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+        </span>
+        <div>
+          <span class="font-bold text-xs text-navy block">Contrato de Fideicomiso</span>
+          <span class="text-[11px] text-slate-500">Confirmar registro ante la DGII y fiduciaria autorizada.</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+        </span>
+        <div>
+          <span class="font-bold text-xs text-navy block">Historial del Desarrollador</span>
+          <span class="text-[11px] text-slate-500">Revisar proyectos finalizados y entregados con título.</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+        </span>
+        <div>
+          <span class="font-bold text-xs text-navy block">Certificación Ley Confotur</span>
+          <span class="text-[11px] text-slate-500">Verificar exención del 3% de transferencia y 1% de IPI.</span>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+        </span>
+        <div>
+          <span class="font-bold text-xs text-navy block">Cláusulas de Entrega y Plazos</span>
+          <span class="text-[11px] text-slate-500">Estipulación clara de fechas límite y penalidades por demora.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 5 — Rentabilidad y Plusvalía
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="plusvalia-roi" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 05</span>
+      <span>•</span>
+      <span>Retorno Proyectado</span>
+    </div>
+    <h2>5. Rentabilidad por Plusvalía y Alquiler Vacacional</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> La combinación de precio en preventa + rentas turísticas en dólares permite recuperar la inversión inicial en un horizonte de 6 a 8 años con retornos del 8% al 12% anual.
+    </div>
+
+    <!-- Caja de proyección financiera -->
+    <CajaProyeccionFinanciera
+      precioDesde="95,000"
+      moneda="USD"
+      roiMinimo={8}
+      roiMaximo={12}
+    />
+  </section>
+
+  <!-- Banner WhatsApp contextualizado -->
+  <BannerWhatsappGuia
+    badge="Preventa Exclusiva"
+    titulo="¿Deseas conocer los mejores proyectos en planos con Fideicomiso?"
+    subtitulo="Te enviamos las listas de precios en fase cero y las opciones de unidades con mayor potencial de revalorización en Punta Cana y Las Terrenas."
+    mensaje="Hola Alexis, leí la guía de proyectos en planos y me gustaría ver opciones en preventa con cuotas flexibles y Fideicomiso."
+  />
+
+</GuiaLayout>

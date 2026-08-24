@@ -561,6 +561,158 @@ body.a11y-dark-mode [class*="bg-slate-100"] {
 }
 
 /* ========================================================
+   GUIAS Y EDITORIALES EN MODO OSCURO
+   ======================================================== */
+body.a11y-dark-mode .guia-modulo {
+  background: var(--color-surface-dark) !important;
+  border-color: var(--color-border-dark) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.a11y-dark-mode .guia-modulo > h2,
+body.a11y-dark-mode .guia-modulo > h3 {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode .guia-modulo > p,
+body.a11y-dark-mode .guia-modulo > ul > li,
+body.a11y-dark-mode .guia-modulo > ol > li {
+  color: #CBD5E1 !important;
+}
+
+body.a11y-dark-mode .guia-modulo > p strong,
+body.a11y-dark-mode .guia-modulo > ul > li strong,
+body.a11y-dark-mode .guia-modulo > ol > li strong {
+  color: #FFFFFF !important;
+}
+
+/* Resúmenes ejecutivos */
+body.a11y-dark-mode [class*="bg-gold/10"],
+body.a11y-dark-mode .guia-modulo [class*="bg-gold/10"] {
+  background-color: rgba(201, 168, 76, 0.15) !important;
+  color: #F8F7F4 !important;
+  border-left-color: #C9A84C !important;
+}
+
+body.a11y-dark-mode [class*="bg-gold/10"] strong,
+body.a11y-dark-mode .guia-modulo [class*="bg-gold/10"] strong {
+  color: #C9A84C !important;
+}
+
+/* Índice de contenido */
+body.a11y-dark-mode nav.bg-white {
+  background-color: var(--color-surface-dark) !important;
+  border-color: var(--color-border-dark) !important;
+}
+
+body.a11y-dark-mode nav a[class*="bg-slate-50"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode nav a[class*="bg-slate-50"] span.truncate {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode nav a[class*="bg-slate-50"] span.w-6 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #C9A84C !important;
+}
+
+body.a11y-dark-mode nav a[class*="bg-slate-50"]:hover {
+  background-color: rgba(201, 168, 76, 0.2) !important;
+  border-color: rgba(201, 168, 76, 0.4) !important;
+}
+
+/* Cajas de alerta jurídica */
+body.a11y-dark-mode [class*="bg-amber-500/10"] {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-left-color: #f59e0b !important;
+}
+
+body.a11y-dark-mode [class*="bg-amber-500/10"] h4,
+body.a11y-dark-mode [class*="bg-amber-500/10"] p,
+body.a11y-dark-mode [class*="bg-amber-500/10"] div,
+body.a11y-dark-mode [class*="bg-amber-500/10"] strong {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode [class*="bg-blue-500/10"] {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  border-left-color: #3b82f6 !important;
+}
+
+body.a11y-dark-mode [class*="bg-blue-500/10"] h4,
+body.a11y-dark-mode [class*="bg-blue-500/10"] p,
+body.a11y-dark-mode [class*="bg-blue-500/10"] div,
+body.a11y-dark-mode [class*="bg-blue-500/10"] strong {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode [class*="bg-emerald-500/10"] {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-left-color: #10b981 !important;
+}
+
+body.a11y-dark-mode [class*="bg-emerald-500/10"] h4,
+body.a11y-dark-mode [class*="bg-emerald-500/10"] p,
+body.a11y-dark-mode [class*="bg-emerald-500/10"] div,
+body.a11y-dark-mode [class*="bg-emerald-500/10"] strong {
+  color: #F8F7F4 !important;
+}
+
+/* Tarjetas y listas con bg-slate-50 */
+body.a11y-dark-mode [class*="bg-slate-50"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #CBD5E1 !important;
+}
+
+body.a11y-dark-mode [class*="bg-slate-50"] strong,
+body.a11y-dark-mode [class*="bg-slate-50"] h4,
+body.a11y-dark-mode [class*="bg-slate-50"] .font-bold {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode [class*="bg-slate-50"] p,
+body.a11y-dark-mode [class*="bg-slate-50"] [class*="text-slate-500"],
+body.a11y-dark-mode [class*="bg-slate-50"] [class*="text-slate-600"] {
+  color: #94A3B8 !important;
+}
+
+/* Tablas comparativas en modo oscuro */
+body.a11y-dark-mode table thead tr {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.a11y-dark-mode table thead th {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode table tbody tr {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.a11y-dark-mode table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+body.a11y-dark-mode table tbody td {
+  color: #CBD5E1 !important;
+}
+
+body.a11y-dark-mode table tbody td .font-semibold {
+  color: #F8F7F4 !important;
+}
+
+body.a11y-dark-mode [class*="bg-slate-50/50"] {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ========================================================
    DYSLEXIC FONT
    ======================================================== */
 body.a11y-dyslexic-font,

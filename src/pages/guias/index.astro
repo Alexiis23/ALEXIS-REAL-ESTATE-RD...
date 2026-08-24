@@ -11,20 +11,63 @@ const WHATSAPP_PHONE = "18295259993";
 // Catálogo de guías disponibles
 const guias = [
   {
-    titulo: "Cómo Comprar e Invertir en Bienes Raíces en República Dominicana desde España (2026)",
-    descripcion: "Todo lo que un inversionista español necesita saber: requisitos legales, poder notarial consular, título deslindado, transferencias EUR-USD, exenciones Confotur y rentabilidad en alquiler vacacional.",
+    titulo: "Cómo Comprar e Invertir en Bienes Raíces en RD desde España",
+    descripcion: "Requisitos legales con pasaporte, firma consular a distancia, transferencias seguras y exención de impuestos con Ley Confotur.",
     href: "/guias/comprar-en-republica-dominicana-desde-espana",
     categoria: "Inversión Internacional",
     tiempoLectura: "18 min",
     fecha: "Agosto 2026",
     destacada: true,
     modulos: [
-      "Requisitos legales para españoles",
-      "Poder Notarial Consular y Apostilla",
-      "Título Deslindado vs Derechos Posesorios",
-      "Transferencias EUR → USD y Escrow",
-      "Ley Confotur 158-01 (Exenciones fiscales)",
-      "Property Management y ROI (8%-12%)"
+      "Requisitos con pasaporte",
+      "Poder Consular y Apostilla",
+      "Título Deslindado",
+      "Ley Confotur (Exenciones)"
+    ]
+  },
+  {
+    titulo: "Cómo Invertir en Propiedades en Planos y Preventa en RD",
+    descripcion: "Estructura de pagos en obra (10/40/50), rentabilidad por plusvalía del 15%-25% y protección de fondos mediante Fideicomiso (Ley 189-11).",
+    href: "/guias/invertir-en-planos-republica-dominicana",
+    categoria: "Inversión & Preventa",
+    tiempoLectura: "7 min",
+    fecha: "Agosto 2026",
+    destacada: false,
+    modulos: [
+      "Plusvalía 15%-25%",
+      "Plan de Pagos en Obra",
+      "Ley 189-11 de Fideicomiso",
+      "Checklist Constructora"
+    ]
+  },
+  {
+    titulo: "Préstamos Hipotecarios en RD para No Residentes y Extranjeros",
+    descripcion: "Financiamiento bancario de hasta el 80% en dólares o pesos para dominicanos ausentes y compradores de EE. UU., España y Europa.",
+    href: "/guias/prestamos-hipotecarios-no-residentes-republica-dominicana",
+    categoria: "Financiamiento & Bancos",
+    tiempoLectura: "6 min",
+    fecha: "Agosto 2026",
+    destacada: false,
+    modulos: [
+      "Financiamiento hasta 80%",
+      "Plazos hasta 20 años USD",
+      "W-2 / 1040 / IRPF",
+      "Bancos Autorizados"
+    ]
+  },
+  {
+    titulo: "Guía para Comprar Solares, Terrenos y Fincas en RD",
+    descripcion: "Seguridad jurídica con Título Deslindado, verificación de linderos con agrimensor y costos de construcción por m² en 2026.",
+    href: "/guias/comprar-solares-terrenos-republica-dominicana",
+    categoria: "Terrenos & Legal",
+    tiempoLectura: "6 min",
+    fecha: "Agosto 2026",
+    destacada: false,
+    modulos: [
+      "Título Deslindado",
+      "Factibilidad Eléctrica & Agua",
+      "Mensura Agrimensor",
+      "Costos USD/m²"
     ]
   }
 ];
@@ -43,14 +86,14 @@ const guias = [
   <link rel="apple-touch-icon" href="/favicon-192x192.png" />
 
   <!-- SEO -->
-  <title>Guías de Inversión Inmobiliaria en RD | Alexis RD Real Estate</title>
-  <meta name="description" content="Guías editoriales especializadas para inversionistas internacionales y locales en República Dominicana. Aprende sobre aspectos legales, fiscales y financieros del mercado inmobiliario dominicano." />
+  <title>Guías de Inversión y Seguridad Inmobiliaria en RD | Alexis RD Real Estate</title>
+  <meta name="description" content="Toda la información legal, fiscal y financiera que necesitas para comprar villas, apartamentos y solares sin riesgos en Punta Cana, Higüey y Las Terrenas." />
   <meta name="author" content="Alexis Guerrero" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Guías de Inversión Inmobiliaria | Alexis RD Real Estate" />
-  <meta property="og:description" content="Guías editoriales especializadas para inversionistas internacionales y locales en República Dominicana." />
+  <meta property="og:description" content="Centro editorial de asesoría inmobiliaria en República Dominicana. Aprende sobre aspectos legales, fiscales y financieros antes de invertir." />
   <meta property="og:url" content="https://www.alexisrealstate.com/guias" />
 
   <!-- Fuentes -->
@@ -76,30 +119,30 @@ const guias = [
         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
         </svg>
-        Centro de Conocimiento
+        Centro de Asesoría Editorial
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.12] animate-fade-in-up animation-delay-100">
-        Guías de Inversión <br class="hidden sm:block" />
-        <span class="text-gold">Inmobiliaria en RD</span>
+        Guías para Invertir con Seguridad <br class="hidden sm:block" />
+        <span class="text-gold">en República Dominicana</span>
       </h1>
-      <p class="mt-5 text-base sm:text-lg text-white/60 leading-relaxed max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
-        Contenido especializado para inversionistas internacionales y locales. Aprende sobre aspectos legales, fiscales y financieros del mercado inmobiliario dominicano antes de tomar una decisión.
+      <p class="mt-5 text-base sm:text-lg text-white/70 leading-relaxed max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
+        Toda la información legal, fiscal y financiera que necesitas para comprar villas, apartamentos y solares sin riesgos en Punta Cana, Higüey y Las Terrenas.
       </p>
 
       <!-- Stats -->
       <div class="flex flex-wrap justify-center gap-8 mt-10 animate-fade-in-up animation-delay-300">
         <div class="text-center">
           <p class="text-2xl font-black text-gold">12+</p>
-          <p class="text-[11px] text-white/40 uppercase tracking-wider font-semibold mt-1">Años Experiencia</p>
+          <p class="text-[11px] text-white/50 uppercase tracking-wider font-semibold mt-1">Años Experiencia</p>
         </div>
         <div class="text-center">
           <p class="text-2xl font-black text-gold">150+</p>
-          <p class="text-[11px] text-white/40 uppercase tracking-wider font-semibold mt-1">Propiedades Vendidas</p>
+          <p class="text-[11px] text-white/50 uppercase tracking-wider font-semibold mt-1">Propiedades Vendidas</p>
         </div>
         <div class="text-center">
           <p class="text-2xl font-black text-gold">$50M+</p>
-          <p class="text-[11px] text-white/40 uppercase tracking-wider font-semibold mt-1">En Transacciones</p>
+          <p class="text-[11px] text-white/50 uppercase tracking-wider font-semibold mt-1">En Transacciones</p>
         </div>
       </div>
     </div>
@@ -107,86 +150,74 @@ const guias = [
 
   <!-- ─── LISTADO DE GUÍAS ─────────────────────────── -->
   <main class="bg-offwhite -mt-8 relative z-10">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
 
-      {guias.map((guia) => (
-        <a
-          href={guia.href}
-          class="block group mb-8 last:mb-0"
-        >
-          <article class="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-300 overflow-hidden">
-
-            {/* Header de la tarjeta */}
-            <div class="p-6 sm:p-8">
-              {/* Badges */}
-              <div class="flex flex-wrap items-center gap-3 mb-4">
-                {guia.destacada && (
-                  <span class="bg-gold/15 text-gold border border-gold/30 text-[10px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
-                    Destacada
+      <!-- Cuadrícula 2x2 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {guias.map((guia) => (
+          <a
+            href={guia.href}
+            class="block group"
+          >
+            <article class="h-full rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 border bg-navy text-white border-gold/30 shadow-xl hover:border-gold/60 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden">
+              <div>
+                <!-- Badges -->
+                <div class="flex items-center justify-between gap-2 mb-4">
+                  <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border bg-gold/20 text-gold border-gold/40">
+                    {guia.categoria}
                   </span>
+                  <span class="text-xs font-medium flex items-center gap-1.5 text-slate-300">
+                    <svg class="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                    </svg>
+                    {guia.tiempoLectura}
+                  </span>
+                </div>
+
+                <!-- Título -->
+                <h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-3 transition-colors text-white !text-white group-hover:text-gold">
+                  {guia.titulo}
+                </h2>
+
+                <!-- Descripción -->
+                <p class="text-xs sm:text-sm leading-relaxed mb-5 text-slate-200 !text-slate-200">
+                  {guia.descripcion}
+                </p>
+
+                <!-- Módulos / Highlights -->
+                {guia.modulos && (
+                  <div class="flex flex-wrap gap-1.5 mb-6">
+                    {guia.modulos.map((m) => (
+                      <span class="text-[10px] font-semibold px-2.5 py-1 rounded-lg border bg-white/10 text-slate-200 border-white/15">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
                 )}
-                <span class="bg-navy/5 text-navy text-[10px] font-bold uppercase tracking-[0.12em] px-3 py-1.5 rounded-full">
-                  {guia.categoria}
-                </span>
-                <span class="text-slate-300 text-xs">•</span>
-                <span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
-                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
-                  </svg>
-                  {guia.tiempoLectura}
-                </span>
-                <span class="text-slate-300 text-xs">•</span>
-                <span class="text-xs text-slate-400 font-medium">{guia.fecha}</span>
               </div>
 
-              {/* Título */}
-              <h2 class="text-xl sm:text-2xl font-extrabold text-navy leading-snug group-hover:text-gold transition-colors duration-300">
-                {guia.titulo}
-              </h2>
+              <!-- Footer de la tarjeta -->
+              <div class="pt-4 border-t border-white/15 flex items-center justify-between">
+                <span class="text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all text-gold group-hover:text-white">
+                  Leer Guía Completa
+                  <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </span>
+              </div>
+            </article>
+          </a>
+        ))}
+      </div>
 
-              {/* Descripción */}
-              <p class="mt-3 text-sm text-slate-500 leading-relaxed line-clamp-3">
-                {guia.descripcion}
-              </p>
-
-              {/* Módulos */}
-              {guia.modulos && (
-                <div class="mt-5 flex flex-wrap gap-2">
-                  {guia.modulos.map((modulo) => (
-                    <span class="bg-slate-50 text-slate-500 text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-slate-100">
-                      {modulo}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Footer de la tarjeta */}
-            <div class="bg-slate-50/50 border-t border-slate-100 px-6 sm:px-8 py-4 flex items-center justify-between">
-              <span class="text-xs text-slate-400 font-medium">Guía completa con 6 módulos</span>
-              <span class="inline-flex items-center gap-2 text-xs font-bold text-gold group-hover:text-navy transition-colors">
-                Leer guía completa
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                </svg>
-              </span>
-            </div>
-          </article>
-        </a>
-      ))}
-
-      <!-- CTA de contacto -->
-      <div class="mt-16 bg-navy rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden">
-
+      <!-- CTA de contacto general -->
+      <div class="mt-16 bg-navy text-white rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden border border-gold/20 shadow-xl">
         <div class="relative">
-          <h3 class="text-xl sm:text-2xl font-black text-white">
-            ¿No encuentras lo que buscas?
+          <h3 class="text-xl sm:text-2xl font-black text-white !text-white">
+            ¿Tienes una consulta específica sobre una propiedad?
           </h3>
-          <p class="mt-3 text-white/75 text-sm leading-relaxed max-w-lg mx-auto">
-            Consulta directamente con nuestro equipo de asesores especializados. Respondemos en menos de 24 horas.
+          <p class="mt-3 text-slate-200 !text-slate-200 text-sm leading-relaxed max-w-lg mx-auto font-medium">
+            Consulta directamente con nuestro equipo de asesores especializados en República Dominicana. Respondemos en menos de 24 horas.
           </p>
           <a
             href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("Hola Alexis, tengo preguntas sobre inversión inmobiliaria en República Dominicana y me gustaría asesoría personalizada.")}`}
@@ -198,7 +229,7 @@ const guias = [
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
               <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.587l-.386-.232-3.348 1.122 1.122-3.348-.232-.386A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
             </svg>
-            Hablar con un Asesor
+            Hablar con un Asesor por WhatsApp
           </a>
         </div>
       </div>

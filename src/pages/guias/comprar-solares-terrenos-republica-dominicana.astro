@@ -1,0 +1,189 @@
+---
+// src/pages/guias/comprar-solares-terrenos-republica-dominicana.astro
+import GuiaLayout from "../../layouts/GuiaLayout.astro";
+import IndiceContenido, { type ItemIndice } from "../../components/guias/IndiceContenido.astro";
+import CajaAlertaJuridica from "../../components/guias/CajaAlertaJuridica.astro";
+import BannerWhatsappGuia from "../../components/guias/BannerWhatsappGuia.astro";
+
+const itemsIndice: ItemIndice[] = [
+  { id: "titulo-deslindado", titulo: "1. Título Deslindado vs. Constancia", tipoIcono: "shield" },
+  { id: "factibilidad-servicios", titulo: "2. Factibilidad y Servicios Básicos", tipoIcono: "bolt" },
+  { id: "agrimensor-mensura", titulo: "3. Inspección Física con Agrimensor", tipoIcono: "ruler" },
+  { id: "costos-construccion", titulo: "4. Costos Estimados de Construcción", tipoIcono: "crane" }
+];
+---
+
+<GuiaLayout
+  titulo="Guía para Comprar Solares, Terrenos y Fincas en República Dominicana"
+  metaDescripcion="Aprende a verificar la seguridad legal de un terreno, evitar solares sin deslinde y calcular los costos de construcción por metro cuadrado en Higüey, Punta Cana y Las Terrenas."
+  categoria="Terrenos & Legal"
+  tiempoLectura="6 min"
+  fechaActualizacion="2026-08-24"
+>
+
+  <!-- ─── ÍNDICE INTERACTIVO DE CONTENIDO ─── -->
+  <IndiceContenido items={itemsIndice} />
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 1 — Título Deslindado vs. Carta de Constancia
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="titulo-deslindado" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 01</span>
+      <span>•</span>
+      <span>Rigor Jurídico</span>
+    </div>
+    <h2>1. La Regla de Oro: Certificado de Título con Deslinde</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Nunca compres un terreno que solo tenga "Carta de Constancia". Solo un Título Deslindado con plano catastral aprobado garantiza que eres el dueño legítimo de esa porción exacta.
+    </div>
+
+    <p>
+      Comprar un terreno o solar es una de las inversiones más rentables en el país, pero exige el mayor rigor técnico y legal. En República Dominicana coexisten dos figuras jurídicas sobre la tierra:
+    </p>
+
+    <!-- Alerta crítica -->
+    <CajaAlertaJuridica tipo="warning" titulo="Diferencia Crucial entre Título Deslindado y Carta de Constancia">
+      <div class="space-y-2 mt-1">
+        <p>
+          <strong>• Título Deslindado (100% Seguro):</strong> El terreno cuenta con designación catastral individual, coordenadas GPS georreferenciadas y linderos validados por el Registro de Títulos. Eres el dueño exclusivo y definitivo de esa parcela.
+        </p>
+        <p>
+          <strong>• Carta de Constancia / Derechos Posesorios (ALTO RIESGO):</strong> Solo acredita que posees un porcentaje indiviso dentro de una propiedad mayor. No define con precisión dónde están tus límites y expone a disputas de herederos o sobreventas.
+        </p>
+      </div>
+    </CajaAlertaJuridica>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 2 — Factibilidad Técnica y Acceso a Servicios
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="factibilidad-servicios" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 02</span>
+      <span>•</span>
+      <span>Factibilidad Técnica</span>
+    </div>
+    <h2>2. Factibilidad de Servicios Básicos y Normativa de Suelo</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Antes de formalizar la compra, audita la acometida eléctrica (CEPM/Edeeste), el suministro de agua (pozo o red) y la densidad de uso de suelo permitida en el ayuntamiento.
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-4">
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+        <div class="flex items-center gap-2 text-navy font-bold text-xs sm:text-sm">
+          <span class="w-2 h-2 rounded-full bg-gold"></span>
+          Suministro Eléctrico
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Verificar si el tendido eléctrico llega a pie de lote o la distancia exacta al transformador más cercano (CEPM en la zona este o Edeeste/Edenorte).
+        </p>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+        <div class="flex items-center gap-2 text-navy font-bold text-xs sm:text-sm">
+          <span class="w-2 h-2 rounded-full bg-gold"></span>
+          Agua Potable
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Confirmar si la zona cuenta con red municipal o si se requiere la perforación de un pozo tubular y sistema de filtrado.
+        </p>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+        <div class="flex items-center gap-2 text-navy font-bold text-xs sm:text-sm">
+          <span class="w-2 h-2 rounded-full bg-gold"></span>
+          Acceso Vial y Servidumbre
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Asegurarse de que el terreno cuente con acceso directo a vía pública o servidumbre de paso debidamente inscrita en el Registro de Títulos.
+        </p>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+        <div class="flex items-center gap-2 text-navy font-bold text-xs sm:text-sm">
+          <span class="w-2 h-2 rounded-full bg-gold"></span>
+          Uso de Suelo Municipal
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Consultar en el ayuntamiento correspondiente la densidad permitida (número de niveles máximos y tipología comercial o residencial).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 3 — Inspección Física con Agrimensor
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="agrimensor-mensura" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 03</span>
+      <span>•</span>
+      <span>Topografía & Suelos</span>
+    </div>
+    <h2>3. Inspección Física con Agrimensor y Estudio de Suelos</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Contrata siempre a un agrimensor certificado (CODIA) para replantear los hitos físicos con GPS y realizar un estudio geotécnico antes del diseño arquitectónico.
+    </div>
+
+    <p>
+      La comprobación sobre el terreno garantiza que los linderos físicos coincidan al 100% con los planos catastrales aprobados y descarta afectaciones por cañadas o fallas geológicas.
+    </p>
+
+    <CajaAlertaJuridica tipo="info" titulo="Paso Previo Obligatorio: Mensura Catastral">
+      Un agrimensor colegiado colocará las <strong>bornas o hitos de concreto georreferenciados</strong> en los vértices del terreno, asegurando que ningún vecino haya invadido linderos.
+    </CajaAlertaJuridica>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECCIÓN 4 — Costos Estimados de Construcción por m²
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="costos-construccion" class="guia-modulo scroll-mt-28">
+    <div class="flex items-center gap-2 text-gold font-bold text-xs uppercase tracking-widest mb-1.5">
+      <span>Módulo 04</span>
+      <span>•</span>
+      <span>Presupuesto de Obra</span>
+    </div>
+    <h2>4. Costos Promedio de Construcción por m² (2026)</h2>
+
+    <!-- Resumen ejecutivo -->
+    <div class="bg-gold/10 border-l-3 border-gold rounded-r-xl p-3.5 mb-6 text-xs sm:text-sm text-navy font-medium leading-relaxed">
+      <strong>Resumen ejecutivo:</strong> Los costos de edificación oscilan entre $550 y $1,400+ USD/m² dependiendo del nivel de acabados, domótica y equipamiento vacacional.
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-center my-6">
+      <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+        <span class="text-xl sm:text-2xl font-black text-navy block">$550 – $700 USD/m²</span>
+        <span class="text-xs font-bold uppercase text-gold block mt-1">Gama Estándar</span>
+        <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">Viviendas unifamiliares con acabados locales de calidad y pisos cerámicos.</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+        <span class="text-xl sm:text-2xl font-black text-navy block">$750 – $950 USD/m²</span>
+        <span class="text-xs font-bold uppercase text-gold block mt-1">Gama Media-Alta</span>
+        <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">Pisos de porcelanato, madera preciosa (roble), cocinas modulares y climatización.</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-navy text-white border border-gold/40 shadow-md">
+        <span class="text-xl sm:text-2xl font-black text-gold !text-gold block">$1,000 – $1,400+ USD/m²</span>
+        <span class="text-xs font-bold uppercase text-white !text-white block mt-1">Villas de Lujo</span>
+        <p class="text-[11px] text-slate-200 !text-slate-200 mt-2 leading-relaxed">Mármol, ventanería europea, domótica integral, piscina infinity y paisajismo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner WhatsApp contextualizado -->
+  <BannerWhatsappGuia
+    badge="Búsqueda de Terrenos"
+    titulo="¿Buscas un solar o terreno con título deslindado en RD?"
+    subtitulo="Contamos con un catálogo auditado de solares residenciales y comerciales listos para construir en Punta Cana, Higüey y Las Terrenas."
+    mensaje="Hola Alexis, estoy buscando un solar o terreno con título deslindado en RD. ¿Qué opciones tienen disponibles?"
+  />
+
+</GuiaLayout>

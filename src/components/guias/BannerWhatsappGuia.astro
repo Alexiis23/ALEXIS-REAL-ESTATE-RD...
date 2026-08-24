@@ -2,51 +2,48 @@
 // src/components/guias/BannerWhatsappGuia.astro
 interface Props {
   titulo?: string;
+  subtitulo?: string;
+  badge?: string;
   mensaje?: string;
 }
 
 const WHATSAPP_PHONE = "18295259993";
 
 const {
-  titulo = "¿Tienes dudas sobre el proceso legal o fiscal?",
-  mensaje = "Hola Alexis, leí la guía de inversión y tengo preguntas sobre el proceso legal y fiscal para comprar en República Dominicana."
+  badge = "Asesoría Gratuita",
+  titulo = "¿Deseas verificar un proyecto o la titulación de un terreno?",
+  subtitulo = "Evita riesgos legales y confirma si la propiedad cuenta con título deslindado y exenciones fiscales antes de comprometer fondos.",
+  mensaje = "Hola Alexis, estoy leyendo la guía de inversión para españoles y me gustaría consultar la disponibilidad de proyectos con Ley Confotur."
 } = Astro.props;
+
+const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(mensaje)}`;
 ---
 
-<aside class="rounded-2xl overflow-hidden my-10 shadow-lg border border-gold/20">
-  <div class="relative bg-navy p-6 sm:p-8">
-
-    <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
-      <!-- Icono -->
-      <div class="w-14 h-14 rounded-xl bg-gold/20 border border-gold/30 flex items-center justify-center shrink-0">
-        <svg class="w-7 h-7 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-        </svg>
-      </div>
-
-      <!-- Texto -->
-      <div class="flex-1 text-center sm:text-left">
-        <h3 class="text-lg sm:text-xl font-bold text-white !text-white leading-snug">
-          {titulo}
-        </h3>
-        <p class="text-slate-200 !text-slate-200 text-sm mt-2 leading-relaxed font-medium">
-          Recibe orientación gratuita y sin compromiso de un especialista en inversiones inmobiliarias en RD.
-        </p>
-      </div>
-
-      <!-- CTA -->
-      <a
-        href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(mensaje)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2.5 shrink-0 group"
-      >
-        <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.587l-.386-.232-3.348 1.122 1.122-3.348-.232-.386A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-        </svg>
-        Consulta Gratuita
-      </a>
+<aside class="bg-navy text-white rounded-3xl p-6 sm:p-8 my-10 border border-gold/30 shadow-xl relative overflow-hidden">
+  <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="text-center md:text-left space-y-2.5">
+      <span class="bg-gold/20 text-gold border border-gold/40 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block">
+        {badge}
+      </span>
+      <h3 class="text-lg sm:text-xl font-bold tracking-tight text-white !text-white">
+        {titulo}
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-200 !text-slate-200 max-w-xl leading-relaxed font-medium">
+        {subtitulo}
+      </p>
     </div>
+
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2.5 shrink-0 group"
+    >
+      <svg class="w-4.5 h-4.5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.587l-.386-.232-3.348 1.122 1.122-3.348-.232-.386A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
+      <span>Contactar por WhatsApp</span>
+    </a>
   </div>
 </aside>

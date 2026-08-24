@@ -1,0 +1,43 @@
+---
+// src/components/guias/TarjetasMetricasFiscales.astro
+const metricas = [
+  {
+    cifra: "0%",
+    subtitulo: "Impuesto de Transferencia",
+    detalle: "Exención del 3% DGII sobre el valor del inmueble.",
+    destacado: true
+  },
+  {
+    cifra: "15 Años",
+    subtitulo: "Exención de IPI",
+    detalle: "0% de Impuesto al Patrimonio Inmobiliario (ahorro anual del 1%).",
+    destacado: false
+  },
+  {
+    cifra: "8% - 12%",
+    subtitulo: "ROI Estimado en USD",
+    detalle: "Rendimiento neto anual mediante gestión de alquiler vacacional.",
+    destacado: false
+  }
+];
+---
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+  {metricas.map((m) => (
+    <div class={`p-6 rounded-2xl border text-center transition-all ${
+      m.destacado 
+        ? "bg-navy text-white border-gold/40 shadow-md" 
+        : "bg-slate-50 text-slate-800 border-slate-200"
+    }`}>
+      <span class={`text-3xl sm:text-4xl font-black block tracking-tight ${m.destacado ? "text-gold !text-gold" : "text-navy"}`}>
+        {m.cifra}
+      </span>
+      <span class={`text-xs font-bold uppercase tracking-wider block mt-1.5 ${m.destacado ? "text-white !text-white" : "text-navy"}`}>
+        {m.subtitulo}
+      </span>
+      <p class={`text-xs mt-2 leading-relaxed ${m.destacado ? "text-slate-200 !text-slate-200" : "text-slate-500"}`}>
+        {m.detalle}
+      </p>
+    </div>
+  ))}
+</div>

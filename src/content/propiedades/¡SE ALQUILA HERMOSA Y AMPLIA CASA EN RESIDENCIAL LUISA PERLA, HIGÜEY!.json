@@ -1,0 +1,17 @@
+{
+  "descripcion": "Si buscas espacio, comodidad y una excelente ubicación, esta hermosa casa puede ser ideal para ti y tu familia. 🤍\n\n 4 habitaciones\n Habitación principal con baño privado y walking closet\n 3 baños\n 2 cocinas\n Amplia sala\n Balcón\n Galería\n Terraza\n Área de lavado\n Amplio patio con gazebo\n Marquesina\n Agua incluida\n\n Residencial Luisa Perla, Higüey\n\n ALQUILER: US$1,000 mensuales\n\n Modalidad de renta:\n* 2 depósitos de inicio\n* ½ depósito por gestión\n* Monto de contrato\n\n Una propiedad amplia, cómoda y con todo lo necesario para disfrutar de un excelente hogar.",
+  "precioUsd": 1000,
+  "regimen": "Alquiler",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 3,
+  "parqueos": 1,
+  "latitud": 18.602,
+  "longitud": -68.719,
+  "imagenPrincipal": "../../assets/propiedades/¡SE ALQUILA HERMOSA Y AMPLIA CASA EN RESIDENCIAL LUISA PERLA, HIGÜEY!/imagenPrincipal.jpg",
+  "galeria": [],
+  "tipoVideo": "recorrido-virtual"
+}

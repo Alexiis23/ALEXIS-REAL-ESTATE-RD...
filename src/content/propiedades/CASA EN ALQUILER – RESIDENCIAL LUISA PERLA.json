@@ -1,0 +1,18 @@
+{
+  "descripcion": " ¡Hermosa casa disponible en alquiler! \n\n Residencial Luisa Perla\n\n Primer Nivel\n 3 habitaciones\n 3 baños\n Sala\n Cocina\n Comedor\n Área de lavado\n Parqueo techado\n Agua permanente\n\n Alquiler: RD$35,000 mensuales",
+  "precioDop": 35000,
+  "regimen": "Alquiler",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Casa",
+  "estado": "En planos",
+  "habitaciones": 3,
+  "banos": 3,
+  "parqueos": 1,
+  "latitud": 18.604,
+  "longitud": -68.719,
+  "ubicacion": "Residencial Luisa Perla - Higuey",
+  "imagenPrincipal": "../../assets/propiedades/CASA EN ALQUILER – RESIDENCIAL LUISA PERLA/imagenPrincipal.jpg",
+  "galeria": [],
+  "tipoVideo": "recorrido-virtual"
+}

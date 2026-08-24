@@ -16,10 +16,8 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
 
 {totalFotos > 0 ? (
   <section class="relative">
-    <!-- Mosaico Desktop / Foto Única -->
     <div class="rounded-3xl overflow-hidden border border-slate-100 shadow-md bg-slate-900 relative">
-      {totalFotos === 1 ? (
-        <!-- Vista Foto Única -->
+      {totalFotos === 1 && (
         <div
           class="relative w-full h-[320px] sm:h-[400px] md:h-[460px] overflow-hidden group cursor-pointer"
           data-foto-index="0"
@@ -32,12 +30,11 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
           />
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
         </div>
-      ) : (
-        <!-- Vista Múltiples Fotos: Grid Editorial y Móvil -->
-        <>
-          <!-- Vista Desktop: Grid Editorial -->
+      )}
+
+      {totalFotos > 1 && (
+        <div>
           <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[460px] relative">
-            <!-- Foto 1 (Principal Grande - 2 columnas x 2 filas) -->
             <div
               class="col-span-2 row-span-2 overflow-hidden relative group cursor-pointer"
               data-foto-index="0"
@@ -51,7 +48,6 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
               <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"></div>
             </div>
 
-            <!-- Fotos 2 a 5 (Laterales Derecha) -->
             {fotosMosaico.slice(1, 5).map((foto, idx) => (
               <div
                 class="overflow-hidden relative group cursor-pointer"
@@ -67,13 +63,11 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
               </div>
             ))}
 
-            <!-- Si hay menos de 5 fotos, rellenar el espacio visualmente -->
             {fotosMosaico.length < 5 && Array.from({ length: 5 - fotosMosaico.length }).map(() => (
               <div class="bg-slate-800/50 hidden md:block"></div>
             ))}
           </div>
 
-          <!-- Vista Móvil: Foto Principal con Badge de Contador -->
           <div class="md:hidden relative aspect-[16/10] overflow-hidden cursor-pointer" data-foto-index="0">
             <img
               src={fotos[0]}
@@ -86,7 +80,6 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
             </div>
           </div>
 
-          <!-- Botón Flotante "Ver todas las fotos" -->
           <button
             id="btn-abrir-lightbox"
             type="button"
@@ -97,7 +90,7 @@ const fotosMosaico = fotos.slice(0, 5); // 1 grande + hasta 4 secundarias
             </svg>
             Ver las {totalFotos} fotos
           </button>
-        </>
+        </div>
       )}
     </div>
 

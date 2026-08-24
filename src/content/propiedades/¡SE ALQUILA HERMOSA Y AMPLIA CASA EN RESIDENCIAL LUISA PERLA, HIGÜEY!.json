@@ -12,6 +12,16 @@
   "latitud": 18.602,
   "longitud": -68.719,
   "imagenPrincipal": "../../assets/propiedades/¡SE ALQUILA HERMOSA Y AMPLIA CASA EN RESIDENCIAL LUISA PERLA, HIGÜEY!/imagenPrincipal.jpg",
-  "galeria": [],
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/0a544890-6cfc-4146-9404-633ab180254e-1787588823980.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/1ae7838d-02ab-45a4-84fb-14354be12c8f-1787588825053.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/4d8c9ee5-c1a3-4a13-8b45-990383c0b45f-1787588825580.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/6f5c3ae0-dc11-4db8-a109-3f7549f0ff98-1787588826324.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/41c5b221-4b63-4b31-994a-a41b9b194852-1787588826789.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/51f7c23e-b99f-4c38-a31f-839be0f0c125-1787588827405.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/67b4fc1e-543c-4719-a647-5a2023347792-1787588827956.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/82d01881-00c3-4e06-b414-fb25d96a8e66-1787588828419.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/se-alquila-hermosa-y-amplia-casa-en-residencial-luisa-perla-hig%C3%BCey/14300236-3f88-4ea9-930e-e1dfaa860c32-1787588828884.webp"
+  ],
   "tipoVideo": "recorrido-virtual"
 }

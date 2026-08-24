@@ -1,0 +1,32 @@
+{
+  "descripcion": "Excelente oportunidad para adquirir una propiedad 100% operativa, generando ingresos mensuales y con alto potencial de crecimiento. 📈\n\n Ubicación: Higüey, La Altagracia 🇩🇴\n Terreno: 300 m²\n Construcción: 576 m²\n Tasación disponible\n Excelente estado estructural y estético\n\n DISTRIBUCIÓN\n\nEl edificio cuenta con 6 apartamentos amplios, cada uno con:\n\n 3 habitaciones\n 2 baños\n Sala\n Comedor\n Cocina\n Área de lavado\n Balcón privado\n\n INVERSIÓN Y RENTABILIDAD\n\n Ingresos actuales: RD$150,000 mensuales\n Posibilidad de aumentar la rentabilidad llevando las rentas al valor actual del mercado.\n\n PRECIO DE VENTA: RD$24,000,000 NEGOCIABLE\n\n Una propiedad ideal para inversionistas que buscan flujo de efectivo desde el primer día y potencial de valorización.\n\n FINANCIAMIENTO DISPONIBLE\nTe ofrecemos asesoría y acompañamiento durante el proceso de financiamiento con el banco de tu preferencia.",
+  "precioDop": 24000000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Apartamento",
+  "estado": "Listo",
+  "habitaciones": 3,
+  "banos": 2,
+  "parqueos": 0,
+  "area": 300,
+  "latitud": 18.618,
+  "longitud": -68.718,
+  "ubicacion": "Higuey, La Altagracia",
+  "imagenPrincipal": "../../assets/propiedades/EDIFICIO RESIDENCIAL EN VENTA — HIGÜEY/imagenPrincipal.jpg",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/0ce68c04-44ef-4915-acd3-00c70da1c558-1787587890899.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/9dc563d0-33ff-4aaf-a88f-7977400801f4-1787587892193.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/28d9d94d-714f-40a2-a14f-4efaeeb92049-1787587893533.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/3157342a-eb76-45b8-8519-c78fd16562f1-1787587894929.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/38394537-e91d-408e-9a55-81c3139001c5-1787587896493.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/69544235-9585-41f9-81b9-1ba92819e2af-1787587897226.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/bcbdad48-432e-4a8b-a4df-a7393f2e53d8-1787587898475.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/bd84302e-e041-412d-8ca8-0a9fa51440ee-1787587899907.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/cbfdd7d3-50b5-48b1-af87-988408efcd17-1787587901251.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/e76c2b5f-409e-47ae-9b6b-5e1490311219-1787587902431.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/ef39d1d9-af2b-4934-b3e3-d7dbe4c8b774-1787587903951.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/edificio-residencial-en-venta--hig%C3%BCey/ffda9d49-b3c6-43b4-bbde-2da01f86c39a-1787587905848.webp"
+  ],
+  "tipoVideo": "recorrido-virtual"
+}

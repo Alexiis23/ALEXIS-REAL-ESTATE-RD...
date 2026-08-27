@@ -1,0 +1,19 @@
+{
+  "descripcion": "Se vende complejo hotelero-comercial totalmente operativo, con una impresionante extensión de 18,000 m² y todas sus instalaciones funcionando al 100%.\n\nCOMPOSICIÓN DEL PROYECTO:\n\n28 locales comerciales\n75 habitaciones\n1 Casa Club\n2 restaurantes\nOperación 100% activa\n\nVALOR DE VENTA: US$22,000,000\n\nUna oportunidad dirigida a inversionistas, grupos hoteleros y fondos de inversión que buscan adquirir un activo inmobiliario de gran escala, con infraestructura establecida y múltiples fuentes de generación de ingresos.\n\nPara información financiera, ubicación, documentación y coordinar una presentación privada, contactar directamente.\n\nUna propiedad de esta magnitud no se presenta todos los días.",
+  "precioUsd": 22000000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Hotel",
+  "estado": "Listo",
+  "habitaciones": 75,
+  "banos": 75,
+  "parqueos": 1,
+  "area": 18000,
+  "latitud": 18.672,
+  "longitud": -68.406,
+  "ubicacion": "Bavaro, Punta Cana",
+  "imagenPrincipal": "../../assets/propiedades/¡EXTRAORDINARIA OPORTUNIDAD DE INVERSIÓN HOTELERA!/imagenPrincipal.jpg",
+  "galeria": [],
+  "tipoVideo": "recorrido-virtual"
+}

@@ -10,8 +10,8 @@
   "banos": 2.5,
   "parqueos": 2,
   "area": 256,
-  "latitud": 19.305,
-  "longitud": -68.575,
+  "latitud": 19.317,
+  "longitud": -69.539,
   "ubicacion": "Villa mar - Las terrenas ",
   "imagenPrincipal": "../../assets/propiedades/Villa Mar — Townhouse en Las Terrenas/imagenPrincipal.jpg",
   "galeria": [
@@ -40,5 +40,6 @@
     "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-mar--townhouse-en-las-terrenas/e9a3142b-eb28-4838-b1eb-0a39a5dd83b9-1786989456201.webp",
     "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-mar--townhouse-en-las-terrenas/f3369029-d4c1-47c8-9ec4-96a423adc927-1786989456961.webp",
     "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/villa-mar--townhouse-en-las-terrenas/fce147ed-bfa6-468f-9c41-e4577a679791-1786989457741.webp"
-  ]
+  ],
+  "tipoVideo": "recorrido-virtual"
 }

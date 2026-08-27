@@ -11,5 +11,7 @@
   "parqueos": 1,
   "ubicacion": "Residencial Anamelia Higuey",
   "imagenPrincipal": "../../assets/propiedades/¡Haz realidad el sueño de vivir en una casa exclusiva en Residencial Anamelia, Higüey!/imagenPrincipal.jpg",
-  "galeria": []
+  "galeria": [],
+  "tipoVideo": "tour-villa",
+  "videoUrl": "https://youtu.be/jTgbtmGsIPY"
 }

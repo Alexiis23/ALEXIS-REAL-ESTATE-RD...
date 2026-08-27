@@ -1,0 +1,26 @@
+{
+  "descripcion": "Se vende amplio terreno en una de las zonas con mayor potencial turístico de la República Dominicana.\n\nUbicación: Cabo Engaño\nExtensión: 2.9 millones de m²\nCosta y playa: aproximadamente 1.5 km de frente costero\nDocumentación: Título y deslinde\nPrecio: US$110 por m², negociable\n\nUna excelente oportunidad para desarrollar un proyecto turístico, hotelero, villas de lujo o un gran desarrollo inmobiliario frente al mar.",
+  "precioUsd": 319000000,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Solar",
+  "estado": "Listo",
+  "habitaciones": 0,
+  "banos": 0,
+  "parqueos": 0,
+  "area": 2900000,
+  "latitud": 18.616,
+  "longitud": -68.326,
+  "ubicacion": "Cabo Engaño - Punta Cana",
+  "imagenPrincipal": "../../assets/propiedades/TERRENO FRENTE AL MAR - CABO ENGAÑO - PUNTA CANA/imagenPrincipal.jpg",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/4f2ef68e-bed7-4442-88c5-1fc03aa4d611-1787848811824.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/66800710-131c-42f6-91fe-de4df266eaff-1787848813032.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/a3614ae5-981e-4812-b278-87e9413793d0-1787848814111.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/aa159b41-85a4-47fc-83f3-b0ce400eb3b2-1787848815172.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/d4edce03-daad-41e4-9e43-51c65cb7660c-1787848816446.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/terreno-frente-al-mar---cabo-enga%C3%B1o---punta-cana/e6517b4e-fc6e-4489-896a-cc12d67349ae-1787848817607.webp"
+  ],
+  "tipoVideo": "recorrido-virtual"
+}

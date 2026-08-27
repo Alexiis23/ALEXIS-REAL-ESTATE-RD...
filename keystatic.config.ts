@@ -76,7 +76,8 @@ export default config({
             { label: 'Villa', value: 'Villa' },
             { label: 'Apartamento', value: 'Apartamento' },
             { label: 'Casa', value: 'Casa' },
-            { label: 'Solar / Terreno', value: 'Solar' }
+            { label: 'Solar / Terreno', value: 'Solar' },
+            { label: 'Hotel', value: 'Hotel' }
           ],
           defaultValue: 'Apartamento'
         }),

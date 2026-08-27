@@ -14,6 +14,11 @@
   "longitud": -68.406,
   "ubicacion": "Bavaro, Punta Cana",
   "imagenPrincipal": "../../assets/propiedades/¡EXTRAORDINARIA OPORTUNIDAD DE INVERSIÓN HOTELERA!/imagenPrincipal.jpg",
-  "galeria": [],
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/extraordinaria-oportunidad-de-inversi%C3%B3n-hotelera/2e10a76f-69e9-4563-9be2-1fd8c80f4031-1787851916239.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/extraordinaria-oportunidad-de-inversi%C3%B3n-hotelera/499a9023-e230-4075-9690-d09c5995ca65-1787851917089.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/extraordinaria-oportunidad-de-inversi%C3%B3n-hotelera/a1682466-f4f0-46ae-b7ee-8df085584715-1787851917944.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/extraordinaria-oportunidad-de-inversi%C3%B3n-hotelera/watermarked-img-7391384388708005484-1787851918949.webp"
+  ],
   "tipoVideo": "recorrido-virtual"
 }

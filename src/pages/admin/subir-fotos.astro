@@ -16,7 +16,7 @@ const imagenes = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-// Obtener todas las propiedades para mostrarlas en el desplegable
+// Obtener todas las propiedades ordenadas alfabéticamente por título
 const propertiesCollection = await getCollection("propiedades");
 const properties = propertiesCollection.map((entry) => {
   const imgRaw = String(entry.data.imagenPrincipal || "");
@@ -54,14 +54,25 @@ const properties = propertiesCollection.map((entry) => {
     id: entry.id,
     titulo: entry.data.titulo || entry.id.replace(/-/g, " "),
     previewUrl,
+    tipo: entry.data.tipo || "",
+    ubicacion: entry.data.ubicacion || "",
   };
-});
+}).sort((a, b) => a.titulo.localeCompare(b.titulo, "es", { sensitivity: "base" }));
 
 // Mapa de ID → URL de preview para el JS del cliente
 const previewMap: Record<string, string> = {};
 properties.forEach((p) => {
   previewMap[p.id] = p.previewUrl;
 });
+
+// Datos completos para el combobox del cliente
+const comboboxData = properties.map((p) => ({
+  id: p.id,
+  titulo: p.titulo,
+  previewUrl: p.previewUrl,
+  tipo: p.tipo,
+  ubicacion: p.ubicacion,
+}));
 ---
 
 <!doctype html>
@@ -121,7 +132,7 @@ properties.forEach((p) => {
     <!-- ─── PANEL CENTRAL DE CARGA ─────────────────────────── -->
     <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
       <div
-        class="bg-white rounded-3xl shadow-[0_4px_40px_-8px_rgba(11,25,44,0.12)] border border-slate-100 overflow-hidden"
+        class="admin-panel bg-white rounded-3xl shadow-[0_4px_40px_-8px_rgba(11,25,44,0.12)] border border-slate-100 overflow-hidden"
       >
         <!-- Encabezado de Sección -->
         <div
@@ -161,11 +172,10 @@ properties.forEach((p) => {
 
         <!-- Formulario de Administración -->
         <form id="upload-form" class="p-8 space-y-6">
-          <!-- 1. Selección de Propiedad -->
+          <!-- 1. Selección de Propiedad (Combobox Personalizado) -->
           <div class="flex flex-col gap-2">
             <label
-              for="propertySlug"
-              class="text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5"
+              class="admin-label text-xs font-bold text-navy uppercase tracking-wider flex items-center gap-1.5"
             >
               <svg
                 class="w-3.5 h-3.5 text-gold"
@@ -182,28 +192,47 @@ properties.forEach((p) => {
               </svg>
               Seleccionar Propiedad <span class="text-gold">*</span>
             </label>
-            <select
-              id="propertySlug"
-              name="propertySlug"
-              required
-              class="admin-input"
-            >
-              <option value="" disabled selected
-                >Selecciona la propiedad de destino...</option
-              >
-              {
-                properties.map((p) => (
-                  <option value={p.id}>
-                    {p.titulo} ({p.id})
-                  </option>
-                ))
-              }
-            </select>
+
+            <!-- Hidden input que envía el valor al formulario -->
+            <input type="hidden" id="propertySlug" name="propertySlug" required />
+
+            <!-- Combobox Container -->
+            <div id="combobox-wrapper" class="combobox-wrapper relative">
+              <!-- Campo de Búsqueda -->
+              <div class="combobox-trigger admin-input flex items-center gap-2 cursor-text" id="combobox-trigger">
+                <svg class="w-4 h-4 text-slate-400 shrink-0 combobox-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input
+                  type="text"
+                  id="combobox-search"
+                  placeholder="Buscar propiedad por nombre o ID..."
+                  autocomplete="off"
+                  class="combobox-search-input flex-1 bg-transparent border-none outline-none text-sm"
+                />
+                <span id="combobox-count" class="combobox-count text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0"></span>
+                <svg class="w-4 h-4 text-slate-400 shrink-0 combobox-chevron transition-transform duration-200" id="combobox-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+
+              <!-- Dropdown de Opciones -->
+              <div id="combobox-dropdown" class="combobox-dropdown hidden absolute z-50 left-0 right-0 mt-1 max-h-72 overflow-y-auto rounded-xl border shadow-xl">
+                <ul id="combobox-list" class="combobox-list py-1"></ul>
+                <div id="combobox-empty" class="hidden px-4 py-6 text-center">
+                  <svg class="w-8 h-8 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="combobox-empty-text text-xs font-semibold">No se encontraron propiedades</p>
+                  <p class="combobox-empty-hint text-[10px] mt-0.5">Intenta con otro término de búsqueda</p>
+                </div>
+              </div>
+            </div>
 
             <!-- Preview de la imagen principal -->
             <div
               id="property-preview"
-              class="hidden mt-4 rounded-2xl overflow-hidden border border-slate-200 bg-[#f8fafc] transition-all duration-300"
+              class="hidden mt-4 rounded-2xl overflow-hidden border border-slate-200 preview-card transition-all duration-300"
             >
               <div class="flex items-center gap-4 p-4">
                 <div
@@ -219,13 +248,13 @@ properties.forEach((p) => {
                 </div>
                 <div class="flex-1 min-w-0">
                   <p
-                    class="text-xs font-bold text-navy uppercase tracking-wider"
+                    class="admin-label text-xs font-bold text-navy uppercase tracking-wider"
                   >
                     Propiedad seleccionada
                   </p>
                   <p
                     id="preview-title"
-                    class="text-sm font-semibold text-slate-700 truncate mt-0.5"
+                    class="preview-title text-sm font-semibold text-slate-700 truncate mt-0.5"
                   >
                   </p>
                 </div>
@@ -491,10 +520,18 @@ properties.forEach((p) => {
       id="preview-map-data"
       set:html={JSON.stringify(previewMap)}
     />
+    <script
+      type="application/json"
+      id="combobox-data"
+      set:html={JSON.stringify(comboboxData)}
+    />
 
     <script is:inline>
       const PREVIEW_MAP = JSON.parse(
         document.getElementById("preview-map-data").textContent || "{}",
+      );
+      const COMBOBOX_ITEMS = JSON.parse(
+        document.getElementById("combobox-data").textContent || "[]",
       );
 
       // ── Utilidad de compresión WebP en el navegador ──
@@ -571,34 +608,198 @@ properties.forEach((p) => {
         const previewTitleNoImg = document.getElementById(
           "preview-title-no-img",
         );
-        const propertySelect = document.getElementById("propertySlug");
+        const hiddenSlug = document.getElementById("propertySlug");
 
         if (!form || form.dataset.listenerAttached) return;
         form.dataset.listenerAttached = "true";
 
-        // Manejador del cambio de propiedad
-        propertySelect.addEventListener("change", function () {
-          const selectedId = this.value;
-          const selectedText =
-            this.options[this.selectedIndex].text.split(" (")[0];
-          const imgUrl = PREVIEW_MAP[selectedId] || "";
+        // ── COMBOBOX INTERACTIVO ──────────────────────────
+        const comboSearch = document.getElementById("combobox-search");
+        const comboDropdown = document.getElementById("combobox-dropdown");
+        const comboList = document.getElementById("combobox-list");
+        const comboEmpty = document.getElementById("combobox-empty");
+        const comboChevron = document.getElementById("combobox-chevron");
+        const comboCount = document.getElementById("combobox-count");
+        const comboTrigger = document.getElementById("combobox-trigger");
 
+        let isOpen = false;
+        let selectedId = "";
+        let highlightIndex = -1;
+
+        function normalize(str) {
+          return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
+        function renderOptions(query = "") {
+          const q = normalize(query);
+          const filtered = q
+            ? COMBOBOX_ITEMS.filter(
+                (item) =>
+                  normalize(item.titulo).includes(q) ||
+                  normalize(item.id).includes(q) ||
+                  normalize(item.ubicacion).includes(q) ||
+                  normalize(item.tipo).includes(q)
+              )
+            : COMBOBOX_ITEMS;
+
+          comboList.innerHTML = "";
+          highlightIndex = -1;
+
+          if (filtered.length === 0) {
+            comboEmpty.classList.remove("hidden");
+            comboCount.textContent = "";
+          } else {
+            comboEmpty.classList.add("hidden");
+            comboCount.textContent = `${filtered.length}/${COMBOBOX_ITEMS.length}`;
+
+            filtered.forEach((item, i) => {
+              const li = document.createElement("li");
+              li.className = "combobox-option";
+              li.dataset.id = item.id;
+              li.dataset.titulo = item.titulo;
+              li.dataset.index = i;
+
+              if (item.id === selectedId) {
+                li.classList.add("combobox-option-selected");
+              }
+
+              const thumb = item.previewUrl
+                ? `<img src="${item.previewUrl}" alt="" class="combobox-thumb" loading="lazy" />`
+                : `<div class="combobox-thumb-placeholder">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>`;
+
+              const badge = item.tipo
+                ? `<span class="combobox-badge">${item.tipo}</span>`
+                : "";
+
+              li.innerHTML = `
+                <div class="combobox-option-inner">
+                  ${thumb}
+                  <div class="combobox-option-text">
+                    <span class="combobox-option-title">${item.titulo}</span>
+                    <span class="combobox-option-id">${item.id}${item.ubicacion ? ' · ' + item.ubicacion : ''}</span>
+                  </div>
+                  ${badge}
+                  ${item.id === selectedId ? '<svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
+                </div>
+              `;
+
+              li.addEventListener("click", () => selectItem(item));
+              li.addEventListener("mouseenter", () => {
+                highlightIndex = parseInt(li.dataset.index);
+                updateHighlight();
+              });
+
+              comboList.appendChild(li);
+            });
+          }
+        }
+
+        function updateHighlight() {
+          comboList.querySelectorAll(".combobox-option").forEach((el, i) => {
+            el.classList.toggle("combobox-option-highlighted", i === highlightIndex);
+          });
+        }
+
+        function selectItem(item) {
+          selectedId = item.id;
+          hiddenSlug.value = item.id;
+          comboSearch.value = item.titulo;
+          closeDropdown();
+
+          // Actualizar la tarjeta de previsualización
+          const imgUrl = PREVIEW_MAP[item.id] || "";
           if (imgUrl) {
             previewImg.src = imgUrl;
             previewImg.onerror = function () {
               propertyPreview.classList.add("hidden");
-              previewTitleNoImg.textContent = selectedText;
+              previewTitleNoImg.textContent = item.titulo;
               propertyPreviewNoImg.classList.remove("hidden");
             };
-            previewTitle.textContent = selectedText;
+            previewTitle.textContent = item.titulo;
             propertyPreview.classList.remove("hidden");
             propertyPreviewNoImg.classList.add("hidden");
           } else {
             propertyPreview.classList.add("hidden");
-            previewTitleNoImg.textContent = selectedText;
+            previewTitleNoImg.textContent = item.titulo;
             propertyPreviewNoImg.classList.remove("hidden");
           }
+        }
+
+        function openDropdown() {
+          isOpen = true;
+          comboDropdown.classList.remove("hidden");
+          comboChevron.style.transform = "rotate(180deg)";
+          comboTrigger.classList.add("combobox-trigger-active");
+          renderOptions(comboSearch.value);
+        }
+
+        function closeDropdown() {
+          isOpen = false;
+          comboDropdown.classList.add("hidden");
+          comboChevron.style.transform = "";
+          comboTrigger.classList.remove("combobox-trigger-active");
+          // Si no se seleccionó nada y había texto, restaurar el título seleccionado
+          if (!selectedId && comboSearch.value) {
+            comboSearch.value = "";
+          } else if (selectedId) {
+            const sel = COMBOBOX_ITEMS.find((i) => i.id === selectedId);
+            if (sel) comboSearch.value = sel.titulo;
+          }
+        }
+
+        comboTrigger.addEventListener("click", (e) => {
+          if (e.target === comboSearch) return; // let focus handle it
+          comboSearch.focus();
         });
+
+        comboSearch.addEventListener("focus", () => {
+          if (!isOpen) openDropdown();
+          comboSearch.select();
+        });
+
+        comboSearch.addEventListener("input", () => {
+          if (!isOpen) openDropdown();
+          renderOptions(comboSearch.value);
+        });
+
+        comboSearch.addEventListener("keydown", (e) => {
+          const options = comboList.querySelectorAll(".combobox-option");
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (!isOpen) openDropdown();
+            highlightIndex = Math.min(highlightIndex + 1, options.length - 1);
+            updateHighlight();
+            options[highlightIndex]?.scrollIntoView({ block: "nearest" });
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            highlightIndex = Math.max(highlightIndex - 1, 0);
+            updateHighlight();
+            options[highlightIndex]?.scrollIntoView({ block: "nearest" });
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (highlightIndex >= 0 && options[highlightIndex]) {
+              const id = options[highlightIndex].dataset.id;
+              const item = COMBOBOX_ITEMS.find((i) => i.id === id);
+              if (item) selectItem(item);
+            }
+          } else if (e.key === "Escape") {
+            closeDropdown();
+            comboSearch.blur();
+          }
+        });
+
+        // Cerrar al hacer click fuera
+        document.addEventListener("click", (e) => {
+          if (isOpen && !document.getElementById("combobox-wrapper").contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        // ── FIN COMBOBOX ──────────────────────────
 
         dropzone.addEventListener("click", () => fileInput.click());
 
@@ -631,7 +832,7 @@ properties.forEach((p) => {
             Array.from(files).forEach((file) => {
               const li = document.createElement("li");
               li.className =
-                "flex justify-between items-center border-b border-slate-100 pb-1";
+                "flex justify-between items-center border-b border-slate-100 pb-1 file-list-item";
               li.innerHTML = `
             <span class="truncate max-w-[80%]">${file.name}</span>
             <span class="text-slate-400 font-mono">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
@@ -647,7 +848,7 @@ properties.forEach((p) => {
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
 
-          const propertySlug = propertySelect.value;
+          const propertySlug = hiddenSlug.value;
           const adminPassword = document.getElementById("adminPassword").value;
           const rawFiles = Array.from(fileInput.files);
 
@@ -757,6 +958,11 @@ properties.forEach((p) => {
             });
 
             form.reset();
+            comboSearch.value = "";
+            selectedId = "";
+            hiddenSlug.value = "";
+            propertyPreview.classList.add("hidden");
+            propertyPreviewNoImg.classList.add("hidden");
             fileListContainer.classList.add("hidden");
             fileList.innerHTML = "";
           } catch (error) {
@@ -783,7 +989,7 @@ properties.forEach((p) => {
   </body>
 </html>
 
-<style>
+<style is:global>
   .admin-input {
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
@@ -799,9 +1005,228 @@ properties.forEach((p) => {
   .admin-input::placeholder {
     color: #94a3b8;
   }
-  .admin-input:focus {
+  .admin-input:focus-within {
     outline: none;
     border-color: #c9a84c;
     box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  }
+
+  /* ── Combobox Styles ── */
+  .combobox-trigger {
+    cursor: text;
+  }
+  .combobox-trigger-active {
+    border-color: #c9a84c;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  }
+  .combobox-search-input,
+  input.combobox-search-input {
+    font-size: 0.875rem;
+    color: #0b192c;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  .combobox-search-input::placeholder {
+    color: #94a3b8;
+  }
+  .combobox-dropdown {
+    background-color: #ffffff;
+    border-color: #e2e8f0;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .combobox-option {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .combobox-option-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+  }
+  .combobox-option:hover,
+  .combobox-option-highlighted {
+    background-color: #f1f5f9;
+  }
+  .combobox-option-selected {
+    background-color: rgba(201, 168, 76, 0.08);
+  }
+  .combobox-option-selected:hover {
+    background-color: rgba(201, 168, 76, 0.14);
+  }
+  .combobox-thumb {
+    width: 3rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid #e2e8f0;
+  }
+  .combobox-thumb-placeholder {
+    width: 3rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+  }
+  .combobox-option-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .combobox-option-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #0b192c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .combobox-option-id {
+    font-size: 0.6875rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .combobox-badge {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background-color: rgba(201, 168, 76, 0.12);
+    color: #b8952f;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .combobox-empty-text {
+    color: #64748b;
+  }
+  .combobox-empty-hint {
+    color: #94a3b8;
+  }
+
+  /* ── Dark Mode (a11y widget) ── */
+  body.a11y-dark-mode .admin-panel {
+    background-color: #0f2340 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  body.a11y-dark-mode .admin-label {
+    color: #e2e8f0 !important;
+  }
+  body.a11y-dark-mode .admin-input,
+  body.a11y-dark-mode .combobox-trigger {
+    background-color: #1b304c !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #f1f5f9 !important;
+  }
+  body.a11y-dark-mode .combobox-search-input,
+  body.a11y-dark-mode input.combobox-search-input {
+    color: #f1f5f9 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  body.a11y-dark-mode .combobox-search-input::placeholder {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode .combobox-search-icon,
+  body.a11y-dark-mode .combobox-chevron {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode .combobox-count {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode .combobox-trigger-active {
+    border-color: #c9a84c !important;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2) !important;
+  }
+  body.a11y-dark-mode .combobox-dropdown {
+    background-color: #132a47 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+  body.a11y-dark-mode .combobox-option:hover,
+  body.a11y-dark-mode .combobox-option-highlighted {
+    background-color: rgba(201, 168, 76, 0.12) !important;
+  }
+  body.a11y-dark-mode .combobox-option-selected {
+    background-color: rgba(201, 168, 76, 0.18) !important;
+  }
+  body.a11y-dark-mode .combobox-option-title {
+    color: #f1f5f9 !important;
+  }
+  body.a11y-dark-mode .combobox-option-id {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode .combobox-thumb {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  body.a11y-dark-mode .combobox-thumb-placeholder {
+    background-color: #1b304c !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #475569 !important;
+  }
+  body.a11y-dark-mode .combobox-badge {
+    background-color: rgba(201, 168, 76, 0.2) !important;
+    color: #c9a84c !important;
+  }
+  body.a11y-dark-mode .combobox-empty-text {
+    color: #94a3b8 !important;
+  }
+  body.a11y-dark-mode .combobox-empty-hint {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode .preview-card {
+    background-color: #132a47 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  body.a11y-dark-mode .preview-title {
+    color: #e2e8f0 !important;
+  }
+  body.a11y-dark-mode .file-list-item {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+  }
+  body.a11y-dark-mode #dropzone {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+  }
+  body.a11y-dark-mode #dropzone:hover {
+    border-color: rgba(201, 168, 76, 0.4) !important;
+    background-color: rgba(201, 168, 76, 0.05) !important;
+  }
+  body.a11y-dark-mode #dropzone p {
+    color: #cbd5e1 !important;
+  }
+  body.a11y-dark-mode #dropzone p:last-child {
+    color: #64748b !important;
+  }
+  body.a11y-dark-mode #file-list-container {
+    background-color: #1b304c !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  body.a11y-dark-mode #file-list-container h4 {
+    color: #e2e8f0 !important;
+  }
+  body.a11y-dark-mode #progress-container span,
+  body.a11y-dark-mode #progress-container p {
+    color: #cbd5e1 !important;
   }
 </style>

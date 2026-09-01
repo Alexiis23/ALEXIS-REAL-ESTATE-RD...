@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 interface Props {
   titulo: string;
@@ -84,6 +85,7 @@ const WHATSAPP_PHONE = "18295259993";
 <body class="min-h-screen flex flex-col font-sans">
 
   <Analytics />
+  <SpeedInsights />
   <Navbar lang="es" currentPage="guias" />
 
   <!-- ─── HERO EDITORIAL ─────────────────────────── -->

@@ -58,11 +58,18 @@ export const prerender = false;
         </p>
         <div class="mt-4 flex items-center justify-center gap-3">
           <a
-            href="/admin/subir-fotos"
+            href="/admin"
             class="text-xs text-white/50 hover:text-white border border-white/15 hover:border-white/30 px-4 py-2 rounded-xl transition-all"
           >
-            Cargador de Galería Independiente
+            ← Volver al Panel
           </a>
+          <button
+            type="button"
+            id="btnLogoutGlobal"
+            class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-950/30 hover:bg-red-950/60 border border-red-800/40 px-3.5 py-2 rounded-xl transition-all cursor-pointer"
+          >
+            Cerrar Sesión ✕
+          </button>
         </div>
       </div>
     </section>
@@ -922,3 +929,10 @@ export const prerender = false;
     color: #cbd5e1 !important;
   }
 </style>
+
+<script>
+  document.getElementById("btnLogoutGlobal")?.addEventListener("click", async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  });
+</script>

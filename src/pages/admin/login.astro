@@ -1,0 +1,93 @@
+---
+// src/pages/admin/login.astro
+import Layout from "../../layouts/Layout.astro";
+
+export const prerender = false;
+
+const redirectParam = Astro.url.searchParams.get("redirect") || "/admin";
+---
+
+<Layout title="Acceso Administrativo | Alexis RD Real Estate">
+  <main class="min-h-screen bg-slate-900 flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full bg-slate-800/80 border border-slate-700 rounded-3xl p-8 shadow-2xl space-y-6">
+
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 bg-[#c9a84c]/20 border border-[#c9a84c]/40 text-[#c9a84c] rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold">
+          ARD
+        </div>
+        <h1 class="text-2xl font-black text-white tracking-tight">Portal Administrativo</h1>
+        <p class="text-xs text-slate-400">Ingresa la clave maestra para gestionar el catálogo inmobiliario.</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4" data-redirect={redirectParam}>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" for="password">Contraseña de Administrador</label>
+          <input
+            type="password"
+            id="password"
+            required
+            placeholder="••••••••••••"
+            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
+          />
+        </div>
+
+        <p id="errorMessage" class="text-xs text-red-400 font-medium hidden text-center"></p>
+
+        <button
+          type="submit"
+          id="btnLogin"
+          class="w-full bg-[#c9a84c] hover:bg-[#b5953f] text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl transition-all shadow-lg cursor-pointer"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <div class="text-center pt-2">
+        <a href="/" class="text-[11px] text-slate-500 hover:text-slate-300 transition-colors">
+          ← Volver a la web pública
+        </a>
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  function setupLogin() {
+    const form = document.getElementById("loginForm") as HTMLFormElement;
+    const passwordInput = document.getElementById("password") as HTMLInputElement;
+    const errorMessage = document.getElementById("errorMessage");
+    const btnLogin = document.getElementById("btnLogin") as HTMLButtonElement;
+    const targetRedirect = form?.getAttribute("data-redirect") || "/admin";
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMessage?.classList.add("hidden");
+      btnLogin.disabled = true;
+      btnLogin.textContent = "Verificando...";
+
+      try {
+        const res = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: passwordInput.value }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Contraseña incorrecta");
+        }
+
+        window.location.href = targetRedirect;
+      } catch (err: any) {
+        errorMessage!.textContent = err.message;
+        errorMessage?.classList.remove("hidden");
+        btnLogin.disabled = false;
+        btnLogin.textContent = "Iniciar Sesión";
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", setupLogin);
+  document.addEventListener("astro:page-load", setupLogin);
+</script>

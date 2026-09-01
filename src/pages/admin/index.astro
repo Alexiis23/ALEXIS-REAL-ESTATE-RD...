@@ -122,6 +122,13 @@ function formatPrecio(p: (typeof propiedades)[0]) {
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
               Publicar Inmueble
             </a>
+            <button
+              type="button"
+              id="btnLogoutGlobal"
+              class="text-xs font-bold text-red-400 hover:text-red-300 bg-red-950/30 hover:bg-red-950/60 border border-red-800/40 px-3.5 py-2 rounded-xl transition-all cursor-pointer"
+            >
+              Cerrar Sesión ✕
+            </button>
           </div>
         </div>
 
@@ -566,3 +573,10 @@ function formatPrecio(p: (typeof propiedades)[0]) {
     color: #f1f5f9 !important;
   }
 </style>
+
+<script>
+  document.getElementById("btnLogoutGlobal")?.addEventListener("click", async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  });
+</script>

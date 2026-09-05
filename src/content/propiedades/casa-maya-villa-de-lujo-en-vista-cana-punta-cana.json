@@ -1,0 +1,32 @@
+{
+  "titulo": "Casa Maya - villa de lujo en Vista Cana, Punta Cana",
+  "descripcion": "Casa Maya es una moderna y exclusiva villa de 4 habitaciones y 4 baños, ubicada en Vista Cana, Punta Cana, dentro de una comunidad cerrada con seguridad y acceso controlado.\n\nLa propiedad cuenta con 267 m² de construcción sobre un amplio solar de 504 m², diseñada para ofrecer comodidad, privacidad y un estilo de vida sofisticado.\n\nCaracterísticas principales:\n\n4 habitaciones\n4 baños\n267 m² de construcción\n504 m² de solar\nPiscina privada\nTerraza con BBQ\n2 parqueos\n2 carritos de golf\nCocina moderna\nAmplias áreas sociales y exteriores\nGrandes ventanales y excelente iluminación natural\n\nUbicación privilegiada en Vista Cana, cerca de campos de golf, lagos, playas, restaurantes, comercios y amenidades estilo resort.\n\nPrecio de oferta: US$390,000\nPrecio anterior: US$499,000",
+  "titulo_en": "",
+  "descripcion_en": "",
+  "precioUsd": 390000,
+  "precioDop": 0,
+  "regimen": "Venta",
+  "exclusiva": false,
+  "confotur": false,
+  "tipo": "Villa",
+  "estado": "Listo",
+  "habitaciones": 4,
+  "banos": 4,
+  "parqueos": 2,
+  "area": 504,
+  "latitud": 21.145,
+  "longitud": -86.779,
+  "ubicacion": "Vista Cana - Punta Cana",
+  "imagenPrincipal": "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/2002eac6-42f3-4380-935f-b0e43090af9e-1788650243012.webp",
+  "galeria": [
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/47ce9e33-5190-4edc-8e72-224b9feea43c-1788650244389.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/3b6d94e9-61b4-4798-8045-b09ce3f26777-1788650245346.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/c74a33b0-df33-4503-bb80-9b41fae16d3c-1788650246153.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/f3b20450-eba4-4288-b03e-b1e696c1cdc0-1788650246820.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/f2acb706-73c4-490c-891f-c2de388cfd4c-1788650247460.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/1ad100b9-a2b6-4991-9e86-17208c71b52e-1788650248076.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/d0d63f50-f857-4c47-a8fc-a980436f549f-1788650248704.webp",
+    "https://t6x9ajldinj9rvbr.public.blob.vercel-storage.com/propiedades/casa-maya-villa-de-lujo-en-vista-cana-punta-cana/11499371-ba9c-4fed-8dbf-65ef1f2cdd74-1788650249654.webp"
+  ],
+  "tipoVideo": "recorrido-virtual"
+}
